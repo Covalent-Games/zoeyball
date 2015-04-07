@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfLevel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Level>
+    <Name>It's a Start</Name>
+    <LevelID>1</LevelID>
+    <WorldID>0</WorldID>
+  </Level>
+  <Level>
+    <Name>A Couple More Tries</Name>
+    <LevelID>2</LevelID>
+    <WorldID>0</WorldID>
+  </Level>
+  <Level>
+    <Name>A Few Things To Learn</Name>
+    <LevelID>3</LevelID>
+    <WorldID>0</WorldID>
+  </Level>
+  <Level>
+    <Name>Level 4</Name>
+    <LevelID>4</LevelID>
+    <WorldID>0</WorldID>
+  </Level>
+  <Level>
+    <Name>Level 5</Name>
+    <LevelID>5</LevelID>
+    <WorldID>0</WorldID>
+  </Level>
+</ArrayOfLevel>

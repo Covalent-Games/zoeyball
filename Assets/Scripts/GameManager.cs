@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 public class GameManager : MonoBehaviour {
 
@@ -19,21 +20,24 @@ public class GameManager : MonoBehaviour {
 
 	[System.Serializable]
 	public class Level {
-		//[HideInInspector]
-		[System.Obsolete]
-		public bool HasBeenWon = false;
-		public bool IsUnlocked = false;
 		public string Name;
 		public int LevelID;
-		//[HideInInspector]
+		public int WorldID;
+		[XmlIgnore]
+		public bool IsUnlocked = false;
+		[XmlIgnore]
 		public float Score;
-		//[HideInInspector]
+		[XmlIgnore]
 		public int Bounces;
 	}
 
 	public List<Level> LevelList = new List<Level>();
+	LevelSerializer Serializer;
 
 	void Awake() {
+
+		Serializer = new LevelSerializer();
+		Serializer.DeSerialize(ref LevelList);
 
 		DontDestroyOnLoad(gameObject);
 		DontDestroyOnLoad(EscapeMenuCanvas.gameObject);

@@ -9,8 +9,6 @@ public class PlayServicesHandler : MonoBehaviour {
 
 		PlayGamesPlatform.DebugLogEnabled = true;
 		PlayGamesPlatform.Activate();
-
-
 	}
 
 	public static bool Authenticate() {

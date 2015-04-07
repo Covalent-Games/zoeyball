@@ -50,7 +50,6 @@ public class BallLauncher : MonoBehaviour {
 		transform.rotation = Quaternion.Euler(
 				Vector3.MoveTowards(
 						transform.rotation.eulerAngles, newRotation, Time.deltaTime * RotateSpeed));
-		Debug.Log(RotateSpeed);
 
 	}
 
