@@ -14,6 +14,7 @@ public class GameReset : MonoBehaviour {
 
 		if (!_WinChecker.Winning) {
 			if (colliderObject.tag == "Ball") {
+				Debug.Log("Resetting");
 				BallLauncher ballLauncher = colliderObject.transform.parent.GetComponent<BallLauncher>();
 				Rigidbody ballRigidBody = colliderObject.GetComponent<Rigidbody>();
 				BallBehaviour ballBehaviour = colliderObject.GetComponent<BallBehaviour>();
@@ -25,6 +26,8 @@ public class GameReset : MonoBehaviour {
 				ballRigidBody.velocity = Vector3.zero;
 				ballBehaviour.TmpScore = 0f;
 				ballBehaviour.TmpBounces = 0;
+				ballBehaviour.StartCountingScore = false;
+				ballBehaviour.UpdateScoreText(0);
 				StartCoroutine(ResetBallRoutine(colliderObject.gameObject, ballLauncher));
 			}
 		} else {

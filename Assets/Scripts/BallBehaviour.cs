@@ -14,6 +14,7 @@ public class BallBehaviour : MonoBehaviour {
 	public Text ScoreText;
 	public float TmpScore;
 	public int TmpBounces;
+	public bool StartCountingScore = false;
 
 	void Awake() {
 
@@ -22,6 +23,7 @@ public class BallBehaviour : MonoBehaviour {
 		for (int i = 0; i < ImpactEffects.Length; i++) {
 			ImpactEffects[i] = Instantiate(resource) as GameObject;
 		}
+		UpdateScoreText(0);
 	}
 
 	void OnCollisionEnter(Collision obj) {
@@ -51,17 +53,18 @@ public class BallBehaviour : MonoBehaviour {
 		int bounces = TmpBounces;
 		multiplier = 1 + ((bounces > 0) ? bounces / 2f : 0);
 
-		return Vector3.Distance(transform.position, transform.position + _ThisRigidBody.velocity)
-				* Time.deltaTime
-				* multiplier;
+		//return Vector3.Distance(transform.position, transform.position + _ThisRigidBody.velocity)
+		//		* Time.deltaTime
+		//		* multiplier;
+		return Time.deltaTime * multiplier * 3;
 	}
 
-	void UpdateScoreText(float multiplier) {
+	public void UpdateScoreText(float multiplier) {
 
 		if (multiplier > 1) {
-			ScoreText.text = string.Format("Score: {0}  Bonus x{1}",
+			ScoreText.text = string.Format("Score: {0}  Bounces: {1}",
 					Mathf.RoundToInt(TmpScore),
-					multiplier);
+					TmpBounces);
 		} else {
 			ScoreText.text = string.Format("Score: {0}", Mathf.RoundToInt(TmpScore));
 		}
@@ -70,9 +73,9 @@ public class BallBehaviour : MonoBehaviour {
 	void Update() {
 
 		float multiplier;
-		TmpScore += CalculateScoreThisUpdate(out multiplier);
-		UpdateScoreText(multiplier);
-
-
+		if (StartCountingScore) {
+			TmpScore += CalculateScoreThisUpdate(out multiplier);
+			UpdateScoreText(multiplier);
+		}
 	}
 }

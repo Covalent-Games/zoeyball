@@ -7,14 +7,11 @@ using System.Xml.Serialization;
 public class GameManager : MonoBehaviour {
 
 	public static Level CurrentLevel;
+	public TextAsset LevelData;
 	public Canvas EscapeMenuCanvas;
 	public Canvas RestartButtonCanvas;
-	public AudioSource Music;
-	public Image MuteMusicIcon;
-	public Image MuteSoundsIcon;
-	float _PreviousMusicVolume;
-	bool MusicMuted = false;
-	bool SoundMuted = false;
+	AudioManager AudioWrangler;
+
 
 	GameObject LevelButtonResource;
 
@@ -37,16 +34,13 @@ public class GameManager : MonoBehaviour {
 	void Awake() {
 
 		Serializer = new LevelSerializer();
-		Serializer.DeSerialize(ref LevelList);
-
+		Serializer.DeSerialize(out LevelList, LevelData);
+		AudioWrangler = GetComponent<AudioManager>();
 		DontDestroyOnLoad(gameObject);
 		DontDestroyOnLoad(EscapeMenuCanvas.gameObject);
 
 		UIResources.Load();
 
-		if (Music == null) {
-			Music = transform.FindChild("Music").GetComponent<AudioSource>();
-		}
 	}
 
 	void Start() {
@@ -126,24 +120,18 @@ public class GameManager : MonoBehaviour {
 		switch (levelIndex) {
 			default:
 				RestartButtonCanvas.enabled = true;
-				ChangeMusicVolume(.275f);
+				AudioWrangler.ChangeMusicVolume(.275f);
 				break;
 			case 0:
 				RestartButtonCanvas.enabled = false;
-				ChangeMusicVolume(1f);
+				AudioWrangler.ChangeMusicVolume(1f);
 				break;
 			case 1:
 				RestartButtonCanvas.enabled = false;
 				PopulateLevelListUI();
-				ChangeMusicVolume(1f);
+				AudioWrangler.ChangeMusicVolume(1f);
 				break;
 		}
-	}
-
-	void ChangeMusicVolume(float newVolume) {
-
-		if (!MusicMuted)
-			Music.volume = newVolume;
 	}
 
 	void PopulateLevelListUI() {
@@ -161,7 +149,8 @@ public class GameManager : MonoBehaviour {
 			loadLevelButton.LevelToLoad = level;
 			Text nameText = button.transform.FindChild("LevelName").GetComponent<Text>();
 			nameText.text = level.Name;
-			button.transform.FindChild("ScoreText").GetComponent<Text>().text = ((int)level.Score).ToString();
+			button.transform.FindChild("ScoreText").GetComponent<Text>().text =
+					Mathf.RoundToInt(level.Score).ToString();
 			button.transform.FindChild("BounceText").GetComponent<Text>().text = level.Bounces.ToString();
 
 			if (!level.IsUnlocked && level.LevelID != 1) {
@@ -170,33 +159,5 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public void ToggleMusic() {
 
-		MusicMuted = !MusicMuted;
-
-		if (MusicMuted) {
-			_PreviousMusicVolume = Music.volume;
-			Music.volume = 0f;
-			MuteMusicIcon.sprite = UIResources.UISprites["MuteMusicIcon_Muted"]
-					.GetComponent<SpriteRenderer>().sprite;
-		} else {
-			Music.volume = _PreviousMusicVolume;
-			MuteMusicIcon.sprite = UIResources.UISprites["MuteMusicIcon_NotMuted"]
-					.GetComponent<SpriteRenderer>().sprite;
-		}
-
-
-	}
-	public void ToggleSound() {
-
-		SoundMuted = !SoundMuted;
-
-		if (SoundMuted) {
-			MuteSoundsIcon.sprite = UIResources.UISprites["MuteSoundsIcon_Muted"]
-					.GetComponent<SpriteRenderer>().sprite;
-		} else {
-			MuteSoundsIcon.sprite = UIResources.UISprites["MuteSoundsIcon_NotMuted"]
-					.GetComponent<SpriteRenderer>().sprite;
-		}
-	}
 }

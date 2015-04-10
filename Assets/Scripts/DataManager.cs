@@ -8,9 +8,14 @@ public class DataManager : MonoBehaviour {
 
 	public static bool Save(List<GameManager.Level> saveObject) {
 
-		using (Stream stream = File.Create(Application.persistentDataPath + "/savedata.dat")) {
+		foreach (var level in saveObject) {
+			Debug.Log(level.LevelID + " -- " + level.Score);
+		}
+
+		using (Stream stream = File.Create(Application.persistentDataPath + @"/savedata.dat")) {
 			var bFormatter = new BinaryFormatter();
 			bFormatter.Serialize(stream, saveObject);
+			stream.Close();
 		}
 		Debug.Log("Saved");
 		return true;
@@ -18,17 +23,16 @@ public class DataManager : MonoBehaviour {
 
 	public static bool Load(ref List<GameManager.Level> loadObject) {
 
-		if (!File.Exists(Application.persistentDataPath + "/savedata.dat")) { return false; }
+		foreach (var level in loadObject) {
+			Debug.Log(level.LevelID + " -- " + level.Score);
+		}
 
-		using (Stream stream = File.Open(Application.persistentDataPath + "/savedata.dat", FileMode.Open)) {
+		if (!File.Exists(Application.persistentDataPath + @"/savedata.dat")) { return false; }
+
+		using (Stream stream = File.Open(Application.persistentDataPath + @"/savedata.dat", FileMode.Open)) {
 			var bFormatter = new BinaryFormatter();
-			List<GameManager.Level> tmpList = bFormatter.Deserialize(stream) as List<GameManager.Level>;
-
-			for (int index = tmpList.Count; index < loadObject.Count; index++) {
-				Debug.Log(loadObject[index].Name);
-			}
-
-			loadObject = tmpList;
+			loadObject = bFormatter.Deserialize(stream) as List<GameManager.Level>;
+			stream.Close();
 		}
 
 		Debug.Log("Loaded");

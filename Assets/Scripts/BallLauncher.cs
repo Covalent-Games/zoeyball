@@ -77,6 +77,7 @@ public class BallLauncher : MonoBehaviour {
 			StartRotation = Ball.transform.rotation;
 			ball.isKinematic = false;
 			ball.AddForce(Ball.transform.up * LaunchPowerMeter * 100);
+			ball.GetComponent<BallBehaviour>().StartCountingScore = true;
 			CanLaunch = false;
 		}
 	}

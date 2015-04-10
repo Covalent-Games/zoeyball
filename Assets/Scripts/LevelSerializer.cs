@@ -7,10 +7,10 @@ using System.IO;
 
 public class LevelSerializer {
 
-	public void DeSerialize(ref List<GameManager.Level> levelList) {
+	public void DeSerialize(out List<GameManager.Level> levelList, TextAsset asset) {
 
 		XmlSerializer serializer = new XmlSerializer(typeof(List<GameManager.Level>));
-		using (TextReader reader = new StreamReader(Application.dataPath + "/Levels/leveldata.xml")) {
+		using (var reader = new StringReader(asset.text)) {
 			levelList = (List<GameManager.Level>)serializer.Deserialize(reader);
 		}
 	}

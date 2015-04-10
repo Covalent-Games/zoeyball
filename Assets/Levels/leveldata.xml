@@ -16,13 +16,14 @@
     <WorldID>0</WorldID>
   </Level>
   <Level>
-    <Name>Level 4</Name>
+    <Name>Fourth time's a charm</Name>
     <LevelID>4</LevelID>
     <WorldID>0</WorldID>
   </Level>
   <Level>
-    <Name>Level 5</Name>
-    <LevelID>5</LevelID>
+    <Name>7th Heaven</Name>
+    <LevelID>7</LevelID>
     <WorldID>0</WorldID>
   </Level>
+
 </ArrayOfLevel>
