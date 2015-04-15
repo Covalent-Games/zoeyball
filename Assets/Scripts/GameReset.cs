@@ -27,7 +27,7 @@ public class GameReset : MonoBehaviour {
 				ballBehaviour.TmpScore = 0f;
 				ballBehaviour.TmpBounces = 0;
 				ballBehaviour.StartCountingScore = false;
-				ballBehaviour.UpdateScoreText(0);
+				ballBehaviour.UpdateScoreText();
 				StartCoroutine(ResetBallRoutine(colliderObject.gameObject, ballLauncher));
 			}
 		} else {

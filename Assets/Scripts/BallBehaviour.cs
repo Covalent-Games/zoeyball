@@ -6,6 +6,7 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody))]
 public class BallBehaviour : MonoBehaviour {
 
+	public GameObject FiveBounceParticle;
 	Rigidbody _ThisRigidBody;
 	GameObject[] ImpactEffects = new GameObject[3];
 	int ImpactEffectPoolIndex;
@@ -23,7 +24,7 @@ public class BallBehaviour : MonoBehaviour {
 		for (int i = 0; i < ImpactEffects.Length; i++) {
 			ImpactEffects[i] = Instantiate(resource) as GameObject;
 		}
-		UpdateScoreText(0);
+		UpdateScoreText();
 	}
 
 	void OnCollisionEnter(Collision obj) {
@@ -45,23 +46,17 @@ public class BallBehaviour : MonoBehaviour {
 
 		if (obj.gameObject.tag == "Block") {
 			TmpBounces++;
+			TmpScore += 5;
+		}
+
+		if (TmpBounces == 5) {
+			Instantiate(FiveBounceParticle, transform.position, Quaternion.identity);
 		}
 	}
 
-	float CalculateScoreThisUpdate(out float multiplier) {
+	public void UpdateScoreText() {
 
-		int bounces = TmpBounces;
-		multiplier = 1 + ((bounces > 0) ? bounces / 2f : 0);
-
-		//return Vector3.Distance(transform.position, transform.position + _ThisRigidBody.velocity)
-		//		* Time.deltaTime
-		//		* multiplier;
-		return Time.deltaTime * multiplier * 3;
-	}
-
-	public void UpdateScoreText(float multiplier) {
-
-		if (multiplier > 1) {
+		if (TmpBounces > 0) {
 			ScoreText.text = string.Format("Score: {0}  Bounces: {1}",
 					Mathf.RoundToInt(TmpScore),
 					TmpBounces);
@@ -72,10 +67,9 @@ public class BallBehaviour : MonoBehaviour {
 
 	void Update() {
 
-		float multiplier;
 		if (StartCountingScore) {
-			TmpScore += CalculateScoreThisUpdate(out multiplier);
-			UpdateScoreText(multiplier);
+			TmpScore += Time.deltaTime * 5;
+			UpdateScoreText();
 		}
 	}
 }

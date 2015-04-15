@@ -577,9 +577,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b69fd9812e66eab46981d0357f023197, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FiveBounceParticle: {fileID: 190604, guid: 70a304a10f68f7843b5774595696f2f2, type: 2}
   ScoreText: {fileID: 11458254}
   TmpScore: 0
   TmpBounces: 0
+  StartCountingScore: 0
 --- !u!114 &11401342
 MonoBehaviour:
   m_ObjectHideFlags: 1

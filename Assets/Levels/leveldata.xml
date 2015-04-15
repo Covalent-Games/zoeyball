@@ -20,8 +20,18 @@
     <LevelID>4</LevelID>
     <WorldID>0</WorldID>
   </Level>
+    <Level>
+    <Name>Not Really Level 5</Name>
+    <LevelID>5</LevelID>
+    <WorldID>0</WorldID>
+  </Level>
+    <Level>
+    <Name>Not Really Level 6</Name>
+    <LevelID>6</LevelID>
+    <WorldID>0</WorldID>
+  </Level>
   <Level>
-    <Name>7th Heaven</Name>
+    <Name>Not Really Level 7</Name>
     <LevelID>7</LevelID>
     <WorldID>0</WorldID>
   </Level>

@@ -180,7 +180,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 11473738, guid: 4c005cb0d5c74264091ca09e17801db8, type: 2}
       propertyPath: HelpTextList.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 22457190, guid: 4c005cb0d5c74264091ca09e17801db8, type: 2}
       propertyPath: m_LocalPosition.x

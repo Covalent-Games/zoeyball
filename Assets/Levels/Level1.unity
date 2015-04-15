@@ -404,7 +404,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HelpTextCanvas: {fileID: 958798263}
   HelpText: {fileID: 1018440907}
-  HelpTextList: []
+  HelpTextList:
+  - Rotate the launcher using the arrows. Hold "Pew" to power up and release to launch
+    the ball. Hit the red block to win!
 --- !u!114 &958798261
 MonoBehaviour:
   m_ObjectHideFlags: 0
