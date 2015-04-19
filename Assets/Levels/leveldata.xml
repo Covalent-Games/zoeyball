@@ -35,5 +35,20 @@
     <LevelID>7</LevelID>
     <WorldID>0</WorldID>
   </Level>
+ <Level>
+    <Name>Don't be l8</Name>
+    <LevelID>8</LevelID>
+    <WorldID>0</WorldID>
+  </Level>
+  <Level>
+    <Name>The 9th hole</Name>
+    <LevelID>9</LevelID>
+    <WorldID>0</WorldID>
+  </Level>
+  <Level>
+    <Name>Decathon</Name>
+    <LevelID>10</LevelID>
+    <WorldID>0</WorldID>
+  </Level>  
 
 </ArrayOfLevel>
