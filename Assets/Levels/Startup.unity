@@ -171,6 +171,10 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
   m_EffectDistance: {x: 2, y: 2}
   m_UseGraphicAlpha: 1
+--- !u!1 &559777686 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 109344, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
+  m_PrefabInternal: {fileID: 1324695264}
 --- !u!1 &693612438
 GameObject:
   m_ObjectHideFlags: 0
@@ -429,6 +433,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 11418296, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
+      propertyPath: m_ActionBase
+      value: 
+      objectReference: {fileID: 1853063103}
     - target: {fileID: 22409562, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_AnchorMin.y
       value: 1
@@ -448,10 +456,6 @@ Prefab:
     - target: {fileID: 22423558, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_AnchoredPosition.y
       value: -20
-      objectReference: {fileID: 0}
-    - target: {fileID: 22389670, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
-      propertyPath: m_Enabled
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
@@ -750,3 +754,16 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1793002354}
+--- !u!114 &1853063103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d6d16a58a17940419a1dcbff3c60ca5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  go: {fileID: 559777686}
+  thisPropertyPath: 

@@ -66,6 +66,7 @@ GameObject:
   - 114: {fileID: 11418368}
   - 82: {fileID: 8268528}
   - 114: {fileID: 11422088}
+  - 114: {fileID: 11418296}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameManager
@@ -730,6 +731,27 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+--- !u!114 &11418296
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 109344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bafa54482a87ac4cbd7ff1bfd1ac93a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkAfterTime: 1
+  repeatCheckTime: 1
+  repeatEveryTime: 1
+  checkAfterFrames: 1
+  repeatCheckFrame: 1
+  repeatEveryFrame: 1
+  hasFailed: 0
+  checkMethods: -1
+  m_ActionBase: {fileID: 0}
+  checksPerformed: 0
 --- !u!114 &11418368
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -753,8 +775,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Audio: {fileID: 8268528}
-  MuteMusicIcon: {fileID: 0}
-  MuteSoundsIcon: {fileID: 0}
+  MuteMusicImage: {fileID: 0}
+  MuteSoundsImage: {fileID: 0}
+  MusicMutedIcon: {fileID: 0}
+  MusicUnMutedIcon: {fileID: 0}
+  SoundMutedIcon: {fileID: 0}
+  SoundUnmutedIcon: {fileID: 0}
 --- !u!114 &11425360
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1155,37 +1181,7 @@ MonoBehaviour:
   LevelData: {fileID: 4900000, guid: dbcde555c78beed48b9b0448228390dd, type: 3}
   EscapeMenuCanvas: {fileID: 22311512}
   RestartButtonCanvas: {fileID: 22362038}
-  LevelList:
-  - Name: It's a Start
-    LevelID: 1
-    WorldID: 0
-    IsUnlocked: 0
-    Score: 0
-    Bounces: 0
-  - Name: A Couple More Tries
-    LevelID: 2
-    WorldID: 0
-    IsUnlocked: 1
-    Score: 8.80187702
-    Bounces: 1
-  - Name: A Few Things To Learn
-    LevelID: 3
-    WorldID: 0
-    IsUnlocked: 1
-    Score: 23.0155716
-    Bounces: 2
-  - Name: Fourth time's a charm
-    LevelID: 4
-    WorldID: 0
-    IsUnlocked: 1
-    Score: 17.4036121
-    Bounces: 3
-  - Name: 7th Heaven
-    LevelID: 7
-    WorldID: 0
-    IsUnlocked: 1
-    Score: 0
-    Bounces: 0
+  LevelButtonResource: {fileID: 189052, guid: 2e15318e6927fff4baa36ecbe9d94e24, type: 2}
 --- !u!114 &11460014
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1666,7 +1662,7 @@ Canvas:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 145396}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_RenderMode: 0
   m_Camera: {fileID: 0}

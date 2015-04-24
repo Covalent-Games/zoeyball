@@ -57,8 +57,8 @@ public class WinChecker : MonoBehaviour {
 			_Ball.enabled = false;
 
 			// LevelID is human readable, so is 1 higher than it's index.
-			if (GameManager.CurrentLevel.LevelID < _GameManger.LevelList.Count) {
-				GameManager.Level nextLevel = _GameManger.LevelList[GameManager.CurrentLevel.LevelID];
+			if (GameManager.CurrentLevel.LevelID < DataManager.LevelList.Count) {
+				var nextLevel = DataManager.LevelList[GameManager.CurrentLevel.LevelID];
 				nextLevel.IsUnlocked = true;
 			}
 			if (_Ball.TmpScore > GameManager.CurrentLevel.Score) {
