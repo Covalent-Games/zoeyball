@@ -6,10 +6,10 @@ PhysicMaterial:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Plastic
-  dynamicFriction: .600000024
-  staticFriction: .600000024
+  dynamicFriction: 49.4799995
+  staticFriction: 33.1399994
   bounciness: .5
-  frictionCombine: 0
+  frictionCombine: 1
   bounceCombine: 0
   frictionDirection2: {x: 0, y: 0, z: 0}
   dynamicFriction2: 0

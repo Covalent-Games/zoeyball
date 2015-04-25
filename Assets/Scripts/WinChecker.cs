@@ -47,6 +47,7 @@ public class WinChecker : MonoBehaviour {
 			"Luck. That's all that was.",
 			"Did you see that!?",
 			"WHAAAAAAAAAAAAA-",
+			"You're unstoppable!!!",
 		};
 	}
 
@@ -80,7 +81,9 @@ public class WinChecker : MonoBehaviour {
 				Destroy(block);
 			}
 
-			_GameManger.ReturnToLevelPicker(Winning);
+			_GameManger.LevelCompleteCanvas.enabled = true;
+			_GameManger.DisplayWinDetails();
+			//_GameManger.ReturnToLevelPicker(Winning);
 		}
 	}
 

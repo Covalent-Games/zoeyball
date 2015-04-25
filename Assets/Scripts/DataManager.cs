@@ -29,8 +29,10 @@ public class DataManager {
 		[XmlIgnore]
 		public int Bounces;
 	}
-	public delegate void DataLoadedEventHandler();
-	public event DataLoadedEventHandler OnDataLoaded;
+	public delegate void DataChangedEventHandler();
+	public event DataChangedEventHandler OnDataLoaded;
+	public event DataChangedEventHandler OnDataSaved;
+	public event DataChangedEventHandler OnDataDeleted;
 
 	bool Writing = false;
 
@@ -72,6 +74,7 @@ public class DataManager {
 		Debug.Log("****************** Queueing Save game ******************");
 		OpenSavedGame();
 		Writing = true;
+		GameManager.IsBusy = true;
 	}
 
 	public void StartLoadGameData() {
@@ -79,6 +82,7 @@ public class DataManager {
 		Debug.Log("****************** Queueing Load game ******************");
 		OpenSavedGame();
 		Writing = false;
+		GameManager.IsBusy = true;
 	}
 
 	#region Data Manager Callbacks
@@ -134,6 +138,8 @@ public class DataManager {
 
 		switch (status) {
 			case SavedGameRequestStatus.Success:
+				OnDataSaved();
+				GameManager.IsBusy = false;
 				Debug.Log("****************** " + metaData.Filename + " was written succesfully ******************");
 				break;
 			case SavedGameRequestStatus.AuthenticationError:

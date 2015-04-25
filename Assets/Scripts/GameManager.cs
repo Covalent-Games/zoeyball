@@ -13,9 +13,28 @@ public class GameManager : MonoBehaviour {
 	public TextAsset LevelData;
 	public Canvas EscapeMenuCanvas;
 	public Canvas RestartButtonCanvas;
+	public Canvas LevelCompleteCanvas;
 	AudioManager AudioWrangler;
 	public DataManager DataWrangler = new DataManager();
 	public GameObject LevelButtonResource;
+
+	private BallBehaviour _BallBehavior;
+	private BallLauncher _BallLauncher;
+
+	# region Loading Widget members
+	public delegate void OnBoolChangedEventHandler(bool val);
+	public static event OnBoolChangedEventHandler OnIsBusyChanged;
+	static bool _IsBusy = false;
+	public static bool IsBusy {
+		get {
+			return _IsBusy;
+		}
+		set {
+			_IsBusy = value;
+			OnIsBusyChanged(_IsBusy);
+		}
+	}
+	#endregion
 
 	void Awake() {
 
@@ -23,6 +42,7 @@ public class GameManager : MonoBehaviour {
 		AudioWrangler = GetComponent<AudioManager>();
 		DontDestroyOnLoad(gameObject);
 		DontDestroyOnLoad(EscapeMenuCanvas.gameObject);
+		GameManager.OnIsBusyChanged += ToggleBusyCanvas;
 	}
 
 	void Start() {
@@ -37,6 +57,11 @@ public class GameManager : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.Escape)) {
 			EscapeMenuCanvas.enabled = !EscapeMenuCanvas.enabled;
 		}
+	}
+
+	void ToggleBusyCanvas(bool val) {
+
+		Debug.Log("GameManager is busy: " + val.ToString());
 	}
 
 	public void Play() {
@@ -58,6 +83,7 @@ public class GameManager : MonoBehaviour {
 
 	void LoadLevelPicker() {
 
+		GameManager.IsBusy = true;
 		Application.LoadLevel("LevelPicker");
 	}
 
@@ -84,20 +110,28 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public void Quit() {
+	public void QueueQuit() {
 
+		DataWrangler.OnDataSaved += QuitApplication;
 		DataWrangler.StartSaveGameData();
+
+	}
+
+	void QuitApplication() {
+
 		Application.Quit();
 	}
 
 	public void ReturnButton() {
 
 		EscapeMenuCanvas.enabled = false;
+		LevelCompleteCanvas.enabled = false;
 		ReturnToLevelPicker(true, true);
 	}
 
 	public void ReturnToLevelPicker(bool save, bool immediate = false) {
 
+		RestartCache.LoadFromCache = false;
 
 		if (save) {
 			DataWrangler.StartSaveGameData();
@@ -117,8 +151,27 @@ public class GameManager : MonoBehaviour {
 
 	public void Restart() {
 
+		RestartCache.Score = _BallBehavior.TmpScore;
+		RestartCache.Bounces = _BallBehavior.TmpBounces;
+		RestartCache.StartBlockRotation = _BallLauncher.transform.rotation;
+		RestartCache.Powerbar = _BallLauncher.LaunchPowerMeter;
+		RestartCache.LoadFromCache = true;
+
 		EscapeMenuCanvas.enabled = false;
+		LevelCompleteCanvas.enabled = false;
 		Application.LoadLevel(Application.loadedLevel);
+	}
+
+	public void NextButton() {
+
+		RestartCache.LoadFromCache = false;
+
+		LevelCompleteCanvas.enabled = false;
+		// If next level exists, load it.
+		if (DataManager.LevelList[CurrentLevel.LevelID] != null)
+			LoadLevelByID(CurrentLevel.LevelID + 1);
+		else
+			ReturnToLevelPicker(true, true);
 	}
 
 	public static void LoadLevelByID(int ID) {
@@ -132,10 +185,16 @@ public class GameManager : MonoBehaviour {
 
 	void OnLevelWasLoaded(int levelIndex) {
 
+		GameManager.IsBusy = false;
 		switch (levelIndex) {
 			default:
 				RestartButtonCanvas.enabled = true;
 				AudioWrangler.ChangeMusicVolume(.275f);
+				_BallLauncher = GameObject.FindObjectOfType<BallLauncher>();
+				_BallBehavior = _BallLauncher.Ball.GetComponent<BallBehaviour>();
+				if (RestartCache.LoadFromCache) {
+					ApplyCacheToLoadedLevel();
+				}
 				break;
 			case 0:
 				RestartButtonCanvas.enabled = false;
@@ -147,6 +206,17 @@ public class GameManager : MonoBehaviour {
 				AudioWrangler.ChangeMusicVolume(1f);
 				break;
 		}
+	}
+
+	void ApplyCacheToLoadedLevel() {
+
+		_BallLauncher.transform.rotation = RestartCache.StartBlockRotation;
+		_BallBehavior.TmpScore = RestartCache.Score;
+		_BallBehavior.TmpBounces = RestartCache.Bounces;
+		_BallBehavior.UpdateScoreText();
+		_BallBehavior.TmpScore = 0;
+		_BallBehavior.TmpBounces = 0;
+		_BallLauncher.LanchMeterImage.fillAmount = RestartCache.Powerbar / _BallLauncher.MaxLaunchPower;
 	}
 
 	void PopulateLevelListUI() {
@@ -173,6 +243,14 @@ public class GameManager : MonoBehaviour {
 				nameText.color = Color.black;
 			}
 		}
+	}
+
+	public void DisplayWinDetails() {
+
+		GameObject ScoreRecapGO = LevelCompleteCanvas.transform.FindChild("Score Recap").gameObject;
+		ScoreRecapGO.GetComponent<Text>().text = string.Format("Old Score: \n" +
+												 "New Score: {0}\n" +
+												 "Some other stuff...", Mathf.RoundToInt(_BallBehavior.TmpScore));
 	}
 
 
