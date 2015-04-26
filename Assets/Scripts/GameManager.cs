@@ -7,6 +7,7 @@ using GooglePlayGames.BasicApi;
 using GooglePlayGames.BasicApi.SavedGame;
 using System;
 
+[RequireComponent(typeof(PlayServicesHandler))]
 public class GameManager : MonoBehaviour {
 
 	public static DataManager.Level CurrentLevel;
@@ -16,6 +17,7 @@ public class GameManager : MonoBehaviour {
 	AudioManager AudioWrangler;
 	public DataManager DataWrangler = new DataManager();
 	public GameObject LevelButtonResource;
+	PlayServicesHandler _PlayServicesHandler;
 
 	void Awake() {
 
