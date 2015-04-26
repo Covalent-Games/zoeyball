@@ -3,15 +3,36 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 
 public class LevelSerializer {
 
-	public void DeSerialize(out List<GameManager.Level> levelList, TextAsset asset) {
+	public List<DataManager.Level> Deserialize(TextAsset asset) {
 
-		XmlSerializer serializer = new XmlSerializer(typeof(List<GameManager.Level>));
+		XmlSerializer serializer = new XmlSerializer(typeof(List<DataManager.Level>));
 		using (var reader = new StringReader(asset.text)) {
-			levelList = (List<GameManager.Level>)serializer.Deserialize(reader);
+			return (List<DataManager.Level>)serializer.Deserialize(reader);
 		}
+	}
+
+	public byte[] SerializeLevelList(List<DataManager.Level> readableLevelList) {
+
+
+		BinaryFormatter binaryFormatter = new BinaryFormatter();
+		MemoryStream stream = new MemoryStream();
+		binaryFormatter.Serialize(stream, readableLevelList);
+
+		return stream.ToArray();
+	}
+
+	public List<DataManager.Level> DeserializeLevelList(byte[] data) {
+
+		BinaryFormatter binaryFormatter = new BinaryFormatter();
+		MemoryStream stream = new MemoryStream(data);
+		object deserializedData = binaryFormatter.Deserialize(stream);
+
+		return (List<DataManager.Level>)deserializedData;
+
 	}
 }

@@ -4,7 +4,7 @@ using System.Collections;
 
 public class LoadLevelButton : MonoBehaviour {
 
-	public GameManager.Level LevelToLoad;
+	public DataManager.Level LevelToLoad;
 
 	public void LoadLevel() {
 

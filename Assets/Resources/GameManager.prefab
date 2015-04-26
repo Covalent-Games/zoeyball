@@ -62,10 +62,11 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 449404}
-  - 114: {fileID: 11451454}
-  - 114: {fileID: 11418368}
   - 82: {fileID: 8268528}
-  - 114: {fileID: 11422088}
+  - 114: {fileID: 11475898}
+  - 114: {fileID: 11475324}
+  - 114: {fileID: 11476736}
+  - 114: {fileID: 11475702}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameManager
@@ -662,7 +663,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 11451454}
+        - m_Target: {fileID: 11475324}
           m_MethodName: ReturnButton
           m_Mode: 1
           m_Arguments:
@@ -759,31 +760,6 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
---- !u!114 &11418368
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 109344}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ef9f88c8be096c49a018f2490111324, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &11422088
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 109344}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00c6d7dc73ed83746bc5b0941c6164a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Audio: {fileID: 8268528}
-  MuteMusicIcon: {fileID: 0}
-  MuteSoundsIcon: {fileID: 0}
 --- !u!114 &11423788
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -841,7 +817,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11451454}
+      - m_Target: {fileID: 11475324}
         m_MethodName: Restart
         m_Mode: 1
         m_Arguments:
@@ -894,7 +870,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11451454}
+      - m_Target: {fileID: 11475324}
         m_MethodName: Quit
         m_Mode: 1
         m_Arguments:
@@ -966,7 +942,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 11451454}
+        - m_Target: {fileID: 11475324}
           m_MethodName: NextButton
           m_Mode: 1
           m_Arguments:
@@ -1019,7 +995,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11451454}
+      - m_Target: {fileID: 11475324}
         m_MethodName: ReturnButton
         m_Mode: 1
         m_Arguments:
@@ -1096,7 +1072,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 11422088}
+        - m_Target: {fileID: 11475702}
           m_MethodName: ToggleMusic
           m_Mode: 1
           m_Arguments:
@@ -1218,82 +1194,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &11451454
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 109344}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a363e6a9e6855149b655a72148753b9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LevelData: {fileID: 4900000, guid: dbcde555c78beed48b9b0448228390dd, type: 3}
-  EscapeMenuCanvas: {fileID: 22311512}
-  RestartButtonCanvas: {fileID: 22362038}
-  LevelCompleteCanvas: {fileID: 22389670}
-  LevelList:
-  - Name: It's a Start
-    LevelID: 1
-    WorldID: 0
-    IsUnlocked: 0
-    Score: 6.00127172
-    Bounces: 0
-  - Name: A Couple More Tries
-    LevelID: 2
-    WorldID: 0
-    IsUnlocked: 1
-    Score: 0
-    Bounces: 0
-  - Name: A Few Things To Learn
-    LevelID: 3
-    WorldID: 0
-    IsUnlocked: 0
-    Score: 0
-    Bounces: 0
-  - Name: Fourth time's a charm
-    LevelID: 4
-    WorldID: 0
-    IsUnlocked: 0
-    Score: 0
-    Bounces: 0
-  - Name: Not Really Level 5
-    LevelID: 5
-    WorldID: 0
-    IsUnlocked: 0
-    Score: 0
-    Bounces: 0
-  - Name: Not Really Level 6
-    LevelID: 6
-    WorldID: 0
-    IsUnlocked: 0
-    Score: 0
-    Bounces: 0
-  - Name: Not Really Level 7
-    LevelID: 7
-    WorldID: 0
-    IsUnlocked: 0
-    Score: 0
-    Bounces: 0
-  - Name: Don't be l8
-    LevelID: 8
-    WorldID: 0
-    IsUnlocked: 0
-    Score: 0
-    Bounces: 0
-  - Name: The 9th hole
-    LevelID: 9
-    WorldID: 0
-    IsUnlocked: 0
-    Score: 0
-    Bounces: 0
-  - Name: Decathon
-    LevelID: 10
-    WorldID: 0
-    IsUnlocked: 0
-    Score: 0
-    Bounces: 0
 --- !u!114 &11454068
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1331,7 +1231,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 11422088}
+        - m_Target: {fileID: 11475702}
           m_MethodName: ToggleSound
           m_Mode: 1
           m_Arguments:
@@ -1563,6 +1463,62 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &11475324
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 109344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a363e6a9e6855149b655a72148753b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LevelData: {fileID: 4900000, guid: dbcde555c78beed48b9b0448228390dd, type: 3}
+  EscapeMenuCanvas: {fileID: 22311512}
+  RestartButtonCanvas: {fileID: 22362038}
+  LevelCompleteCanvas: {fileID: 22389670}
+  LevelButtonResource: {fileID: 189052, guid: 2e15318e6927fff4baa36ecbe9d94e24, type: 2}
+--- !u!114 &11475702
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 109344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00c6d7dc73ed83746bc5b0941c6164a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Audio: {fileID: 8268528}
+  MuteMusicImage: {fileID: 11474150}
+  MuteSoundsImage: {fileID: 11432402}
+  MusicMutedIcon: {fileID: 21300000, guid: 83c6137ed2112dd4d86d588e5770eb09, type: 3}
+  MusicUnMutedIcon: {fileID: 21300000, guid: 2d64dd21d1d406e428454a2052793dbc, type: 3}
+  SoundMutedIcon: {fileID: 21300000, guid: e6e3c8cbb6dce654b9fbe6788f94f02f, type: 3}
+  SoundUnmutedIcon: {fileID: 21300000, guid: 32f6e018b86ec73459dbe3b3470fe111, type: 3}
+--- !u!114 &11475898
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 109344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ef9f88c8be096c49a018f2490111324, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &11476736
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 109344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ef9f88c8be096c49a018f2490111324, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11485218
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1579,7 +1535,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 11451454}
+        - m_Target: {fileID: 11475324}
           m_MethodName: Restart
           m_Mode: 1
           m_Arguments:
@@ -1829,7 +1785,7 @@ Canvas:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 145396}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_RenderMode: 0
   m_Camera: {fileID: 0}
