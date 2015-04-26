@@ -6,6 +6,7 @@ using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 using GooglePlayGames.BasicApi.SavedGame;
 using System;
+using GameData;
 
 [RequireComponent(typeof(PlayServicesHandler))]
 public class GameManager : MonoBehaviour {
@@ -60,7 +61,7 @@ public class GameManager : MonoBehaviour {
 			}
 		}
 		LoadLevelPicker();
-		}
+	}
 
 	void LoadLevelPicker() {
 
@@ -150,10 +151,18 @@ public class GameManager : MonoBehaviour {
 
 	public static void LoadLevelByID(int ID) {
 
+#if UNITY_EDITOR
+		Application.LoadLevel(string.Format("Level{0}", ID));
+		GameManager.CurrentLevel = DataManager.LevelList[ID - 1];
+
+#else
+
 		if (ID != 1 && !DataManager.LevelList[ID - 1].IsUnlocked) { return; }
 
 		Application.LoadLevel(string.Format("Level{0}", ID));
 		GameManager.CurrentLevel = DataManager.LevelList[ID - 1];
+
+#endif
 
 	}
 
