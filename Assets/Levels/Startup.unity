@@ -306,12 +306,23 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!114 &983714326 stripped
+--- !u!114 &983714326
 MonoBehaviour:
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 11475324, guid: 11a8b0b5f84a6b949814034659f9ec61,
     type: 2}
   m_PrefabInternal: {fileID: 1324695264}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8a363e6a9e6855149b655a72148753b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LevelData: {fileID: 0}
+  EscapeMenuCanvas: {fileID: 0}
+  RestartButtonCanvas: {fileID: 0}
+  LevelCompleteCanvas: {fileID: 0}
+  LevelButtonResource: {fileID: 0}
 --- !u!1 &1052666402
 GameObject:
   m_ObjectHideFlags: 0
@@ -396,7 +407,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
---- !u!1001 &1324695264
+--- !u!1001 &1096938341
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2

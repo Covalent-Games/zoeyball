@@ -29,8 +29,10 @@ public class DataManager {
 		[XmlIgnore]
 		public int Bounces;
 	}
-	public delegate void DataLoadedEventHandler();
-	public event DataLoadedEventHandler OnDataLoaded;
+	public delegate void DataChangedEventHandler();
+	public event DataChangedEventHandler OnDataLoaded;
+	public event DataChangedEventHandler OnDataSaved;
+	public event DataChangedEventHandler OnDataDeleted;
 
 	bool Writing = false;
 
@@ -134,6 +136,7 @@ public class DataManager {
 
 		switch (status) {
 			case SavedGameRequestStatus.Success:
+				OnDataSaved();
 				Debug.Log("****************** " + metaData.Filename + " was written succesfully ******************");
 				break;
 			case SavedGameRequestStatus.AuthenticationError:
