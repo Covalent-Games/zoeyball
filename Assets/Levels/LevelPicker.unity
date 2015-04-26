@@ -292,10 +292,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1250956122}
   m_RootOrder: 0
-  m_AnchorMin: {x: .0521436855, y: 0}
-  m_AnchorMax: {x: .947000027, y: .98812443}
-  m_AnchoredPosition: {x: -54, y: 0}
-  m_SizeDelta: {x: -54, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1.00000012}
+  m_AnchoredPosition: {x: -100, y: -5}
+  m_SizeDelta: {x: -145, y: 90}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &818904150
 MonoBehaviour:
@@ -359,7 +359,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
-  m_VerticalFit: 1
+  m_VerticalFit: 0
 --- !u!1 &1040002617
 GameObject:
   m_ObjectHideFlags: 0
