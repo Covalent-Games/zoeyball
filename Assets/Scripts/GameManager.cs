@@ -2,53 +2,37 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
-using System.Xml.Serialization;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
+using GooglePlayGames.BasicApi.SavedGame;
+using System;
 
+[RequireComponent(typeof(PlayServicesHandler))]
 public class GameManager : MonoBehaviour {
 
-	public static Level CurrentLevel;
+	public static DataManager.Level CurrentLevel;
 	public TextAsset LevelData;
 	public Canvas EscapeMenuCanvas;
 	public Canvas RestartButtonCanvas;
 	public Canvas LevelCompleteCanvas;
 	AudioManager AudioWrangler;
+	public DataManager DataWrangler = new DataManager();
+	public GameObject LevelButtonResource;
 
-	GameObject LevelButtonResource;
 	private BallBehaviour _BallBehavior;
 	private BallLauncher _BallLauncher;
 
 
-	[System.Serializable]
-	public class Level {
-		public string Name;
-		public int LevelID;
-		public int WorldID;
-		[XmlIgnore]
-		public bool IsUnlocked = false;
-		[XmlIgnore]
-		public float Score;
-		[XmlIgnore]
-		public int Bounces;
-	}
-
-	public List<Level> LevelList = new List<Level>();
-	LevelSerializer Serializer;
-
 	void Awake() {
 
-		Serializer = new LevelSerializer();
-		Serializer.DeSerialize(out LevelList, LevelData);
+		DataWrangler.LoadLevelTemplate(LevelData);
 		AudioWrangler = GetComponent<AudioManager>();
 		DontDestroyOnLoad(gameObject);
 		DontDestroyOnLoad(EscapeMenuCanvas.gameObject);
-
-		UIResources.Load();
-
 	}
 
 	void Start() {
 
-		LevelButtonResource = UIResources.UIObjects["LevelButton"];
 		Time.timeScale = 1.15f;
 		PlayServicesHandler.Activate();
 		PlayServicesHandler.Authenticate();
@@ -63,16 +47,52 @@ public class GameManager : MonoBehaviour {
 
 	public void Play() {
 
-		if (!DataManager.Load(ref LevelList)) {
-			DataManager.Save(LevelList);
-			Debug.Log("A new save file was created.");
+		try {
+			DataWrangler.OnDataLoaded += LoadLevelPicker;
+			DataWrangler.StartLoadGameData();
+		} catch (NullReferenceException) {
+			Debug.Log("LoadGameData failed to execute");
+
+			if (Application.isEditor) {
+				Debug.LogWarning(
+					"Loading LevelPicker. You're running in the Editor so no save files used!");
+				LoadLevelPicker();
+			}
 		}
+		LoadLevelPicker();
+		}
+
+	void LoadLevelPicker() {
+
 		Application.LoadLevel("LevelPicker");
+	}
+
+	public void DisplaySaveSelection() {
+
+		uint maxNumToDisplay = 5;
+		bool allowCreateNew = false;
+		bool allowDelete = true;
+
+		ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
+		savedGameClient.ShowSelectSavedGameUI("Select saved game",
+			maxNumToDisplay,
+			allowCreateNew,
+			allowDelete,
+			OnSavedGameSelected);
+	}
+
+	void OnSavedGameSelected(SelectUIStatus status, ISavedGameMetadata metaData) {
+
+		if (status == SelectUIStatus.SavedGameSelected) {
+			Debug.Log("Selected the saved game");
+		} else {
+			Debug.LogError("The save game selection got borked");
+		}
 	}
 
 	public void Quit() {
 
-		DataManager.Save(LevelList);
+		DataWrangler.StartSaveGameData();
 		Application.Quit();
 	}
 
@@ -88,7 +108,7 @@ public class GameManager : MonoBehaviour {
 		RestartCache.LoadFromCache = false;
 
 		if (save) {
-			DataManager.Save(LevelList);
+			DataWrangler.StartSaveGameData();
 		}
 		if (immediate) {
 			Application.LoadLevel("LevelPicker");
@@ -122,7 +142,7 @@ public class GameManager : MonoBehaviour {
 
 		LevelCompleteCanvas.enabled = false;
 		// If next level exists, load it.
-		if (LevelList[CurrentLevel.LevelID] != null)
+		if (DataManager.LevelList[CurrentLevel.LevelID] != null)
 			LoadLevelByID(CurrentLevel.LevelID + 1);
 		else
 			ReturnToLevelPicker(true, true);
@@ -130,12 +150,10 @@ public class GameManager : MonoBehaviour {
 
 	public static void LoadLevelByID(int ID) {
 
-		GameManager gm = GameObject.FindObjectOfType<GameManager>();
-
-		if (ID != 1 && !gm.LevelList[ID - 1].IsUnlocked) { return; }
+		if (ID != 1 && !DataManager.LevelList[ID - 1].IsUnlocked) { return; }
 
 		Application.LoadLevel(string.Format("Level{0}", ID));
-		GameManager.CurrentLevel = gm.LevelList[ID - 1];
+		GameManager.CurrentLevel = DataManager.LevelList[ID - 1];
 
 	}
 
@@ -182,8 +200,9 @@ public class GameManager : MonoBehaviour {
 			Debug.LogError("Content panel missing or renamed.");
 		}
 
-		foreach (Level level in LevelList) {
+		foreach (var level in DataManager.LevelList) {
 			GameObject button = Instantiate(LevelButtonResource);
+
 			button.transform.SetParent(contentPanel.transform, false);
 			LoadLevelButton loadLevelButton = button.GetComponent<LoadLevelButton>();
 			loadLevelButton.LevelToLoad = level;

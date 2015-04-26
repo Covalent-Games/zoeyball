@@ -6,8 +6,12 @@ using System.Collections;
 public class AudioManager : MonoBehaviour {
 
 	public AudioSource Audio;
-	public Image MuteMusicIcon;
-	public Image MuteSoundsIcon;
+	public Image MuteMusicImage;
+	public Image MuteSoundsImage;
+	public Sprite MusicMutedIcon;
+	public Sprite MusicUnMutedIcon;
+	public Sprite SoundMutedIcon;
+	public Sprite SoundUnmutedIcon;
 	bool MusicMuted = false;
 	bool SoundMuted = false;
 
@@ -24,30 +28,25 @@ public class AudioManager : MonoBehaviour {
 
 	public void ToggleMusic() {
 
-		MusicMuted = !MusicMuted;
-
 		if (MusicMuted) {
 			Audio.mute = false;
-			MuteMusicIcon.sprite = UIResources.UISprites["MuteMusicIcon_Muted"]
-					.GetComponent<SpriteRenderer>().sprite;
+			MuteMusicImage.sprite = MusicUnMutedIcon;
 		} else {
 			Audio.mute = true;
-			MuteMusicIcon.sprite = UIResources.UISprites["MuteMusicIcon_NotMuted"]
-					.GetComponent<SpriteRenderer>().sprite;
+			MuteMusicImage.sprite = MusicMutedIcon;
 		}
 
-
+		MusicMuted = !MusicMuted;
 	}
+
 	public void ToggleSound() {
 
 		SoundMuted = !SoundMuted;
 		Debug.LogWarning("Muting sound effects not yet implemented!");
 		if (SoundMuted) {
-			MuteSoundsIcon.sprite = UIResources.UISprites["MuteSoundsIcon_Muted"]
-					.GetComponent<SpriteRenderer>().sprite;
+			MuteSoundsImage.sprite = SoundMutedIcon;
 		} else {
-			MuteSoundsIcon.sprite = UIResources.UISprites["MuteSoundsIcon_NotMuted"]
-					.GetComponent<SpriteRenderer>().sprite;
+			MuteSoundsImage.sprite = SoundUnmutedIcon;
 		}
 	}
 

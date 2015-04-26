@@ -1,41 +1,190 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi.SavedGame;
+using System;
 
-public class DataManager : MonoBehaviour {
+/// <summary>
+/// Handles all data.
+/// </summary>
+public class DataManager {
 
-	public static bool Save(List<GameManager.Level> saveObject) {
+	ISavedGameMetadata SavedGameMetaData;
+	public LevelSerializer Serializer;
+	public static List<Level> LevelList = new List<Level>();
 
-		foreach (var level in saveObject) {
-			Debug.Log(level.LevelID + " -- " + level.Score);
-		}
+	[System.Serializable]
+	public class Level {
+		public string Name;
+		public int LevelID;
+		public int WorldID;
+		[XmlIgnore]
+		public bool IsUnlocked = false;
+		[XmlIgnore]
+		public float Score;
+		[XmlIgnore]
+		public int Bounces;
+	}
+	public delegate void DataLoadedEventHandler();
+	public event DataLoadedEventHandler OnDataLoaded;
 
-		using (Stream stream = File.Create(Application.persistentDataPath + @"/savedata.dat")) {
-			var bFormatter = new BinaryFormatter();
-			bFormatter.Serialize(stream, saveObject);
-			stream.Close();
-		}
-		Debug.Log("Saved");
-		return true;
+	bool Writing = false;
+
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	public DataManager() {
+
+		Serializer = new LevelSerializer();
 	}
 
-	public static bool Load(ref List<GameManager.Level> loadObject) {
+	/// <summary>
+	/// Loads the basic level template. This is not the player's progress.
+	/// </summary>
+	/// <param name="levelData">The TextAsset XML file containing level info.</param>
+	public void LoadLevelTemplate(TextAsset levelData) {
 
-		foreach (var level in loadObject) {
-			Debug.Log(level.LevelID + " -- " + level.Score);
-		}
-
-		if (!File.Exists(Application.persistentDataPath + @"/savedata.dat")) { return false; }
-
-		using (Stream stream = File.Open(Application.persistentDataPath + @"/savedata.dat", FileMode.Open)) {
-			var bFormatter = new BinaryFormatter();
-			loadObject = bFormatter.Deserialize(stream) as List<GameManager.Level>;
-			stream.Close();
-		}
-
-		Debug.Log("Loaded");
-		return true;
+		LevelList = Serializer.Deserialize(levelData);
 	}
+
+	public void OpenSavedGame() {
+
+		ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
+
+		if (Application.isEditor) {
+			Debug.LogWarning("Skipping Google Play Services. Loading LevelPicker.");
+			Application.LoadLevel("LevelPicker");
+		}
+
+		savedGameClient.OpenWithAutomaticConflictResolution(
+				"save",
+				DataSource.ReadCacheOrNetwork,
+				ConflictResolutionStrategy.UseLongestPlaytime,
+				OnSavedGameOpened);
+	}
+
+	public void StartSaveGameData() {
+
+		Debug.Log("****************** Queueing Save game ******************");
+		OpenSavedGame();
+		Writing = true;
+	}
+
+	public void StartLoadGameData() {
+
+		Debug.Log("****************** Queueing Load game ******************");
+		OpenSavedGame();
+		Writing = false;
+	}
+
+	#region Data Manager Callbacks
+
+	void OnSavedGameOpened(SavedGameRequestStatus status, ISavedGameMetadata metaData) {
+
+		Debug.Log("****************** Opening game and verifying status ******************");
+
+		switch (status) {
+			case SavedGameRequestStatus.Success:
+				SavedGameMetaData = metaData;
+				Debug.Log("****************** Save File Opened!");
+				Debug.Log("Last modified: " + metaData.LastModifiedTimestamp);
+
+				if (Writing) {
+					Debug.Log("****************** Saving game ******************");
+
+					byte[] savedData = Serializer.SerializeLevelList(LevelList);
+
+					ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
+					SavedGameMetadataUpdate.Builder builder = new SavedGameMetadataUpdate.Builder();
+
+					builder = builder
+						.WithUpdatedDescription("Saved game at " + DateTime.Now);
+
+					SavedGameMetadataUpdate updatedMetadata = builder.Build();
+					savedGameClient.CommitUpdate(SavedGameMetaData, updatedMetadata, savedData, OnSavedGameWritten);
+				} else {
+					Debug.Log("****************** Loading game ******************");
+
+					ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
+					savedGameClient.ReadBinaryData(SavedGameMetaData, OnSavedGameDataRead);
+				}
+
+				break;
+			case SavedGameRequestStatus.AuthenticationError:
+				Debug.Log("OPEN FAILED! NO AUTHENTICATION!");
+				break;
+			case SavedGameRequestStatus.BadInputError:
+				Debug.Log("OPEN FAILED! BAD INPUT!");
+				break;
+			case SavedGameRequestStatus.InternalError:
+				Debug.Log("OPEN FAILED BUT IT LIKELY ISN'T OUR FAULT! INTERNAL ERROR!");
+				break;
+			case SavedGameRequestStatus.TimeoutError:
+				Debug.Log("TIMEOUT OPENING FILE");
+				break;
+		}
+
+	}
+
+	void OnSavedGameWritten(SavedGameRequestStatus status, ISavedGameMetadata metaData) {
+
+		switch (status) {
+			case SavedGameRequestStatus.Success:
+				Debug.Log("****************** " + metaData.Filename + " was written succesfully ******************");
+				break;
+			case SavedGameRequestStatus.AuthenticationError:
+				Debug.Log("SAVE FAILED! NO AUTHENTICATION!");
+				break;
+			case SavedGameRequestStatus.BadInputError:
+				Debug.Log("SAVE FAILED! BAD INPUT!");
+				break;
+			case SavedGameRequestStatus.InternalError:
+				Debug.Log("SAVE FAILED BUT IT LIKELY ISN'T OUR FAULT! INTERNAL ERROR!");
+				break;
+			case SavedGameRequestStatus.TimeoutError:
+				Debug.Log("TIMEOUT SAVING FILE");
+				break;
+		}
+	}
+
+	void OnSavedGameDataRead(SavedGameRequestStatus status, byte[] data) {
+
+		switch (status) {
+			case SavedGameRequestStatus.Success:
+				LevelList = Serializer.DeserializeLevelList(data);
+
+				// Events to trigger once data has been loaded
+				if (OnDataLoaded != null) {
+					OnDataLoaded();
+				} else {
+					Debug.LogError("No event registered for OnDataLoaded. LevelPicker scene won't be loaded");
+				}
+
+				Debug.Log("****************** Data was read and deserialized. Things SHOULD be G2G!");
+				break;
+			case SavedGameRequestStatus.AuthenticationError:
+				Debug.Log("LOAD FAILED! NO AUTHENTICATION!");
+				break;
+			case SavedGameRequestStatus.BadInputError:
+				Debug.Log("LOAD FAILED! BAD INPUT!");
+				break;
+			case SavedGameRequestStatus.InternalError:
+				Debug.Log("LOAD FAILED BUT IT LIKELY ISN'T OUR FAULT! INTERNAL ERROR!");
+				break;
+			case SavedGameRequestStatus.TimeoutError:
+				Debug.Log("TIMEOUT LOADING FILE");
+				break;
+		}
+		Debug.Log("Data Loaded ended");
+		foreach (var level in LevelList) {
+			Debug.Log(level.Name + " -- " + level.Score);
+		}
+	}
+
+	#endregion
+
 }
