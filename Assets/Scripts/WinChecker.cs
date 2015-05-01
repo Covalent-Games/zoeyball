@@ -48,6 +48,16 @@ public class WinChecker : MonoBehaviour {
 			"Did you see that!?",
 			"WHAAAAAAAAAAAAA-",
 			"You're unstoppable!!!",
+			"Well, look at you!",
+			"I'm just...I'm so proud.",
+			"Imaginary high-five!",
+			"And the award for best ball-launching goes to...",
+			"Find this winner a cupcake.",
+			"Have you been working out?",
+			"GOOOOOOOOOOOOOAL!!!",
+			"Are you sopnsored yet?",
+			"That was OK, but I like pizza.",
+			"If you could see me, I'd be clapping.",
 		};
 	}
 
@@ -63,6 +73,7 @@ public class WinChecker : MonoBehaviour {
 				nextLevel.IsUnlocked = true;
 			}
 			if (_Ball.TmpScore > GameManager.CurrentLevel.Score) {
+				GameManager.GotHighScore = true;
 				GameManager.CurrentLevel.Score = _Ball.TmpScore;
 				GameManager.CurrentLevel.Bounces = _Ball.TmpBounces;
 			}
@@ -83,6 +94,9 @@ public class WinChecker : MonoBehaviour {
 
 			_GameManger.LevelCompleteCanvas.enabled = true;
 			_GameManger.DisplayWinDetails();
+
+			GameObject ControlUICanvasGO = GameObject.Find("ControlUICanvas");
+			ControlUICanvasGO.GetComponent<Canvas>().enabled = false;
 			//_GameManger.ReturnToLevelPicker(Winning);
 		}
 	}

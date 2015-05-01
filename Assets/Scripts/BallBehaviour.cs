@@ -7,6 +7,10 @@ using System.Collections;
 public class BallBehaviour : MonoBehaviour {
 
 	public GameObject FiveBounceParticle;
+	public GameObject FiveBounceTrail;
+	public GameObject TenBounceParticle;
+	public GameObject TenBounceTrail;
+	public GameObject FifteenBounceParticle;
 	Rigidbody _ThisRigidBody;
 	GameObject[] ImpactEffects = new GameObject[3];
 	int ImpactEffectPoolIndex;
@@ -51,6 +55,8 @@ public class BallBehaviour : MonoBehaviour {
 
 		if (TmpBounces == 5) {
 			Instantiate(FiveBounceParticle, transform.position, Quaternion.identity);
+		} else if (TmpBounces == 10) {
+			Instantiate(TenBounceParticle, transform.position, Quaternion.identity);
 		}
 	}
 
