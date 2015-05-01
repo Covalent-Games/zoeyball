@@ -11,7 +11,7 @@ public class BallBehaviour : MonoBehaviour {
 	public GameObject TenBounceParticle;
 	public GameObject TenBounceTrail;
 	public GameObject FifteenBounceParticle;
-	Rigidbody _ThisRigidBody;
+	Rigidbody thisRigidBody;
 	GameObject[] ImpactEffects = new GameObject[3];
 	int ImpactEffectPoolIndex;
 
@@ -23,7 +23,7 @@ public class BallBehaviour : MonoBehaviour {
 
 	void Awake() {
 
-		_ThisRigidBody = GetComponent<Rigidbody>();
+		thisRigidBody = GetComponent<Rigidbody>();
 		GameObject resource = (GameObject)Resources.Load("Effects/ImpactEffect");
 		for (int i = 0; i < ImpactEffects.Length; i++) {
 			ImpactEffects[i] = Instantiate(resource) as GameObject;
@@ -37,7 +37,7 @@ public class BallBehaviour : MonoBehaviour {
 		if (audioSource != null) {
 			// Raise or lower volume of impact based on ball velocity.
 			audioSource.volume = Vector3.Distance(
-					(_ThisRigidBody.velocity * Time.deltaTime) + transform.position,
+					(thisRigidBody.velocity * Time.deltaTime) + transform.position,
 					transform.position) * 3.3f;
 			audioSource.Play();
 		}

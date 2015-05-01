@@ -5,34 +5,35 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
+namespace GameData {
+	public class LevelSerializer {
 
-public class LevelSerializer {
+		public List<DataManager.Level> Deserialize(TextAsset asset) {
 
-	public List<DataManager.Level> Deserialize(TextAsset asset) {
-
-		XmlSerializer serializer = new XmlSerializer(typeof(List<DataManager.Level>));
-		using (var reader = new StringReader(asset.text)) {
-			return (List<DataManager.Level>)serializer.Deserialize(reader);
+			XmlSerializer serializer = new XmlSerializer(typeof(List<DataManager.Level>));
+			using (var reader = new StringReader(asset.text)) {
+				return (List<DataManager.Level>)serializer.Deserialize(reader);
+			}
 		}
-	}
 
-	public byte[] SerializeLevelList(List<DataManager.Level> readableLevelList) {
+		public byte[] SerializeLevelList(List<DataManager.Level> readableLevelList) {
 
 
-		BinaryFormatter binaryFormatter = new BinaryFormatter();
-		MemoryStream stream = new MemoryStream();
-		binaryFormatter.Serialize(stream, readableLevelList);
+			BinaryFormatter binaryFormatter = new BinaryFormatter();
+			MemoryStream stream = new MemoryStream();
+			binaryFormatter.Serialize(stream, readableLevelList);
 
-		return stream.ToArray();
-	}
+			return stream.ToArray();
+		}
 
-	public List<DataManager.Level> DeserializeLevelList(byte[] data) {
+		public List<DataManager.Level> DeserializeLevelList(byte[] data) {
 
-		BinaryFormatter binaryFormatter = new BinaryFormatter();
-		MemoryStream stream = new MemoryStream(data);
-		object deserializedData = binaryFormatter.Deserialize(stream);
+			BinaryFormatter binaryFormatter = new BinaryFormatter();
+			MemoryStream stream = new MemoryStream(data);
+			object deserializedData = binaryFormatter.Deserialize(stream);
 
-		return (List<DataManager.Level>)deserializedData;
+			return (List<DataManager.Level>)deserializedData;
 
+		}
 	}
 }
