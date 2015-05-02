@@ -301,6 +301,60 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: da2fea60d3aabee4eae6469abbbaf81c, type: 2}
   m_IsPrefabParent: 0
+--- !u!1001 &1476714289
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 410742, guid: 79722c5173402e64298ad0cd361336f8, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -.572145581
+      objectReference: {fileID: 0}
+    - target: {fileID: 410742, guid: 79722c5173402e64298ad0cd361336f8, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 2.34487772
+      objectReference: {fileID: 0}
+    - target: {fileID: 410742, guid: 79722c5173402e64298ad0cd361336f8, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 410742, guid: 79722c5173402e64298ad0cd361336f8, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -.707106829
+      objectReference: {fileID: 0}
+    - target: {fileID: 410742, guid: 79722c5173402e64298ad0cd361336f8, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 410742, guid: 79722c5173402e64298ad0cd361336f8, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 410742, guid: 79722c5173402e64298ad0cd361336f8, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: .707106829
+      objectReference: {fileID: 0}
+    - target: {fileID: 410742, guid: 79722c5173402e64298ad0cd361336f8, type: 2}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 19863338, guid: 79722c5173402e64298ad0cd361336f8, type: 2}
+      propertyPath: InitialModule.startSize.scalar
+      value: .75
+      objectReference: {fileID: 0}
+    - target: {fileID: 19863338, guid: 79722c5173402e64298ad0cd361336f8, type: 2}
+      propertyPath: InitialModule.startSize.maxCurve.m_Curve.Array.data[0].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 19863338, guid: 79722c5173402e64298ad0cd361336f8, type: 2}
+      propertyPath: InitialModule.startSize.minCurve.m_Curve.Array.data[0].value
+      value: .466666669
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 79722c5173402e64298ad0cd361336f8, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1001 &1706068557
 Prefab:
   m_ObjectHideFlags: 0
