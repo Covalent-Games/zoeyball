@@ -17,7 +17,8 @@ namespace GameData {
 	public class DataManager {
 
 		ISavedGameMetadata SavedGameMetaData;
-		public LevelSerializer Serializer;
+		public LevelSerializer Serializer = new LevelSerializer();
+		SessionTimeTracker thisTimeTracker = new SessionTimeTracker();
 		public static List<Level> LevelList = new List<Level>();
 
 		[System.Serializable]
@@ -40,14 +41,6 @@ namespace GameData {
 		bool Writing = false;
 
 		/// <summary>
-		/// Constructor.
-		/// </summary>
-		public DataManager() {
-
-			Serializer = new LevelSerializer();
-		}
-
-		/// <summary>
 		/// Loads the basic level template. This is not the player's progress.
 		/// </summary>
 		/// <param name="levelData">The TextAsset XML file containing level info.</param>
@@ -56,6 +49,12 @@ namespace GameData {
 			LevelList = Serializer.Deserialize(levelData);
 		}
 
+		public void StartRecordingPlayTime() {
+
+			thisTimeTracker.StartRecordingTime();
+		}
+
+		#region Game Saving/Loading
 		public void OpenSavedGame() {
 
 			ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
@@ -74,46 +73,45 @@ namespace GameData {
 
 		public void StartSaveGameData() {
 
-			Debug.Log("****************** Queueing Save game ******************");
 			OpenSavedGame();
 			Writing = true;
 		}
 
 		public void StartLoadGameData() {
 
-			Debug.Log("****************** Queueing Load game ******************");
 			OpenSavedGame();
 			Writing = false;
 		}
-
+		#endregion
 		#region Data Manager Callbacks
 
 		void OnSavedGameOpened(SavedGameRequestStatus status, ISavedGameMetadata metaData) {
 
-			Debug.Log("****************** Opening game and verifying status ******************");
-
 			switch (status) {
 				case SavedGameRequestStatus.Success:
 					SavedGameMetaData = metaData;
-					Debug.Log("****************** Save File Opened!");
-					Debug.Log("Last modified: " + metaData.LastModifiedTimestamp);
 
+					// Set to save the current game.
 					if (Writing) {
-						Debug.Log("****************** Saving game ******************");
-
 						byte[] savedData = Serializer.SerializeLevelList(LevelList);
 
 						ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
 						SavedGameMetadataUpdate.Builder builder = new SavedGameMetadataUpdate.Builder();
 
 						builder = builder
-							.WithUpdatedDescription("Saved game at " + DateTime.Now);
+							.WithUpdatedDescription("Saved game at " + DateTime.Now)
+							.WithUpdatedPlayedTime(
+								thisTimeTracker.GetTimeSnapshot(metaData.TotalTimePlayed));
 
 						SavedGameMetadataUpdate updatedMetadata = builder.Build();
-						savedGameClient.CommitUpdate(SavedGameMetaData, updatedMetadata, savedData, OnSavedGameWritten);
-					} else {
-						Debug.Log("****************** Loading game ******************");
+						savedGameClient.CommitUpdate(
+								SavedGameMetaData,
+								updatedMetadata,
+								savedData,
+								OnSavedGameWritten);
 
+						// Set to load an existing game.
+					} else {
 						ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
 						savedGameClient.ReadBinaryData(SavedGameMetaData, OnSavedGameDataRead);
 					}
@@ -140,7 +138,6 @@ namespace GameData {
 			switch (status) {
 				case SavedGameRequestStatus.Success:
 					OnDataSaved();
-					Debug.Log("****************** " + metaData.Filename + " was written succesfully ******************");
 					break;
 				case SavedGameRequestStatus.AuthenticationError:
 					Debug.Log("SAVE FAILED! NO AUTHENTICATION!");
@@ -170,7 +167,6 @@ namespace GameData {
 						Debug.LogError("No event registered for OnDataLoaded. LevelPicker scene won't be loaded");
 					}
 
-					Debug.Log("****************** Data was read and deserialized. Things SHOULD be G2G!");
 					break;
 				case SavedGameRequestStatus.AuthenticationError:
 					Debug.Log("LOAD FAILED! NO AUTHENTICATION!");
@@ -184,10 +180,6 @@ namespace GameData {
 				case SavedGameRequestStatus.TimeoutError:
 					Debug.Log("TIMEOUT LOADING FILE");
 					break;
-			}
-			Debug.Log("Data Loaded ended");
-			foreach (var level in LevelList) {
-				Debug.Log(level.Name + " -- " + level.Score);
 			}
 		}
 

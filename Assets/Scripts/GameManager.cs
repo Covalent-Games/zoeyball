@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour {
 		try {
 			DataWrangler.OnDataLoaded += LoadLevelPicker;
 			DataWrangler.StartLoadGameData();
+			DataWrangler.StartRecordingPlayTime();
 		} catch (NullReferenceException) {
 			Debug.Log("LoadGameData failed to execute");
 
