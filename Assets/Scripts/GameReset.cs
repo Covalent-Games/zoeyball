@@ -19,6 +19,8 @@ public class GameReset : MonoBehaviour {
 				Rigidbody ballRigidBody = colliderObject.GetComponent<Rigidbody>();
 				BallBehaviour ballBehaviour = colliderObject.GetComponent<BallBehaviour>();
 
+				ballBehaviour.FiveBounceTrail.GetComponent<ParticleSystem>().Stop();
+				ballBehaviour.FiveBounceTrail.GetComponent<ParticleSystem>().Clear();
 				colliderObject.transform.position = ballLauncher.StartPosition;
 				colliderObject.transform.rotation = ballLauncher.StartRotation;
 				ballLauncher.LaunchPowerMeter = 0f;

@@ -24,6 +24,7 @@ public class BallBehaviour : MonoBehaviour {
 	void Awake() {
 
 		thisRigidBody = GetComponent<Rigidbody>();
+
 		GameObject resource = (GameObject)Resources.Load("Effects/ImpactEffect");
 		for (int i = 0; i < ImpactEffects.Length; i++) {
 			ImpactEffects[i] = Instantiate(resource) as GameObject;
@@ -55,6 +56,9 @@ public class BallBehaviour : MonoBehaviour {
 
 		if (TmpBounces == 5) {
 			Instantiate(FiveBounceParticle, transform.position, Quaternion.identity);
+			FiveBounceTrail.GetComponent<ParticleSystem>().Play();
+			//GameObject firstTrail = (GameObject)Instantiate(FiveBounceTrail, transform.position, Quaternion.identity);
+			//firstTrail.transform.parent = transform;
 		} else if (TmpBounces == 10) {
 			Instantiate(TenBounceParticle, transform.position, Quaternion.identity);
 		}

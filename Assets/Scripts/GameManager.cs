@@ -134,6 +134,8 @@ public class GameManager : MonoBehaviour {
 		RestartCache.Powerbar = _BallLauncher.LaunchPowerMeter;
 		RestartCache.LoadFromCache = true;
 
+		_BallBehavior.FiveBounceTrail.GetComponent<ParticleSystem>().Stop();
+		_BallBehavior.FiveBounceTrail.GetComponent<ParticleSystem>().Clear();
 		EscapeMenuCanvas.enabled = false;
 		LevelCompleteCanvas.enabled = false;
 		LevelCompleteCanvas.transform.Find("HighScoreText").GetComponent<Text>().enabled = false;
