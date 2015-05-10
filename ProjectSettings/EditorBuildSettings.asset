@@ -37,3 +37,19 @@ EditorBuildSettings:
     path: Assets/Levels/Maze.unity
   - enabled: 1
     path: Assets/Levels/Level10.unity
+  - enabled: 1
+    path: Assets/Levels/Level11.unity
+  - enabled: 1
+    path: Assets/Levels/Level12.unity
+  - enabled: 1
+    path: Assets/Levels/Level13.unity
+  - enabled: 1
+    path: Assets/Levels/Level14.unity
+  - enabled: 1
+    path: Assets/Levels/Level15.unity
+  - enabled: 1
+    path: Assets/Levels/Level16.unity
+  - enabled: 1
+    path: Assets/Levels/Level18.unity
+  - enabled: 1
+    path: Assets/Levels/Level20.unity

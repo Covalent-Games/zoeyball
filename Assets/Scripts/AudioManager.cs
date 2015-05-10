@@ -18,12 +18,26 @@ public class AudioManager : MonoBehaviour {
 	void Awake() {
 
 		Audio = GetComponent<AudioSource>();
+
+		if (PlayerPrefs.HasKey("Music") && PlayerPrefs.GetString("Music") == "Off") {
+			ToggleMusic();
+		}
+		if (PlayerPrefs.HasKey("Sound") && PlayerPrefs.GetString("Sound") == "Off") {
+			ToggleSound();
+		}
+	}
+
+	void Start() {
+
+		
 	}
 
 	public void ChangeMusicVolume(float newVolume) {
 
 		if (!MusicMuted)
 			Audio.volume = newVolume;
+
+		PlayerPrefs.SetFloat("Volume", newVolume);
 	}
 
 	public void ToggleMusic() {
@@ -31,9 +45,11 @@ public class AudioManager : MonoBehaviour {
 		if (MusicMuted) {
 			Audio.mute = false;
 			MuteMusicImage.sprite = MusicUnMutedIcon;
+			PlayerPrefs.SetString("Music", "On");
 		} else {
 			Audio.mute = true;
 			MuteMusicImage.sprite = MusicMutedIcon;
+			PlayerPrefs.SetString("Music", "Off");
 		}
 
 		MusicMuted = !MusicMuted;
@@ -45,8 +61,10 @@ public class AudioManager : MonoBehaviour {
 		Debug.LogWarning("Muting sound effects not yet implemented!");
 		if (SoundMuted) {
 			MuteSoundsImage.sprite = SoundMutedIcon;
+			PlayerPrefs.SetString("Sound", "Off");
 		} else {
 			MuteSoundsImage.sprite = SoundUnmutedIcon;
+			PlayerPrefs.SetString("Sound", "On");
 		}
 	}
 

@@ -57,10 +57,12 @@ public class BallBehaviour : MonoBehaviour {
 		if (TmpBounces == 5) {
 			Instantiate(FiveBounceParticle, transform.position, Quaternion.identity);
 			FiveBounceTrail.GetComponent<ParticleSystem>().Play();
-			//GameObject firstTrail = (GameObject)Instantiate(FiveBounceTrail, transform.position, Quaternion.identity);
-			//firstTrail.transform.parent = transform;
 		} else if (TmpBounces == 10) {
 			Instantiate(TenBounceParticle, transform.position, Quaternion.identity);
+			FiveBounceTrail.GetComponent<ParticleSystem>().Stop();
+			TenBounceTrail.GetComponent<ParticleSystem>().Play();
+		} else if (TmpBounces == 15) {
+
 		}
 	}
 

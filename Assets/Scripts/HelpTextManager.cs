@@ -12,7 +12,30 @@ public class HelpTextManager : MonoBehaviour {
 
 	void Start() {
 
-		DisplayNextText();
+		bool showHelpText = true;
+		string level = gameObject.name.Split('_')[1];
+		switch (level) {
+			case "1":
+				if (PlayerPrefs.HasKey("Level1HelpText")) {
+					showHelpText = false;
+				}
+				break;
+			case "2":
+				if (PlayerPrefs.HasKey("Level2HelpText")) {
+					showHelpText = false;
+				}
+				break;
+			case "3":
+				if (PlayerPrefs.HasKey("Level3HelpText")) {
+					showHelpText = false;
+				}
+				break;
+		}
+
+		if (showHelpText)
+			DisplayNextText();
+		else
+			HelpTextCanvas.enabled = false;
 	}
 
 	public void DisplayNextText() {
@@ -25,6 +48,21 @@ public class HelpTextManager : MonoBehaviour {
 		}
 
 		HelpText.text = HelpTextList[_CurrentTextIndex];
+	}
+
+	public void SeeLevel1HelpText() {
+
+		PlayerPrefs.SetString("Level1HelpText", "Yes");
+	}
+
+	public void SeeLevel2HelpText() {
+
+		PlayerPrefs.SetString("Level2HelpText", "Yes");
+	}
+
+	public void SeeLevel3HelpText() {
+
+		PlayerPrefs.SetString("Level3HelpText", "Yes");
 	}
 }
 

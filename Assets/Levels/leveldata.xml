@@ -50,5 +50,55 @@
     <LevelID>10</LevelID>
     <WorldID>0</WorldID>
   </Level>  
+    <Level>
+    <Name>Elevensies</Name>
+    <LevelID>11</LevelID>
+    <WorldID>0</WorldID>
+  </Level>
+  <Level>
+    <Name>Some Eggs</Name>
+    <LevelID>12</LevelID>
+    <WorldID>0</WorldID>
+  </Level>
+  <Level>
+    <Name>Feeling Lucky?</Name>
+    <LevelID>13</LevelID>
+    <WorldID>0</WorldID>
+  </Level>
+  <Level>
+    <Name>Fourteenth Time's the Charm</Name>
+    <LevelID>14</LevelID>
+    <WorldID>0</WorldID>
+  </Level>
+    <Level>
+    <Name>Mooorrre!</Name>
+    <LevelID>15</LevelID>
+    <WorldID>0</WorldID>
+  </Level>
+    <Level>
+    <Name>Is This Driving You Nuts?</Name>
+    <LevelID>16</LevelID>
+    <WorldID>0</WorldID>
+  </Level>
+  <Level>
+    <Name>...Going on 17</Name>
+    <LevelID>17</LevelID>
+    <WorldID>0</WorldID>
+  </Level>
+ <Level>
+    <Name>Submit Your Vote</Name>
+    <LevelID>18</LevelID>
+    <WorldID>0</WorldID>
+  </Level>
+  <Level>
+    <Name>Are You Still Playing This?</Name>
+    <LevelID>19</LevelID>
+    <WorldID>0</WorldID>
+  </Level>
+  <Level>
+    <Name>Second Decade</Name>
+    <LevelID>20</LevelID>
+    <WorldID>0</WorldID>
+  </Level>  
 
 </ArrayOfLevel>
