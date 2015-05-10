@@ -137,6 +137,8 @@ public class GameManager : MonoBehaviour {
 
 		_BallBehavior.FiveBounceTrail.GetComponent<ParticleSystem>().Stop();
 		_BallBehavior.FiveBounceTrail.GetComponent<ParticleSystem>().Clear();
+		_BallBehavior.TenBounceTrail.GetComponent<ParticleSystem>().Stop();
+		_BallBehavior.TenBounceTrail.GetComponent<ParticleSystem>().Clear(); 
 		EscapeMenuCanvas.enabled = false;
 		LevelCompleteCanvas.enabled = false;
 		HighScoreStamp.GetComponent<RawImage>().enabled = false;

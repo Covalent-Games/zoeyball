@@ -21,6 +21,8 @@ public class GameReset : MonoBehaviour {
 
 				ballBehaviour.FiveBounceTrail.GetComponent<ParticleSystem>().Stop();
 				ballBehaviour.FiveBounceTrail.GetComponent<ParticleSystem>().Clear();
+				ballBehaviour.TenBounceTrail.GetComponent<ParticleSystem>().Stop();
+				ballBehaviour.TenBounceTrail.GetComponent<ParticleSystem>().Clear();
 				colliderObject.transform.position = ballLauncher.StartPosition;
 				colliderObject.transform.rotation = ballLauncher.StartRotation;
 				ballLauncher.LaunchPowerMeter = 0f;
