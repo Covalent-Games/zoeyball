@@ -20,6 +20,7 @@ public class PlayServicesHandler : MonoBehaviour {
 	public static bool Authenticate() {
 
 		bool returnValue = true;
+
 		Social.localUser.Authenticate((bool success) => {
 			if (success) {
 				Debug.Log("Signed into Google Play!");
