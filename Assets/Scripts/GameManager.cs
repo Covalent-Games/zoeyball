@@ -12,8 +12,10 @@ using GameData;
 public class GameManager : MonoBehaviour {
 
 	public static DataManager.Level CurrentLevel;
+	[Header("Exhaustive Level Template")]
 	public TextAsset LevelData;
-	public Canvas EscapeMenuCanvas;
+	[Header("UI References")]
+	public Canvas MenuCanvas;
 	public Canvas RestartButtonCanvas;
 	public Canvas LevelCompleteCanvas;
 	AudioManager AudioWrangler;
@@ -22,6 +24,7 @@ public class GameManager : MonoBehaviour {
 
 	private BallBehaviour _BallBehavior;
 	private BallLauncher _BallLauncher;
+	private bool MenuToggled = false;
 
 
 	void Awake() {
@@ -29,7 +32,7 @@ public class GameManager : MonoBehaviour {
 		DataWrangler.LoadLevelTemplate(LevelData);
 		AudioWrangler = GetComponent<AudioManager>();
 		DontDestroyOnLoad(gameObject);
-		DontDestroyOnLoad(EscapeMenuCanvas.gameObject);
+		DontDestroyOnLoad(MenuCanvas.gameObject);
 	}
 
 	void Start() {
@@ -42,7 +45,7 @@ public class GameManager : MonoBehaviour {
 	void Update() {
 
 		if (Input.GetKeyDown(KeyCode.Escape)) {
-			EscapeMenuCanvas.enabled = !EscapeMenuCanvas.enabled;
+			MenuCanvas.enabled = !MenuCanvas.enabled;
 		}
 	}
 
@@ -92,6 +95,16 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
+	public void ToggleMenu() {
+
+		MenuToggled = !MenuToggled;
+
+		//if (MenuToggled)
+		//MenuCanvas.GetComponent<Animator>().Play();
+		//else
+		//MenuCanvas.GetComponent<Animation>().Rewind();
+	}
+
 	public void Quit() {
 
 		DataWrangler.StartSaveGameData();
@@ -100,7 +113,7 @@ public class GameManager : MonoBehaviour {
 
 	public void ReturnButton() {
 
-		EscapeMenuCanvas.enabled = false;
+		MenuCanvas.enabled = false;
 		LevelCompleteCanvas.enabled = false;
 		ReturnToLevelPicker(true, true);
 	}
@@ -133,7 +146,7 @@ public class GameManager : MonoBehaviour {
 		RestartCache.Powerbar = _BallLauncher.LaunchPowerMeter;
 		RestartCache.LoadFromCache = true;
 
-		EscapeMenuCanvas.enabled = false;
+		MenuCanvas.enabled = false;
 		LevelCompleteCanvas.enabled = false;
 		Application.LoadLevel(Application.loadedLevel);
 	}
