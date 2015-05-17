@@ -367,7 +367,7 @@ GameObject:
   - 114: {fileID: 958798261}
   - 114: {fileID: 958798260}
   m_Layer: 5
-  m_Name: HelpCanvas
+  m_Name: HelpCanvas_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -582,14 +582,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 485422, guid: 4e5927e64e5d29d4ea7612824b8a07e4, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 2.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 485422, guid: 4e5927e64e5d29d4ea7612824b8a07e4, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4e5927e64e5d29d4ea7612824b8a07e4, type: 2}
   m_IsPrefabParent: 0
@@ -717,6 +709,18 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 958798260}
           m_MethodName: DisplayNextText
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 958798260}
+          m_MethodName: SeeLevel1HelpText
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}

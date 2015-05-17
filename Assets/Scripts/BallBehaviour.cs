@@ -7,6 +7,10 @@ using System.Collections;
 public class BallBehaviour : MonoBehaviour {
 
 	public GameObject FiveBounceParticle;
+	public GameObject FiveBounceTrail;
+	public GameObject TenBounceParticle;
+	public GameObject TenBounceTrail;
+	public GameObject FifteenBounceParticle;
 	Rigidbody thisRigidBody;
 	GameObject[] ImpactEffects = new GameObject[3];
 	int ImpactEffectPoolIndex;
@@ -20,6 +24,7 @@ public class BallBehaviour : MonoBehaviour {
 	void Awake() {
 
 		thisRigidBody = GetComponent<Rigidbody>();
+
 		GameObject resource = (GameObject)Resources.Load("Effects/ImpactEffect");
 		for (int i = 0; i < ImpactEffects.Length; i++) {
 			ImpactEffects[i] = Instantiate(resource) as GameObject;
@@ -51,6 +56,13 @@ public class BallBehaviour : MonoBehaviour {
 
 		if (TmpBounces == 5) {
 			Instantiate(FiveBounceParticle, transform.position, Quaternion.identity);
+			FiveBounceTrail.GetComponent<ParticleSystem>().Play();
+		} else if (TmpBounces == 10) {
+			Instantiate(TenBounceParticle, transform.position, Quaternion.identity);
+			FiveBounceTrail.GetComponent<ParticleSystem>().Stop();
+			TenBounceTrail.GetComponent<ParticleSystem>().Play();
+		} else if (TmpBounces == 15) {
+
 		}
 	}
 

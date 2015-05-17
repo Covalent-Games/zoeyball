@@ -16,9 +16,11 @@ public class GameManager : MonoBehaviour {
 	public Canvas EscapeMenuCanvas;
 	public Canvas RestartButtonCanvas;
 	public Canvas LevelCompleteCanvas;
+	public GameObject HighScoreStamp;
 	AudioManager AudioWrangler;
 	public DataManager DataWrangler = new DataManager();
 	public GameObject LevelButtonResource;
+	public static bool GotHighScore = false;
 
 	private BallBehaviour _BallBehavior;
 	private BallLauncher _BallLauncher;
@@ -133,8 +135,13 @@ public class GameManager : MonoBehaviour {
 		RestartCache.Powerbar = _BallLauncher.LaunchPowerMeter;
 		RestartCache.LoadFromCache = true;
 
+		_BallBehavior.FiveBounceTrail.GetComponent<ParticleSystem>().Stop();
+		_BallBehavior.FiveBounceTrail.GetComponent<ParticleSystem>().Clear();
+		_BallBehavior.TenBounceTrail.GetComponent<ParticleSystem>().Stop();
+		_BallBehavior.TenBounceTrail.GetComponent<ParticleSystem>().Clear(); 
 		EscapeMenuCanvas.enabled = false;
 		LevelCompleteCanvas.enabled = false;
+		HighScoreStamp.GetComponent<RawImage>().enabled = false;
 		Application.LoadLevel(Application.loadedLevel);
 	}
 
@@ -143,6 +150,7 @@ public class GameManager : MonoBehaviour {
 		RestartCache.LoadFromCache = false;
 
 		LevelCompleteCanvas.enabled = false;
+		HighScoreStamp.GetComponent<RawImage>().enabled = false;
 		// If next level exists, load it.
 		if (DataManager.LevelList[CurrentLevel.LevelID] != null)
 			LoadLevelByID(CurrentLevel.LevelID + 1);
@@ -230,11 +238,23 @@ public class GameManager : MonoBehaviour {
 
 	public void DisplayWinDetails() {
 
-		GameObject ScoreRecapGO = LevelCompleteCanvas.transform.FindChild("Score Recap").gameObject;
-		ScoreRecapGO.GetComponent<Text>().text = string.Format("Old Score: \n" +
-												 "New Score: {0}\n" +
-												 "Some other stuff...", Mathf.RoundToInt(_BallBehavior.TmpScore));
+		GameObject ScoreRecapGO = LevelCompleteCanvas.transform.Find("LevelCompleteButtonLayout/Score Recap").gameObject;
+		//ScoreRecapGO.GetComponent<Text>().text = string.Format("High Score: {0}\n" +
+		//										 "New Score: {1}", Mathf.RoundToInt(CurrentLevel.Score), Mathf.RoundToInt(_BallBehavior.TmpScore));
+		if (GotHighScore) {
+			HighScoreStamp.GetComponent<RawImage>().enabled = true;
+			HighScoreStamp.GetComponent<Animation>().Play();
+			//HighScoreStamp.GetComponentInChildren<ParticleSystem>().Play();
+			//GameObject HighScoreParticles = (GameObject)Instantiate(HighScoreStamp.transform.GetChild(0).gameObject, HighScoreStamp.transform.position, HighScoreStamp.transform.rotation);
+			//HighScoreParticles.GetComponent<ParticleSystem>().Play();
+			GotHighScore = false;
+		}
+
 	}
 
+	void OnApplicationQuit() {
+
+		PlayerPrefs.Save();
+	}
 
 }
