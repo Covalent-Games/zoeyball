@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 using System.Collections;
 
 [RequireComponent(typeof(AudioSource))]
 public class AudioManager : MonoBehaviour {
 
 	public AudioSource Audio;
+	public AudioMixer Mixer;
 	public Image MuteMusicImage;
 	public Image MuteSoundsImage;
 	public Sprite MusicMutedIcon;
@@ -29,7 +31,7 @@ public class AudioManager : MonoBehaviour {
 
 	void Start() {
 
-		
+
 	}
 
 	public void ChangeMusicVolume(float newVolume) {
@@ -60,9 +62,11 @@ public class AudioManager : MonoBehaviour {
 		SoundMuted = !SoundMuted;
 		Debug.LogWarning("Muting sound effects not yet implemented!");
 		if (SoundMuted) {
+			Mixer.SetFloat("SoundVolume", -80f);
 			MuteSoundsImage.sprite = SoundMutedIcon;
 			PlayerPrefs.SetString("Sound", "Off");
 		} else {
+			Mixer.SetFloat("SoundVolume", 0f);
 			MuteSoundsImage.sprite = SoundUnmutedIcon;
 			PlayerPrefs.SetString("Sound", "On");
 		}
