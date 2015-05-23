@@ -1,7 +1,5 @@
-*.dll
-*.dll.meta
 *.keystore
-*.apk
+*.apk*
 
 # =============== #
 # Unity generated #
