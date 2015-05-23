@@ -73,14 +73,14 @@ namespace GameData {
 
 		public void StartSaveGameData() {
 
-			OpenSavedGame();
 			Writing = true;
+			OpenSavedGame();
 		}
 
 		public void StartLoadGameData() {
 
-			OpenSavedGame();
 			Writing = false;
+			OpenSavedGame();
 		}
 		#endregion
 		#region Data Manager Callbacks

@@ -8,6 +8,8 @@ TagManager:
   - Ball
   - WinBlock
   - GameManager
+  - MenuButton
+  - MenuPanel
   layers:
   - Default
   - TransparentFX

@@ -7,31 +7,36 @@ using GooglePlayGames.BasicApi;
 using GooglePlayGames.BasicApi.SavedGame;
 using System;
 using GameData;
+using UnityEngine.Audio;
 
 [RequireComponent(typeof(PlayServicesHandler))]
 public class GameManager : MonoBehaviour {
 
 	public static DataManager.Level CurrentLevel;
 	public TextAsset LevelData;
-	public Canvas EscapeMenuCanvas;
-	public Canvas RestartButtonCanvas;
 	public Canvas LevelCompleteCanvas;
+	public Image LevelSelectBkGrndImage;
 	public GameObject HighScoreStamp;
-	AudioManager AudioWrangler;
+	public Animator MenuAnimator;
 	public DataManager DataWrangler = new DataManager();
 	public GameObject LevelButtonResource;
 	public static bool GotHighScore = false;
 
+	private AudioManager AudioWrangler;
 	private BallBehaviour _BallBehavior;
 	private BallLauncher _BallLauncher;
+
+	private bool MenuOpen = false;
 
 
 	void Awake() {
 
 		DataWrangler.LoadLevelTemplate(LevelData);
 		AudioWrangler = GetComponent<AudioManager>();
+		MenuAnimator = GameObject.FindGameObjectWithTag("MenuPanel").GetComponent<Animator>();
+		MenuAnimator.enabled = false;
+		LevelSelectBkGrndImage = GameObject.Find("LevelSelectBackground").GetComponent<Image>();
 		DontDestroyOnLoad(gameObject);
-		DontDestroyOnLoad(EscapeMenuCanvas.gameObject);
 	}
 
 	void Start() {
@@ -39,13 +44,6 @@ public class GameManager : MonoBehaviour {
 		Time.timeScale = 1.15f;
 		PlayServicesHandler.Activate();
 		PlayServicesHandler.Authenticate();
-	}
-
-	void Update() {
-
-		if (Input.GetKeyDown(KeyCode.Escape)) {
-			EscapeMenuCanvas.enabled = !EscapeMenuCanvas.enabled;
-		}
 	}
 
 	public void Play() {
@@ -60,8 +58,15 @@ public class GameManager : MonoBehaviour {
 			if (Application.isEditor) {
 				Debug.LogWarning(
 					"Loading LevelPicker. You're running in the Editor so no save files used!");
+				if (MenuOpen) {
+					ToggleMenu();
+				}
 				LoadLevelPicker();
+				return;
 			}
+		}
+		if (MenuOpen) {
+			ToggleMenu();
 		}
 		LoadLevelPicker();
 	}
@@ -94,16 +99,35 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
+	public void ToggleMenu() {
+
+		MenuAnimator.enabled = true;
+		if (MenuOpen) {
+			MenuAnimator.Play("MenuSlideOut");
+		} else {
+			MenuAnimator.Play("MenuSlideIn");
+		}
+		MenuOpen = !MenuOpen;
+
+	}
+
 	public void Quit() {
 
+		DataWrangler.OnDataSaved += Application.Quit;
+		// Close the menu
+		ToggleMenu();
 		DataWrangler.StartSaveGameData();
-		Application.Quit();
 	}
 
 	public void ReturnButton() {
 
-		EscapeMenuCanvas.enabled = false;
+		// If we're already in the level selection screen this button does nothing.
+		if (Application.loadedLevel == 0 || Application.loadedLevel == 1) {
+			return;
+		}
 		LevelCompleteCanvas.enabled = false;
+		// Close the menu
+		ToggleMenu();
 		ReturnToLevelPicker(true, true);
 	}
 
@@ -127,7 +151,12 @@ public class GameManager : MonoBehaviour {
 		Application.LoadLevel("LevelPicker");
 	}
 
-	public void Restart() {
+	public void Restart(bool toggleMenu) {
+
+		// If we're already in the level selection screen this button does nothing.
+		if (Application.loadedLevel == 0 || Application.loadedLevel == 1) {
+			return;
+		}
 
 		RestartCache.Score = _BallBehavior.TmpScore;
 		RestartCache.Bounces = _BallBehavior.TmpBounces;
@@ -138,10 +167,13 @@ public class GameManager : MonoBehaviour {
 		_BallBehavior.FiveBounceTrail.GetComponent<ParticleSystem>().Stop();
 		_BallBehavior.FiveBounceTrail.GetComponent<ParticleSystem>().Clear();
 		_BallBehavior.TenBounceTrail.GetComponent<ParticleSystem>().Stop();
-		_BallBehavior.TenBounceTrail.GetComponent<ParticleSystem>().Clear(); 
-		EscapeMenuCanvas.enabled = false;
+		_BallBehavior.TenBounceTrail.GetComponent<ParticleSystem>().Clear();
 		LevelCompleteCanvas.enabled = false;
 		HighScoreStamp.GetComponent<RawImage>().enabled = false;
+
+		if (toggleMenu) {
+			ToggleMenu();
+		}
 		Application.LoadLevel(Application.loadedLevel);
 	}
 
@@ -179,7 +211,7 @@ public class GameManager : MonoBehaviour {
 
 		switch (levelIndex) {
 			default:
-				RestartButtonCanvas.enabled = true;
+				LevelSelectBkGrndImage.enabled = false;
 				AudioWrangler.ChangeMusicVolume(.275f);
 				_BallLauncher = GameObject.FindObjectOfType<BallLauncher>();
 				_BallBehavior = _BallLauncher.Ball.GetComponent<BallBehaviour>();
@@ -188,11 +220,11 @@ public class GameManager : MonoBehaviour {
 				}
 				break;
 			case 0:
-				RestartButtonCanvas.enabled = false;
+				LevelSelectBkGrndImage.enabled = false;
 				AudioWrangler.ChangeMusicVolume(1f);
 				break;
 			case 1:
-				RestartButtonCanvas.enabled = false;
+				LevelSelectBkGrndImage.enabled = true;
 				PopulateLevelListUI();
 				AudioWrangler.ChangeMusicVolume(1f);
 				break;
