@@ -267,7 +267,7 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4e5927e64e5d29d4ea7612824b8a07e4, type: 2}
   m_IsPrefabParent: 0
---- !u!4 &1635749076
+--- !u!4 &1635749076 stripped
 Transform:
   m_PrefabParentObject: {fileID: 435950, guid: 4e5927e64e5d29d4ea7612824b8a07e4, type: 2}
   m_PrefabInternal: {fileID: 1128183302}
@@ -280,7 +280,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 438504, guid: 105d8c6a4fa76374d850993282965ff4, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 438504, guid: 105d8c6a4fa76374d850993282965ff4, type: 2}
       propertyPath: m_LocalPosition.y

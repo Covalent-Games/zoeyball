@@ -3,11 +3,16 @@ using System.Collections;
 
 public class Follow : MonoBehaviour {
 
+	[HideInInspector]
 	public GameObject FollowTarget;
-	[Range(0.01f, 1.0f)]
-	public float FollowDistance;
-	GameObject FocusObject;
+	[HideInInspector]
 	public GameObject WinBlock;
+	[Range(0.01f, 1.0f)]
+	[Tooltip("0 will stare at the Winblock. 1 will follow the ball perfectly.")]
+	public float FollowDistance;
+	[Tooltip("Modifies where the camera looks")]
+	public Vector2 Offset;
+	GameObject FocusObject;
 
 	void Start() {
 
@@ -32,7 +37,8 @@ public class Follow : MonoBehaviour {
 	void LookAtTarget() {
 
 		Vector3 focalPoint = Vector3.Lerp(
-				WinBlock.transform.position, FollowTarget.transform.position, FollowDistance);
+				WinBlock.transform.position + (Vector3)Offset,
+				FollowTarget.transform.position + (Vector3)Offset, FollowDistance);
 		FocusObject.transform.position = focalPoint;
 		transform.LookAt(FocusObject.transform);
 	}
