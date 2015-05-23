@@ -455,10 +455,6 @@ Prefab:
       propertyPath: m_AnchoredPosition.y
       value: -20
       objectReference: {fileID: 0}
-    - target: {fileID: 11445618, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 22389670, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_Enabled
       value: 0
