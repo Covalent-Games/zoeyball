@@ -12,8 +12,10 @@ using UnityEngine.Audio;
 [RequireComponent(typeof(PlayServicesHandler))]
 public class GameManager : MonoBehaviour {
 
+	#region Members
 	public static GameManager Instance;
 	public static DataManager.Level CurrentLevel;
+	public PlayServicesHandler GooglePlay;
 	public TextAsset LevelData;
 	public Canvas LevelCompleteCanvas;
 	public Image LevelSelectBkGrndImage;
@@ -28,11 +30,13 @@ public class GameManager : MonoBehaviour {
 	private BallLauncher _BallLauncher;
 
 	private bool MenuOpen = false;
+	#endregion
 
-
+	#region Initializers
 	void Awake() {
 
 		GameManager.Instance = this;
+		GooglePlay = new PlayServicesHandler();
 		DataWrangler.LoadLevelTemplate(LevelData);
 		AudioWrangler = GetComponent<AudioManager>();
 		MenuAnimator = GameObject.FindGameObjectWithTag("MenuPanel").GetComponent<Animator>();
@@ -44,10 +48,12 @@ public class GameManager : MonoBehaviour {
 	void Start() {
 
 		Time.timeScale = 1.15f;
-		PlayServicesHandler.Activate();
-		PlayServicesHandler.Authenticate();
+		GooglePlay.Activate();
+		GooglePlay.Authenticate();
 	}
+	#endregion
 
+	#region Button Handlers
 	public void Play() {
 
 		try {
@@ -71,34 +77,6 @@ public class GameManager : MonoBehaviour {
 			ToggleMenu();
 		}
 		LoadLevelPicker();
-	}
-
-	void LoadLevelPicker() {
-
-		Application.LoadLevel("LevelPicker");
-	}
-
-	public void DisplaySaveSelection() {
-
-		uint maxNumToDisplay = 5;
-		bool allowCreateNew = false;
-		bool allowDelete = true;
-
-		ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
-		savedGameClient.ShowSelectSavedGameUI("Select saved game",
-			maxNumToDisplay,
-			allowCreateNew,
-			allowDelete,
-			OnSavedGameSelected);
-	}
-
-	void OnSavedGameSelected(SelectUIStatus status, ISavedGameMetadata metaData) {
-
-		if (status == SelectUIStatus.SavedGameSelected) {
-			Debug.Log("Selected the saved game");
-		} else {
-			Debug.LogError("The save game selection got borked");
-		}
 	}
 
 	public void ToggleMenu() {
@@ -131,26 +109,6 @@ public class GameManager : MonoBehaviour {
 		// Close the menu
 		ToggleMenu();
 		ReturnToLevelPicker(true, true);
-	}
-
-	public void ReturnToLevelPicker(bool save, bool immediate = false) {
-
-		RestartCache.LoadFromCache = false;
-
-		if (save) {
-			DataWrangler.StartSaveGameData();
-		}
-		if (immediate) {
-			Application.LoadLevel("LevelPicker");
-		} else {
-			StartCoroutine(ReturnToLevelPickerRoutine());
-		}
-	}
-
-	IEnumerator ReturnToLevelPickerRoutine() {
-
-		yield return new WaitForSeconds(2.5f);
-		Application.LoadLevel("LevelPicker");
 	}
 
 	public void Restart(bool toggleMenu = false) {
@@ -192,6 +150,47 @@ public class GameManager : MonoBehaviour {
 			ReturnToLevelPicker(true, true);
 	}
 
+	public void DisplaySaveSelection() {
+
+		uint maxNumToDisplay = 10;
+		bool allowCreateNew = false;
+		bool allowDelete = true;
+
+		ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
+		savedGameClient.ShowSelectSavedGameUI("Select saved game",
+			maxNumToDisplay,
+			allowCreateNew,
+			allowDelete,
+			OnSavedGameSelected);
+	}
+	#endregion
+
+	#region Misc
+	void LoadLevelPicker() {
+
+		Application.LoadLevel("LevelPicker");
+	}
+
+	public void ReturnToLevelPicker(bool save, bool immediate = false) {
+
+		RestartCache.LoadFromCache = false;
+
+		if (save) {
+			DataWrangler.StartSaveGameData();
+		}
+		if (immediate) {
+			Application.LoadLevel("LevelPicker");
+		} else {
+			StartCoroutine(ReturnToLevelPickerRoutine());
+		}
+	}
+
+	IEnumerator ReturnToLevelPickerRoutine() {
+
+		yield return new WaitForSeconds(2.5f);
+		Application.LoadLevel("LevelPicker");
+	}
+
 	public static void LoadLevelByID(int ID) {
 
 #if UNITY_EDITOR
@@ -207,30 +206,6 @@ public class GameManager : MonoBehaviour {
 
 #endif
 
-	}
-
-	void OnLevelWasLoaded(int levelIndex) {
-
-		switch (levelIndex) {
-			default:
-				LevelSelectBkGrndImage.enabled = false;
-				AudioWrangler.ChangeMusicVolume(.275f);
-				_BallLauncher = GameObject.FindObjectOfType<BallLauncher>();
-				_BallBehavior = _BallLauncher.Ball.GetComponent<BallBehaviour>();
-				if (RestartCache.LoadFromCache) {
-					ApplyCacheToLoadedLevel();
-				}
-				break;
-			case 0:
-				LevelSelectBkGrndImage.enabled = false;
-				AudioWrangler.ChangeMusicVolume(1f);
-				break;
-			case 1:
-				LevelSelectBkGrndImage.enabled = true;
-				PopulateLevelListUI();
-				AudioWrangler.ChangeMusicVolume(1f);
-				break;
-		}
 	}
 
 	void ApplyCacheToLoadedLevel() {
@@ -285,10 +260,45 @@ public class GameManager : MonoBehaviour {
 		}
 
 	}
+	#endregion
 
+	#region Event Subs
 	void OnApplicationQuit() {
 
 		PlayerPrefs.Save();
 	}
 
+	void OnLevelWasLoaded(int levelIndex) {
+
+		switch (levelIndex) {
+			default:
+				LevelSelectBkGrndImage.enabled = false;
+				AudioWrangler.ChangeMusicVolume(.275f);
+				_BallLauncher = GameObject.FindObjectOfType<BallLauncher>();
+				_BallBehavior = _BallLauncher.Ball.GetComponent<BallBehaviour>();
+				if (RestartCache.LoadFromCache) {
+					ApplyCacheToLoadedLevel();
+				}
+				break;
+			case 0:
+				LevelSelectBkGrndImage.enabled = false;
+				AudioWrangler.ChangeMusicVolume(1f);
+				break;
+			case 1:
+				LevelSelectBkGrndImage.enabled = true;
+				PopulateLevelListUI();
+				AudioWrangler.ChangeMusicVolume(1f);
+				break;
+		}
+	}
+
+	void OnSavedGameSelected(SelectUIStatus status, ISavedGameMetadata metaData) {
+
+		if (status == SelectUIStatus.SavedGameSelected) {
+			Debug.Log("Selected the saved game");
+		} else {
+			Debug.LogError("The save game selection got borked");
+		}
+	}
+	#endregion
 }

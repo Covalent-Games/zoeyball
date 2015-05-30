@@ -52,7 +52,7 @@ LightmapSettings:
     m_IndirectOutputScale: 1
     m_AlbedoBoost: 1
     m_TemporalCoherenceThreshold: 1
-    m_EnvironmentLightingMode: 0
+    m_EnvironmentLightingMode: 1
     m_EnableBakedLightmaps: 1
     m_EnableRealtimeLightmaps: 1
   m_LightmapEditorSettings:
@@ -159,6 +159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a363e6a9e6855149b655a72148753b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GooglePlay: {fileID: 0}
   LevelData: {fileID: 0}
   LevelCompleteCanvas: {fileID: 0}
   LevelSelectBkGrndImage: {fileID: 0}
@@ -298,7 +299,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22415036, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 95.0249176
+      value: 96.2778931
       objectReference: {fileID: 0}
     - target: {fileID: 22415036, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_AnchoredPosition.y
@@ -322,7 +323,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22489968, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 95.0249176
+      value: 96.2778931
       objectReference: {fileID: 0}
     - target: {fileID: 22489968, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_AnchoredPosition.y
@@ -346,7 +347,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22435142, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 95.0249176
+      value: 96.2778931
       objectReference: {fileID: 0}
     - target: {fileID: 22435142, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_AnchoredPosition.y
@@ -370,7 +371,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22409562, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 95.0249176
+      value: 96.2778931
       objectReference: {fileID: 0}
     - target: {fileID: 22409562, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_AnchoredPosition.y
@@ -394,7 +395,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22423558, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 95.0249176
+      value: 96.2778931
       objectReference: {fileID: 0}
     - target: {fileID: 22423558, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_AnchoredPosition.y
@@ -538,7 +539,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22487342, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 105.024918
+      value: 106.277893
       objectReference: {fileID: 0}
     - target: {fileID: 22487342, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_AnchoredPosition.y
@@ -546,7 +547,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22487342, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_SizeDelta.x
-      value: 190.049835
+      value: 192.555786
       objectReference: {fileID: 0}
     - target: {fileID: 22487342, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_SizeDelta.y
@@ -562,7 +563,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22427300, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 315.074768
+      value: 318.833679
       objectReference: {fileID: 0}
     - target: {fileID: 22427300, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_AnchoredPosition.y
@@ -570,7 +571,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22427300, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_SizeDelta.x
-      value: 190.049835
+      value: 192.555786
       objectReference: {fileID: 0}
     - target: {fileID: 22427300, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_SizeDelta.y
