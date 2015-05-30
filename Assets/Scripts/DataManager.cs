@@ -158,7 +158,14 @@ namespace GameData {
 
 			switch (status) {
 				case SavedGameRequestStatus.Success:
-					LevelList = Serializer.DeserializeLevelList(data);
+					List<Level> storedLevelList = Serializer.DeserializeLevelList(data);
+					for (int i = 0; i < storedLevelList.Count; i++) {
+						LevelList[i] = storedLevelList[i];
+					}
+						//foreach (var level in storedLevelList) {
+						//	Level levelIndex = LevelList.Find(l => l.LevelID == level.LevelID);
+						//	levelIndex = level;
+						//}
 
 					// Events to trigger once data has been loaded
 					if (OnDataLoaded != null) {
