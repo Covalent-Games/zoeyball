@@ -296,6 +296,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 11481298, guid: 105d8c6a4fa76374d850993282965ff4, type: 2}
+      propertyPath: FollowDistance
+      value: .5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 105d8c6a4fa76374d850993282965ff4, type: 2}
   m_IsPrefabParent: 0
