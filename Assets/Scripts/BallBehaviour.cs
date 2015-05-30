@@ -17,6 +17,7 @@ public class BallBehaviour : MonoBehaviour {
 
 	//TODO This doesn't feel like the best location for this.
 	public Text ScoreText;
+	public Text BounceText;
 	public float TmpScore;
 	public int TmpBounces;
 	public bool StartCountingScore = false;
@@ -64,7 +65,7 @@ public class BallBehaviour : MonoBehaviour {
 		} else if (TmpBounces == 15) {
 
 		} else {
-			StartCoroutine(PulseScore());
+			//StartCoroutine(PulseScore());
 			//ScoreTextAnimation.GetComponent<Animator>().CrossFade("ScorePulse", 0f);
 		}
 	}
@@ -80,13 +81,8 @@ public class BallBehaviour : MonoBehaviour {
 
 	public void UpdateScoreText() {
 
-		if (TmpBounces > 0) {
-			ScoreText.text = string.Format("Score: {0}  Bounces: {1}",
-					Mathf.RoundToInt(TmpScore),
-					TmpBounces);
-		} else {
-			ScoreText.text = string.Format("Score: {0}", Mathf.RoundToInt(TmpScore));
-		}
+		ScoreText.text = Mathf.RoundToInt(TmpScore).ToString();
+		BounceText.text = TmpBounces.ToString();
 	}
 
 	void Update() {
