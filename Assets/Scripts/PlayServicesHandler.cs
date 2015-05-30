@@ -52,7 +52,7 @@ public class PlayServicesHandler : MonoBehaviour {
 			if (success) {
 				Debug.Log("Leaderboard updated!");
 			} else {
-				Debug.Log("Nope...");
+				Debug.Log("Leaderboard failed to update.");
 			}
 		});
 	}
