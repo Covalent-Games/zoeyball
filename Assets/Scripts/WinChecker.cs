@@ -11,6 +11,7 @@ public class WinChecker : MonoBehaviour {
 	GameObject _Confetti;
 	BallBehaviour _Ball;
 	GameObject[] _Blocks;
+	Canvas _ControlUICanvas;
 
 	public static int CurentLevel = 1;
 	public Canvas YouWinLabelCanvas;
@@ -23,6 +24,7 @@ public class WinChecker : MonoBehaviour {
 		_Confetti = Resources.Load("ConfettiPopper") as GameObject;
 		_GameManger = GameObject.FindObjectOfType<GameManager>();
 		_Blocks = GameObject.FindGameObjectsWithTag("Block");
+		_ControlUICanvas = GameObject.Find("ControlUICanvas").GetComponent<Canvas>();
 
 	}
 
@@ -53,12 +55,14 @@ public class WinChecker : MonoBehaviour {
 			"I'm just...I'm so proud.",
 			"Imaginary high-five!",
 			"And the award for best ball-launching goes to...",
-			"Find this winner a cupcake.",
+			"Somebody get this winner a cupcake!",
 			"Have you been working out?",
 			"GOOOOOOOOOOOOOAL!!!",
-			"Are you sopnsored yet?",
+			"Are you sponsored yet?",
 			"That was OK, but I like pizza.",
 			"If you could see me, I'd be clapping.",
+			"Ding dang doo!",
+			"Huh, what happened? Sorry I fell asleep.",
 		};
 	}
 
@@ -96,9 +100,7 @@ public class WinChecker : MonoBehaviour {
 			_GameManger.LevelCompleteCanvas.enabled = true;
 			_GameManger.DisplayWinDetails();
 
-			GameObject ControlUICanvasGO = GameObject.Find("ControlUICanvas");
-			ControlUICanvasGO.GetComponent<Canvas>().enabled = false;
-			//_GameManger.ReturnToLevelPicker(Winning);
+			_ControlUICanvas.enabled = false;
 		}
 	}
 

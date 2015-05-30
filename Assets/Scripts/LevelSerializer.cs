@@ -8,7 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace GameData {
 	public class LevelSerializer {
 
-		public List<DataManager.Level> Deserialize(TextAsset asset) {
+		public List<DataManager.Level> DeserializeLevelData(TextAsset asset) {
 
 			XmlSerializer serializer = new XmlSerializer(typeof(List<DataManager.Level>));
 			using (var reader = new StringReader(asset.text)) {
@@ -17,7 +17,6 @@ namespace GameData {
 		}
 
 		public byte[] SerializeLevelList(List<DataManager.Level> readableLevelList) {
-
 
 			BinaryFormatter binaryFormatter = new BinaryFormatter();
 			MemoryStream stream = new MemoryStream();

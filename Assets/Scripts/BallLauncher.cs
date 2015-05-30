@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.TransformExtensions;
 using System.Collections;
 
 public class BallLauncher : MonoBehaviour {
 
 	public GameObject Ball;
 	public AudioSource LaunchSound;
+	public Text LaunchButtonText;
 	public Image LanchMeterImage;
 	public float LaunchPowerMeter;
 	public float MaxLaunchPower;
@@ -13,6 +15,8 @@ public class BallLauncher : MonoBehaviour {
 	public Vector3 StartPosition;
 	public Quaternion StartRotation;
 	public bool CanLaunch = true;
+	public string DefaultLaunchText = "Pew!";
+	public string LaunchResetText = "Restart";
 	bool IncreasePower = false;
 	float RotateSpeed = 20f;
 
@@ -20,10 +24,12 @@ public class BallLauncher : MonoBehaviour {
 
 		Ball.GetComponent<Rigidbody>().isKinematic = true;
 		LaunchSound = transform.FindChild("LaunchSound").GetComponent<AudioSource>();
+		LaunchButtonText = transform.parent.FindChildRecursive("LaunchButtonText").GetComponent<Text>();
 	}
 
 	void FixedUpdate() {
 
+		// If the ball is in flight, effectively disable control button functionality.
 		if (!CanLaunch) { return; }
 
 		if (IncreasePower)
@@ -45,8 +51,8 @@ public class BallLauncher : MonoBehaviour {
 	public void RotateLauncher(float input) {
 
 		Vector3 rotation = transform.rotation.eulerAngles;
-		Vector3 newRotation = new Vector3(rotation.x, rotation.y, rotation.z + (-input * 2));
-		RotateSpeed += 1f;
+		Vector3 newRotation = new Vector3(rotation.x, rotation.y, rotation.z + (-input * 2.5f));
+		RotateSpeed += 2f;
 		transform.rotation = Quaternion.Euler(
 				Vector3.MoveTowards(
 						transform.rotation.eulerAngles, newRotation, Time.deltaTime * RotateSpeed));
@@ -57,8 +63,18 @@ public class BallLauncher : MonoBehaviour {
 
 		IncreasePower = !IncreasePower;
 
+		// Increase power is false when the user lifts there finger off the button
 		if (!IncreasePower)
 			LaunchBall();
+		if (IncreasePower && !CanLaunch)
+#if UNITY_EDITOR
+			if (GameManager.Instance == null)
+				Application.LoadLevel(Application.loadedLevel);
+			else
+				GameManager.Instance.Restart();
+#else
+			GameManager.Instance.Restart();
+#endif
 	}
 
 	void IncreasePowerMeter() {
@@ -79,6 +95,7 @@ public class BallLauncher : MonoBehaviour {
 			ball.AddForce(Ball.transform.up * LaunchPowerMeter * 100);
 			ball.GetComponent<BallBehaviour>().StartCountingScore = true;
 			CanLaunch = false;
+			LaunchButtonText.text = LaunchResetText;
 		}
 	}
 }

@@ -19,76 +19,19 @@ AnimationClip:
       serializedVersion: 2
       m_Curve:
       - time: 0
-        value: -421
-        inSlope: 1263
-        outSlope: 1263
+        value: 1
+        inSlope: 525
+        outSlope: 525
         tangentMode: 10
       - time: .333333343
-        value: 0
-        inSlope: 1263
-        outSlope: 1263
+        value: 176
+        inSlope: 525
+        outSlope: 525
         tangentMode: 10
       m_PreInfinity: 2
       m_PostInfinity: 2
     attribute: m_AnchoredPosition.x
     path: 
-    classID: 224
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - time: 0
-        value: 6.10349998e-05
-        inSlope: -1.09139364e-11
-        outSlope: -1.09139364e-11
-        tangentMode: 10
-      - time: .333333343
-        value: 6.10349962e-05
-        inSlope: -1.09139364e-11
-        outSlope: -1.09139364e-11
-        tangentMode: 10
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-    attribute: m_AnchoredPosition.y
-    path: 
-    classID: 224
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - time: 0
-        value: 15
-        inSlope: -465
-        outSlope: -465
-        tangentMode: 10
-      - time: .333333343
-        value: -140
-        inSlope: -465
-        outSlope: -465
-        tangentMode: 10
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-    attribute: m_AnchoredPosition.x
-    path: MenuButton
-    classID: 224
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - time: 0
-        value: 0
-        inSlope: .000366209977
-        outSlope: .000366209977
-        tangentMode: 10
-      - time: .333333343
-        value: .00012207
-        inSlope: .000366209977
-        outSlope: .000366209977
-        tangentMode: 10
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-    attribute: m_AnchoredPosition.y
-    path: MenuButton
     classID: 224
     script: {fileID: 0}
   m_PPtrCurves: []
@@ -101,24 +44,6 @@ AnimationClip:
     genericBindings:
     - path: 0
       attribute: 1460864421
-      script: {fileID: 0}
-      classID: 224
-      customType: 0
-      isPPtrCurve: 0
-    - path: 1768121632
-      attribute: 1460864421
-      script: {fileID: 0}
-      classID: 224
-      customType: 0
-      isPPtrCurve: 0
-    - path: 1768121632
-      attribute: 538195251
-      script: {fileID: 0}
-      classID: 224
-      customType: 0
-      isPPtrCurve: 0
-    - path: 0
-      attribute: 538195251
       script: {fileID: 0}
       classID: 224
       customType: 0
@@ -146,76 +71,19 @@ AnimationClip:
       serializedVersion: 2
       m_Curve:
       - time: 0
-        value: -421
-        inSlope: 1263
-        outSlope: 1263
+        value: 1
+        inSlope: 525
+        outSlope: 525
         tangentMode: 10
       - time: .333333343
-        value: 0
-        inSlope: 1263
-        outSlope: 1263
+        value: 176
+        inSlope: 525
+        outSlope: 525
         tangentMode: 10
       m_PreInfinity: 2
       m_PostInfinity: 2
     attribute: m_AnchoredPosition.x
     path: 
-    classID: 224
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - time: 0
-        value: 6.10349998e-05
-        inSlope: -1.09139364e-11
-        outSlope: -1.09139364e-11
-        tangentMode: 10
-      - time: .333333343
-        value: 6.10349962e-05
-        inSlope: -1.09139364e-11
-        outSlope: -1.09139364e-11
-        tangentMode: 10
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-    attribute: m_AnchoredPosition.y
-    path: 
-    classID: 224
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - time: 0
-        value: 15
-        inSlope: -465
-        outSlope: -465
-        tangentMode: 10
-      - time: .333333343
-        value: -140
-        inSlope: -465
-        outSlope: -465
-        tangentMode: 10
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-    attribute: m_AnchoredPosition.x
-    path: MenuButton
-    classID: 224
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - time: 0
-        value: 0
-        inSlope: .000366209977
-        outSlope: .000366209977
-        tangentMode: 10
-      - time: .333333343
-        value: .00012207
-        inSlope: .000366209977
-        outSlope: .000366209977
-        tangentMode: 10
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-    attribute: m_AnchoredPosition.y
-    path: MenuButton
     classID: 224
     script: {fileID: 0}
   m_EulerEditorCurves: []

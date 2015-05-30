@@ -46,7 +46,7 @@ namespace GameData {
 		/// <param name="levelData">The TextAsset XML file containing level info.</param>
 		public void LoadLevelTemplate(TextAsset levelData) {
 
-			LevelList = Serializer.Deserialize(levelData);
+			LevelList = Serializer.DeserializeLevelData(levelData);
 		}
 
 		public void StartRecordingPlayTime() {

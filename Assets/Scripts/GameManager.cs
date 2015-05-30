@@ -12,6 +12,7 @@ using UnityEngine.Audio;
 [RequireComponent(typeof(PlayServicesHandler))]
 public class GameManager : MonoBehaviour {
 
+	public static GameManager Instance;
 	public static DataManager.Level CurrentLevel;
 	public TextAsset LevelData;
 	public Canvas LevelCompleteCanvas;
@@ -31,6 +32,7 @@ public class GameManager : MonoBehaviour {
 
 	void Awake() {
 
+		GameManager.Instance = this;
 		DataWrangler.LoadLevelTemplate(LevelData);
 		AudioWrangler = GetComponent<AudioManager>();
 		MenuAnimator = GameObject.FindGameObjectWithTag("MenuPanel").GetComponent<Animator>();
@@ -151,7 +153,7 @@ public class GameManager : MonoBehaviour {
 		Application.LoadLevel("LevelPicker");
 	}
 
-	public void Restart(bool toggleMenu) {
+	public void Restart(bool toggleMenu = false) {
 
 		// If we're already in the level selection screen this button does nothing.
 		if (Application.loadedLevel == 0 || Application.loadedLevel == 1) {

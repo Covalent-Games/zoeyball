@@ -382,7 +382,7 @@ GameObject:
   - 114: {fileID: 11481236}
   - 114: {fileID: 11491966}
   m_Layer: 5
-  m_Name: Text
+  m_Name: LaunchButtonText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -765,7 +765,6 @@ MonoBehaviour:
   TenBounceTrail: {fileID: 164418}
   FifteenBounceParticle: {fileID: 0}
   ScoreText: {fileID: 11423586}
-  ScoreTextAnimation: {fileID: 0}
   TmpScore: 0
   TmpBounces: 0
   StartCountingScore: 0
@@ -1042,6 +1041,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Ball: {fileID: 150808}
   LaunchSound: {fileID: 0}
+  LaunchButtonText: {fileID: 0}
   LanchMeterImage: {fileID: 11420110}
   LaunchPowerMeter: 0
   MaxLaunchPower: 10
@@ -1049,6 +1049,8 @@ MonoBehaviour:
   StartPosition: {x: 0, y: 0, z: 0}
   StartRotation: {x: 0, y: 0, z: 0, w: 0}
   CanLaunch: 1
+  DefaultLaunchText: Pew!
+  LaunchResetText: Restart
 --- !u!114 &11432522
 MonoBehaviour:
   m_ObjectHideFlags: 1
