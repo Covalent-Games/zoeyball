@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.TransformExtensions;
 using System.Collections;
 using System.Collections.Generic;
 using GooglePlayGames;
@@ -23,6 +24,7 @@ public class GameManager : MonoBehaviour {
 	public Animator MenuAnimator;
 	public DataManager DataWrangler = new DataManager();
 	public GameObject LevelButtonResource;
+	public Text LevelText;
 	public static bool GotHighScore = false;
 
 	private AudioManager AudioWrangler;
@@ -270,12 +272,15 @@ public class GameManager : MonoBehaviour {
 
 	void OnLevelWasLoaded(int levelIndex) {
 
+		
 		switch (levelIndex) {
 			default:
 				LevelSelectBkGrndImage.enabled = false;
 				AudioWrangler.ChangeMusicVolume(.275f);
 				_BallLauncher = GameObject.FindObjectOfType<BallLauncher>();
 				_BallBehavior = _BallLauncher.Ball.GetComponent<BallBehaviour>();
+				Text LevelText = _BallLauncher.transform.parent.FindChildRecursive("LevelText").GetComponent<Text>();
+				LevelText.text = string.Format("Level {0}", CurrentLevel.LevelID);
 				if (RestartCache.LoadFromCache) {
 					ApplyCacheToLoadedLevel();
 				}
