@@ -6,8 +6,13 @@ using GooglePlayGames.BasicApi;
 
 public class PlayServicesHandler : MonoBehaviour {
 
+	public static class LeaderBoards {
+		public const string UpInTheClouds = "CgkI562Uo_MOEAIQBg";
+	}
+
 	public void Activate() {
 
+		Debug.Log(LeaderBoards.UpInTheClouds);
 		PlayGamesPlatform.DebugLogEnabled = true;
 		PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
 			.EnableSavedGames()
@@ -39,5 +44,16 @@ public class PlayServicesHandler : MonoBehaviour {
 		if (leaderboard != null) {
 			Social.ShowLeaderboardUI();
 		}
+	}
+
+	public static void UpdateLeaderBoard(string id, int score) {
+
+		Social.ReportScore((long)score, id, (bool success) => {
+			if (success) {
+				Debug.Log("Leaderboard updated!");
+			} else {
+				Debug.Log("Nope...");
+			}
+		});
 	}
 }
