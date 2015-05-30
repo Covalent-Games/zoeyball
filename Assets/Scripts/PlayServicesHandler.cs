@@ -6,7 +6,7 @@ using GooglePlayGames.BasicApi;
 
 public class PlayServicesHandler : MonoBehaviour {
 
-	public static void Activate() {
+	public void Activate() {
 
 		PlayGamesPlatform.DebugLogEnabled = true;
 		PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
@@ -17,7 +17,7 @@ public class PlayServicesHandler : MonoBehaviour {
 
 	}
 
-	public static bool Authenticate() {
+	public bool Authenticate() {
 
 		bool returnValue = true;
 
@@ -32,5 +32,12 @@ public class PlayServicesHandler : MonoBehaviour {
 		});
 
 		return returnValue;
+	}
+
+	public void ShowLeaderboard(string leaderboard = null) {
+
+		if (leaderboard != null) {
+			Social.ShowLeaderboardUI();
+		}
 	}
 }
