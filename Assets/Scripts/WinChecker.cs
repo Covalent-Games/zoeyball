@@ -7,7 +7,6 @@ using GameData;
 public class WinChecker : MonoBehaviour {
 
 	public bool Winning = false;
-	GameManager _GameManger;
 	GameObject _Confetti;
 	BallBehaviour _Ball;
 	GameObject[] _Blocks;
@@ -22,7 +21,6 @@ public class WinChecker : MonoBehaviour {
 
 		_Ball = GameObject.FindObjectOfType<BallBehaviour>();
 		_Confetti = Resources.Load("ConfettiPopper") as GameObject;
-		_GameManger = GameObject.FindObjectOfType<GameManager>();
 		_Blocks = GameObject.FindGameObjectsWithTag("Block");
 		_ControlUICanvas = GameObject.Find("ControlUICanvas").GetComponent<Canvas>();
 
@@ -81,8 +79,18 @@ public class WinChecker : MonoBehaviour {
 				GameManager.GotHighScore = true;
 				GameManager.CurrentLevel.Score = _Ball.TmpScore;
 				GameManager.CurrentLevel.Bounces = _Ball.TmpBounces;
+				PlayServicesHandler.UpdateLeaderBoard(
+					PlayServicesHandler.LeaderBoards.UpInTheClouds,
+					(int)GameManager.CurrentLevel.Score);
 			}
 		}
+	}
+
+	void DisplayWinUI() {
+
+		GameManager.Instance.LevelCompleteCanvas.enabled = true;
+		GameManager.Instance.DisplayWinDetails();
+
 	}
 
 	void Update() {
@@ -96,11 +104,8 @@ public class WinChecker : MonoBehaviour {
 				GameObject.Instantiate(_Confetti, block.transform.position, Quaternion.identity);
 				Destroy(block);
 			}
-
-			_GameManger.LevelCompleteCanvas.enabled = true;
-			_GameManger.DisplayWinDetails();
-
 			_ControlUICanvas.enabled = false;
+			Invoke("DisplayWinUI", 1f);
 		}
 	}
 

@@ -107,7 +107,8 @@ public class GameManager : MonoBehaviour {
 		}
 		LevelCompleteCanvas.enabled = false;
 		// Close the menu
-		ToggleMenu();
+		if (MenuOpen)
+			ToggleMenu();
 		ReturnToLevelPicker(true, true);
 	}
 
