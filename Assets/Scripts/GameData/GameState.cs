@@ -13,7 +13,9 @@ namespace GameData {
 		public GameState() {
 
 			LevelList = new List<Level>();
-			LeaderBoardScores = new Dictionary<string, long>();
+			LeaderBoardScores = new Dictionary<string, long>(){
+				{ PlayServicesHandler.LeaderBoards.UpInTheClouds, 0L }
+			};
 		}
 	}
 }

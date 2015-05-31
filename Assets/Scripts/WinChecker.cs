@@ -76,12 +76,13 @@ public class WinChecker : MonoBehaviour {
 				nextLevel.IsUnlocked = true;
 			}
 			if (_Ball.TmpScore > GameManager.CurrentLevel.Score) {
+				PlayServicesHandler.UpdateLeaderBoard(
+					PlayServicesHandler.LeaderBoards.UpInTheClouds,
+					Mathf.RoundToInt(GameManager.CurrentLevel.Score),
+					Mathf.RoundToInt(_Ball.TmpScore));
 				GameManager.GotHighScore = true;
 				GameManager.CurrentLevel.Score = _Ball.TmpScore;
 				GameManager.CurrentLevel.Bounces = _Ball.TmpBounces;
-				PlayServicesHandler.UpdateLeaderBoard(
-					PlayServicesHandler.LeaderBoards.UpInTheClouds,
-					(int)GameManager.CurrentLevel.Score);
 			}
 		}
 	}
