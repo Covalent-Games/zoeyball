@@ -30,6 +30,11 @@ public class HelpTextManager : MonoBehaviour {
 					showHelpText = false;
 				}
 				break;
+			case "11":
+				if (PlayerPrefs.HasKey("Level11HelpText")) {
+					showHelpText = false;
+				}
+				break;
 		}
 
 		if (showHelpText)
@@ -63,6 +68,11 @@ public class HelpTextManager : MonoBehaviour {
 	public void SeeLevel3HelpText() {
 
 		PlayerPrefs.SetString("Level3HelpText", "Yes");
+	}
+
+	public void SeeLevel11HelpText() {
+
+		PlayerPrefs.SetString("Level11HelpText", "Yes");
 	}
 }
 
