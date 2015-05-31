@@ -1,102 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArrayOfLevel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Level>
-    <Name>It's a Start</Name>
     <LevelID>1</LevelID>
     <WorldID>0</WorldID>
   </Level>
   <Level>
-    <Name>A Couple More Tries</Name>
     <LevelID>2</LevelID>
     <WorldID>0</WorldID>
   </Level>
   <Level>
-    <Name>A Few Things To Learn</Name>
     <LevelID>3</LevelID>
     <WorldID>0</WorldID>
   </Level>
   <Level>
-    <Name>Fourth time's a charm</Name>
     <LevelID>4</LevelID>
     <WorldID>0</WorldID>
   </Level>
     <Level>
-    <Name>Not Really Level 5</Name>
     <LevelID>5</LevelID>
     <WorldID>0</WorldID>
   </Level>
     <Level>
-    <Name>Not Really Level 6</Name>
     <LevelID>6</LevelID>
     <WorldID>0</WorldID>
   </Level>
   <Level>
-    <Name>Not Really Level 7</Name>
     <LevelID>7</LevelID>
     <WorldID>0</WorldID>
   </Level>
  <Level>
-    <Name>Don't be l8</Name>
     <LevelID>8</LevelID>
     <WorldID>0</WorldID>
   </Level>
   <Level>
-    <Name>The 9th hole</Name>
     <LevelID>9</LevelID>
     <WorldID>0</WorldID>
   </Level>
   <Level>
-    <Name>Decathon</Name>
     <LevelID>10</LevelID>
     <WorldID>0</WorldID>
   </Level>  
     <Level>
-    <Name>Elevensies</Name>
     <LevelID>11</LevelID>
     <WorldID>0</WorldID>
   </Level>
   <Level>
-    <Name>Some Eggs</Name>
     <LevelID>12</LevelID>
     <WorldID>0</WorldID>
   </Level>
   <Level>
-    <Name>Feeling Lucky?</Name>
     <LevelID>13</LevelID>
     <WorldID>0</WorldID>
   </Level>
   <Level>
-    <Name>Fourteenth Time's the Charm</Name>
     <LevelID>14</LevelID>
     <WorldID>0</WorldID>
   </Level>
     <Level>
-    <Name>Mooorrre!</Name>
     <LevelID>15</LevelID>
     <WorldID>0</WorldID>
   </Level>
     <Level>
-    <Name>Is This Driving You Nuts?</Name>
     <LevelID>16</LevelID>
     <WorldID>0</WorldID>
   </Level>
   <Level>
-    <Name>...Going on 17</Name>
     <LevelID>17</LevelID>
     <WorldID>0</WorldID>
   </Level>
  <Level>
-    <Name>Submit Your Vote</Name>
     <LevelID>18</LevelID>
     <WorldID>0</WorldID>
   </Level>
   <Level>
-    <Name>Are You Still Playing This?</Name>
     <LevelID>19</LevelID>
     <WorldID>0</WorldID>
   </Level>
   <Level>
-    <Name>Second Decade</Name>
     <LevelID>20</LevelID>
     <WorldID>0</WorldID>
   </Level>  

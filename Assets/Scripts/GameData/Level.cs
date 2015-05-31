@@ -3,13 +3,11 @@ using System.Collections;
 using System.Xml.Serialization;
 using System;
 
-namespace GameData{
+namespace GameData {
 
 	[System.Serializable]
 	public class Level {
 
-		[Obsolete]
-		public string Name;
 		public int LevelID;
 		public int WorldID;
 		[XmlIgnore]
@@ -18,5 +16,5 @@ namespace GameData{
 		public float Score;
 		[XmlIgnore]
 		public int Bounces;
-	} 
+	}
 }
