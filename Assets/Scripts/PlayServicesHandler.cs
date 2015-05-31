@@ -3,6 +3,7 @@ using UnityEngine.SocialPlatforms;
 using System.Collections;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
+using GameData;
 
 public class PlayServicesHandler : MonoBehaviour {
 
@@ -46,14 +47,19 @@ public class PlayServicesHandler : MonoBehaviour {
 		}
 	}
 
-	public static void UpdateLeaderBoard(string id, int score) {
+	public static void UpdateLeaderBoard(string leaderboardId, int oldScore, int newScore) {
 
-		Social.ReportScore((long)score, id, (bool success) => {
-			if (success) {
-				Debug.Log("Leaderboard updated!");
-			} else {
-				Debug.Log("Nope...");
+		long score = DataManager.SaveData.LeaderBoardScores[leaderboardId] - oldScore + newScore;
+		DataManager.SaveData.LeaderBoardScores[leaderboardId] = score;
+
+		Social.ReportScore(DataManager.SaveData.LeaderBoardScores[leaderboardId],
+			leaderboardId, (bool success) => {
+				if (success) {
+					Debug.Log("Leaderboard updated!");
+				} else {
+					Debug.Log("Leaderboard failed to update.");
+				}
 			}
-		});
+		);
 	}
 }

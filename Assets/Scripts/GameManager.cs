@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour {
 
 	#region Members
 	public static GameManager Instance;
-	public static DataManager.Level CurrentLevel;
+	public static Level CurrentLevel;
 	public PlayServicesHandler GooglePlay;
 	public TextAsset LevelData;
 	public Canvas LevelCompleteCanvas;
@@ -147,7 +147,7 @@ public class GameManager : MonoBehaviour {
 		LevelCompleteCanvas.enabled = false;
 		HighScoreStamp.GetComponent<RawImage>().enabled = false;
 		// If next level exists, load it.
-		if (DataManager.LevelList[CurrentLevel.LevelID] != null)
+		if (DataManager.SaveData.LevelList[CurrentLevel.LevelID] != null)
 			LoadLevelByID(CurrentLevel.LevelID + 1);
 		else
 			ReturnToLevelPicker(true, true);
@@ -198,14 +198,14 @@ public class GameManager : MonoBehaviour {
 
 #if UNITY_EDITOR
 		Application.LoadLevel(string.Format("Level{0}", ID));
-		GameManager.CurrentLevel = DataManager.LevelList[ID - 1];
+		GameManager.CurrentLevel = DataManager.SaveData.LevelList[ID - 1];
 
 #else
 
-		if (ID != 1 && !DataManager.LevelList[ID - 1].IsUnlocked) { return; }
+		if (ID != 1 && !DataManager.SaveData.LevelList[ID - 1].IsUnlocked) { return; }
 
 		Application.LoadLevel(string.Format("Level{0}", ID));
-		GameManager.CurrentLevel = DataManager.LevelList[ID - 1];
+		GameManager.CurrentLevel = DataManager.SaveData.LevelList[ID - 1];
 
 #endif
 
@@ -230,27 +230,29 @@ public class GameManager : MonoBehaviour {
 			Debug.LogError("Content panel missing or renamed.");
 		}
 
-		foreach (var level in DataManager.LevelList) {
-			GameObject button = Instantiate(LevelButtonResource);
-
+		GameObject button;
+		foreach (var level in DataManager.SaveData.LevelList) {
+			button = Instantiate(LevelButtonResource);
 			button.transform.SetParent(contentPanel.transform, false);
-			LoadLevelButton loadLevelButton = button.GetComponent<LoadLevelButton>();
-			loadLevelButton.LevelToLoad = level;
-			Text nameText = button.transform.FindChild("LevelName").GetComponent<Text>();
-			nameText.text = level.Name;
+
+			button.GetComponent<LoadLevelButton>().LevelToLoad = level;
+
+			button.transform.FindChild("LevelName").GetComponent<Text>().text =
+				string.Format("Level {0}", level.LevelID);
 			button.transform.FindChild("ScoreText").GetComponent<Text>().text =
-					Mathf.RoundToInt(level.Score).ToString();
-			button.transform.FindChild("BounceText").GetComponent<Text>().text = level.Bounces.ToString();
+				Mathf.RoundToInt(level.Score).ToString();
+			button.transform.FindChild("BounceText").GetComponent<Text>().text =
+				level.Bounces.ToString();
 
 			if (!level.IsUnlocked && level.LevelID != 1) {
-				nameText.color = Color.black;
+				button.transform.FindChild("LevelName").GetComponent<Text>().color = Color.black;
 			}
 		}
 	}
 
 	public void DisplayWinDetails() {
 
-		GameObject ScoreRecapGO = LevelCompleteCanvas.transform.Find("LevelCompleteButtonLayout/Score Recap").gameObject;
+		//GameObject ScoreRecapGO = LevelCompleteCanvas.transform.Find("LevelCompleteButtonLayout/Score Recap").gameObject;
 		//ScoreRecapGO.GetComponent<Text>().text = string.Format("High Score: {0}\n" +
 		//										 "New Score: {1}", Mathf.RoundToInt(CurrentLevel.Score), Mathf.RoundToInt(_BallBehavior.TmpScore));
 		if (GotHighScore) {
@@ -273,7 +275,7 @@ public class GameManager : MonoBehaviour {
 
 	void OnLevelWasLoaded(int levelIndex) {
 
-		
+
 		switch (levelIndex) {
 			default:
 				LevelSelectBkGrndImage.enabled = false;

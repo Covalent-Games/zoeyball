@@ -16,29 +16,19 @@ namespace GameData {
 
 	public class DataManager {
 
-		ISavedGameMetadata SavedGameMetaData;
-		public LevelSerializer Serializer = new LevelSerializer();
-		SessionTimeTracker thisTimeTracker = new SessionTimeTracker();
-		public static List<Level> LevelList = new List<Level>();
+		#region Members
+		public static GameState SaveData = new GameState();
+		public GameStateSerializer Serializer = new GameStateSerializer();
 
-		[System.Serializable]
-		public class Level {
-			public string Name;
-			public int LevelID;
-			public int WorldID;
-			[XmlIgnore]
-			public bool IsUnlocked = false;
-			[XmlIgnore]
-			public float Score;
-			[XmlIgnore]
-			public int Bounces;
-		}
 		public delegate void DataChangedEventHandler();
 		public event DataChangedEventHandler OnDataLoaded;
 		public event DataChangedEventHandler OnDataSaved;
-		public event DataChangedEventHandler OnDataDeleted;
+		//public event DataChangedEventHandler OnDataDeleted;
 
+		SessionTimeTracker thisTimeTracker = new SessionTimeTracker();
+		ISavedGameMetadata SavedGameMetaData;
 		bool Writing = false;
+		#endregion
 
 		/// <summary>
 		/// Loads the basic level template. This is not the player's progress.
@@ -46,7 +36,7 @@ namespace GameData {
 		/// <param name="levelData">The TextAsset XML file containing level info.</param>
 		public void LoadLevelTemplate(TextAsset levelData) {
 
-			LevelList = Serializer.DeserializeLevelData(levelData);
+			SaveData.LevelList = Serializer.DeserializeLevelList(levelData);
 		}
 
 		public void StartRecordingPlayTime() {
@@ -83,6 +73,7 @@ namespace GameData {
 			OpenSavedGame();
 		}
 		#endregion
+
 		#region Data Manager Callbacks
 
 		void OnSavedGameOpened(SavedGameRequestStatus status, ISavedGameMetadata metaData) {
@@ -93,7 +84,7 @@ namespace GameData {
 
 					// Set to save the current game.
 					if (Writing) {
-						byte[] savedData = Serializer.SerializeLevelList(LevelList);
+						byte[] savedData = Serializer.SerializeGameState(SaveData);
 
 						ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
 						SavedGameMetadataUpdate.Builder builder = new SavedGameMetadataUpdate.Builder();
@@ -158,14 +149,10 @@ namespace GameData {
 
 			switch (status) {
 				case SavedGameRequestStatus.Success:
-					List<Level> storedLevelList = Serializer.DeserializeLevelList(data);
-					for (int i = 0; i < storedLevelList.Count; i++) {
-						LevelList[i] = storedLevelList[i];
+					GameState tmpGameState = Serializer.DeserializeGameState(data);
+					for (int i = 0; i < tmpGameState.LevelList.Count; i++) {
+						DataManager.SaveData.LevelList[i] = tmpGameState.LevelList[i];
 					}
-						//foreach (var level in storedLevelList) {
-						//	Level levelIndex = LevelList.Find(l => l.LevelID == level.LevelID);
-						//	levelIndex = level;
-						//}
 
 					// Events to trigger once data has been loaded
 					if (OnDataLoaded != null) {

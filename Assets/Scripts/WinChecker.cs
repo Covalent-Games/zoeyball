@@ -71,17 +71,18 @@ public class WinChecker : MonoBehaviour {
 			_Ball.enabled = false;
 
 			// LevelID is human readable, so is 1 higher than it's index.
-			if (GameManager.CurrentLevel.LevelID < DataManager.LevelList.Count) {
-				var nextLevel = DataManager.LevelList[GameManager.CurrentLevel.LevelID];
+			if (GameManager.CurrentLevel.LevelID < DataManager.SaveData.LevelList.Count) {
+				var nextLevel = DataManager.SaveData.LevelList[GameManager.CurrentLevel.LevelID];
 				nextLevel.IsUnlocked = true;
 			}
 			if (_Ball.TmpScore > GameManager.CurrentLevel.Score) {
+				PlayServicesHandler.UpdateLeaderBoard(
+					PlayServicesHandler.LeaderBoards.UpInTheClouds,
+					Mathf.RoundToInt(GameManager.CurrentLevel.Score),
+					Mathf.RoundToInt(_Ball.TmpScore));
 				GameManager.GotHighScore = true;
 				GameManager.CurrentLevel.Score = _Ball.TmpScore;
 				GameManager.CurrentLevel.Bounces = _Ball.TmpBounces;
-				PlayServicesHandler.UpdateLeaderBoard(
-					PlayServicesHandler.LeaderBoards.UpInTheClouds,
-					(int)GameManager.CurrentLevel.Score);
 			}
 		}
 	}
