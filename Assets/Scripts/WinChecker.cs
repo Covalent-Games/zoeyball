@@ -84,6 +84,32 @@ public class WinChecker : MonoBehaviour {
 				GameManager.CurrentLevel.Score = _Ball.TmpScore;
 				GameManager.CurrentLevel.Bounces = _Ball.TmpBounces;
 			}
+
+			CheckAchievements(colliderObject);
+		}
+	}
+
+	void CheckAchievements(Collision colliderObject) {
+
+		if (!DataManager.SaveData.AchievementProg.Pentabounce && _Ball.TmpBounces >= 5) {
+			Social.ReportProgress(AchievementCodes.Pentabounce, 100f, (bool success) => {
+				DataManager.SaveData.AchievementProg.Pentabounce = true;
+			});
+		}
+		if (!DataManager.SaveData.AchievementProg.TheDecabounce && _Ball.TmpBounces >= 10) {
+			Social.ReportProgress(AchievementCodes.TheDecabounce, 100f, (bool success) => {
+				DataManager.SaveData.AchievementProg.TheDecabounce = true;
+			});
+		}
+		if (!DataManager.SaveData.AchievementProg.AScoreOfBounces && _Ball.TmpBounces >= 20) {
+			Social.ReportProgress(AchievementCodes.AScoreOfBounces, 100f, (bool success) => {
+				DataManager.SaveData.AchievementProg.AScoreOfBounces = true;
+			});
+		}
+		if (!DataManager.SaveData.AchievementProg.Check && GameManager.CurrentLevel.LevelID == 20) {
+			Social.ReportProgress(AchievementCodes.Check, 100f, (bool success) => {
+				DataManager.SaveData.AchievementProg.Check = true;
+			});
 		}
 	}
 
