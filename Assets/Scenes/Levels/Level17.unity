@@ -140,7 +140,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 19870532, guid: 8954a82ccd6b6e74e8f56a3efb27fa6e, type: 2}
       propertyPath: InitialModule.startRotation.scalar
-      value: 4.71238899
+      value: 3.1415925
       objectReference: {fileID: 0}
     - target: {fileID: 113826, guid: 8954a82ccd6b6e74e8f56a3efb27fa6e, type: 2}
       propertyPath: m_Name
@@ -202,7 +202,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 19870532, guid: 8954a82ccd6b6e74e8f56a3efb27fa6e, type: 2}
       propertyPath: InitialModule.startRotation.scalar
-      value: 4.71238899
+      value: 3.1415925
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8954a82ccd6b6e74e8f56a3efb27fa6e, type: 2}

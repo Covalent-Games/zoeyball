@@ -111,6 +111,21 @@ public class WinChecker : MonoBehaviour {
 				DataManager.SaveData.AchievementProg.Check = true;
 			});
 		}
+		if (!DataManager.SaveData.AchievementProg.Champ && _Ball.TmpScore >= 100) {
+			Social.ReportProgress(AchievementCodes.Champ, 100f, (bool success) => {
+				DataManager.SaveData.AchievementProg.Champ = true;
+			});
+		}
+		if (!DataManager.SaveData.AchievementProg.Olympian && _Ball.TmpScore >= 200) {
+			Social.ReportProgress(AchievementCodes.Olympian, 100f, (bool success) => {
+				DataManager.SaveData.AchievementProg.Olympian = true;
+			});
+		}
+		if (!DataManager.SaveData.AchievementProg.YoureRidiculous && _Ball.TmpScore >= 500) {
+			Social.ReportProgress(AchievementCodes.YoureRidiculous, 100f, (bool success) => {
+				DataManager.SaveData.AchievementProg.YoureRidiculous = true;
+			});
+		}
 	}
 
 	void DisplayWinUI() {

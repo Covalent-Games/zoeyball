@@ -10,5 +10,8 @@ namespace GameData {
 		public bool TheDecabounce = false;
 		public bool AScoreOfBounces = false;
 		public bool IThinkYouMissed = false;
+		public bool Champ = false;
+		public bool Olympian = false;
+		public bool YoureRidiculous = false;
 	} 
 }
