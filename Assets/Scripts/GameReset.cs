@@ -16,15 +16,6 @@ public class GameReset : MonoBehaviour {
 		if (!_WinChecker.Winning) {
 			if (colliderObject.tag == "Ball") {
 				ResetLevel(colliderObject);
-				if (!DataManager.SaveData.AchievementProg.IThinkYouMissed) {
-					Social.ReportProgress(AchievementCodes.IThinkYouMissed, 100f, (bool success) => {
-						if (success) {
-							Debug.Log("Achievement Unlocked");
-						} else {
-							Debug.Log("Tried updating I Think You Missed but it failed");
-						}
-					});
-				}
 			}
 		} else {
 			colliderObject.GetComponent<MeshRenderer>().enabled = false;
@@ -37,6 +28,16 @@ public class GameReset : MonoBehaviour {
 		BallLauncher ballLauncher = colliderObject.transform.parent.GetComponent<BallLauncher>();
 		Rigidbody ballRigidBody = colliderObject.GetComponent<Rigidbody>();
 		BallBehaviour ballBehaviour = colliderObject.GetComponent<BallBehaviour>();
+
+		if (!DataManager.SaveData.AchievementProg.IThinkYouMissed &&
+			ballBehaviour.TmpBounces == 0 &&
+			GameManager.CurrentLevel.LevelID > 2) {
+			Social.ReportProgress(AchievementCodes.IThinkYouMissed, 100f, (bool success) => {
+				if (success) {
+					DataManager.SaveData.AchievementProg.IThinkYouMissed = true;
+				}
+			});
+		}
 
 		ballBehaviour.FiveBounceTrail.GetComponent<ParticleSystem>().Stop();
 		ballBehaviour.FiveBounceTrail.GetComponent<ParticleSystem>().Clear();
