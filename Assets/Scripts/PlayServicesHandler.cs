@@ -47,6 +47,11 @@ public class PlayServicesHandler : MonoBehaviour {
 		}
 	}
 
+	public void ShowAchievements() {
+
+		Social.ShowAchievementsUI();
+	}
+
 	public static void UpdateLeaderBoard(string leaderboardId, int oldScore, int newScore) {
 
 		long score = DataManager.SaveData.LeaderBoardScores[leaderboardId] - oldScore + newScore;

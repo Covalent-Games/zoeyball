@@ -9,6 +9,9 @@ namespace GameData {
 
 		public List<Level> LevelList;
 		public Dictionary<string, long> LeaderBoardScores;
+		#region Achievement bools
+		public AchievementProgress AchievementProg;
+		#endregion
 
 		public GameState() {
 
@@ -16,6 +19,7 @@ namespace GameData {
 			LeaderBoardScores = new Dictionary<string, long>(){
 				{ PlayServicesHandler.LeaderBoards.UpInTheClouds, 0L }
 			};
+			AchievementProg = new AchievementProgress();
 		}
 	}
 }

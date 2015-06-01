@@ -27,6 +27,10 @@ public class GameManager : MonoBehaviour {
 	public Text LevelText;
 	public static bool GotHighScore = false;
 
+	private GameObject LevelDisplayCanvasGO;
+	private Text WorldName;
+	private int SelectedWorldID = 0;
+	private GameObject LevelDisplayContent;
 	private AudioManager AudioWrangler;
 	private BallBehaviour _BallBehavior;
 	private BallLauncher _BallLauncher;
@@ -38,7 +42,7 @@ public class GameManager : MonoBehaviour {
 	void Awake() {
 
 		GameManager.Instance = this;
-		GooglePlay = new PlayServicesHandler();
+		GooglePlay = GetComponent<PlayServicesHandler>();
 		DataWrangler.LoadLevelTemplate(LevelData);
 		AudioWrangler = GetComponent<AudioManager>();
 		MenuAnimator = GameObject.FindGameObjectWithTag("MenuPanel").GetComponent<Animator>();
@@ -166,6 +170,16 @@ public class GameManager : MonoBehaviour {
 			allowDelete,
 			OnSavedGameSelected);
 	}
+
+	public void NextWorldButton() {
+
+		SelectedWorldID++;
+		if (DataManager.SaveData.LevelList[-1].WorldID < SelectedWorldID) {
+			SelectedWorldID--;
+		} else {
+			//Do world switching stuff.
+		}
+	}
 	#endregion
 
 	#region Misc
@@ -224,16 +238,18 @@ public class GameManager : MonoBehaviour {
 
 	void PopulateLevelListUI() {
 
-		GameObject contentPanel = GameObject.Find("Content");
-
-		if (!contentPanel) {
+		if (!LevelDisplayContent) {
 			Debug.LogError("Content panel missing or renamed.");
 		}
 
 		GameObject button;
 		foreach (var level in DataManager.SaveData.LevelList) {
+			if (level.WorldID < SelectedWorldID) { continue; }
+			if (level.WorldID > SelectedWorldID) { break; }
+			//TOOD: Have this not set every time.
+			WorldName.text = World.Names[level.WorldID];
 			button = Instantiate(LevelButtonResource);
-			button.transform.SetParent(contentPanel.transform, false);
+			button.transform.SetParent(LevelDisplayContent.transform, false);
 
 			button.GetComponent<LoadLevelButton>().LevelToLoad = level;
 
@@ -275,14 +291,14 @@ public class GameManager : MonoBehaviour {
 
 	void OnLevelWasLoaded(int levelIndex) {
 
-
 		switch (levelIndex) {
 			default:
 				LevelSelectBkGrndImage.enabled = false;
 				AudioWrangler.ChangeMusicVolume(.275f);
 				_BallLauncher = GameObject.FindObjectOfType<BallLauncher>();
 				_BallBehavior = _BallLauncher.Ball.GetComponent<BallBehaviour>();
-				Text LevelText = _BallLauncher.transform.parent.FindChildRecursive("LevelText").GetComponent<Text>();
+				Text LevelText = _BallLauncher.transform.parent.FindChildRecursive("LevelText")
+					.GetComponent<Text>();
 				LevelText.text = string.Format("Level {0}", CurrentLevel.LevelID);
 				if (RestartCache.LoadFromCache) {
 					ApplyCacheToLoadedLevel();
@@ -294,6 +310,11 @@ public class GameManager : MonoBehaviour {
 				break;
 			case 1:
 				LevelSelectBkGrndImage.enabled = true;
+				LevelDisplayCanvasGO = GameObject.Find("LevelDisplayCanvas");
+				WorldName = LevelDisplayCanvasGO.transform.FindChildRecursive("WorldName")
+					.GetComponent<Text>();
+				LevelDisplayContent = LevelDisplayCanvasGO.transform
+					.FindChildRecursive("LevelDisplayContent").gameObject;
 				PopulateLevelListUI();
 				AudioWrangler.ChangeMusicVolume(1f);
 				break;
