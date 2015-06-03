@@ -47,6 +47,7 @@ public class GameReset : MonoBehaviour {
 		ballGo.transform.rotation = ballLauncher.StartRotation;
 		ballLauncher.LaunchPowerMeter = 0f;
 		ballLauncher.LaunchButtonText.text = ballLauncher.DefaultLaunchText;
+		ballLauncher.LaunchArrowRenderer.enabled = true;
 		ballRigidBody.isKinematic = true;
 		ballRigidBody.velocity = Vector3.zero;
 		ballBehaviour.TmpScore = 0f;

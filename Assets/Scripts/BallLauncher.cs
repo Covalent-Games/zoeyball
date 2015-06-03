@@ -7,6 +7,7 @@ public class BallLauncher : MonoBehaviour {
 
 	public GameObject Ball;
 	public AudioSource LaunchSound;
+	public SpriteRenderer LaunchArrowRenderer;
 	public Text LaunchButtonText;
 	public Image LanchMeterImage;
 	public float LaunchPowerMeter;
@@ -23,6 +24,7 @@ public class BallLauncher : MonoBehaviour {
 	void Awake() {
 
 		Ball.GetComponent<Rigidbody>().isKinematic = true;
+		LaunchArrowRenderer = transform.FindChild("LaunchArrow").GetComponent<SpriteRenderer>();
 		LaunchSound = transform.FindChild("LaunchSound").GetComponent<AudioSource>();
 		LaunchButtonText = transform.parent.FindChildRecursive("LaunchButtonText").GetComponent<Text>();
 	}
@@ -87,6 +89,7 @@ public class BallLauncher : MonoBehaviour {
 
 		if (CanLaunch) {
 			LaunchSound.Play();
+			LaunchArrowRenderer.enabled = false;
 			Rigidbody ball = Ball.GetComponent<Rigidbody>();
 
 			StartPosition = Ball.transform.position;
