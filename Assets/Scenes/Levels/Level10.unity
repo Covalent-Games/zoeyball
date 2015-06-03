@@ -316,7 +316,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 2065000, guid: 105d8c6a4fa76374d850993282965ff4, type: 2}
       propertyPath: field of view
-      value: 22.5
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 11481298, guid: 105d8c6a4fa76374d850993282965ff4, type: 2}
+      propertyPath: Offset.x
+      value: -2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 11481298, guid: 105d8c6a4fa76374d850993282965ff4, type: 2}
+      propertyPath: Offset.y
+      value: -.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 105d8c6a4fa76374d850993282965ff4, type: 2}

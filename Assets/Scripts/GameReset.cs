@@ -15,7 +15,7 @@ public class GameReset : MonoBehaviour {
 
 		if (!_WinChecker.Winning) {
 			if (colliderObject.tag == "Ball") {
-				ResetLevel(colliderObject);
+				ResetLevel(colliderObject.gameObject);
 			}
 		} else {
 			colliderObject.GetComponent<MeshRenderer>().enabled = false;
@@ -23,11 +23,11 @@ public class GameReset : MonoBehaviour {
 		}
 	}
 
-	void ResetLevel(Collider colliderObject) {
+	public void ResetLevel(GameObject ballGo) {
 
-		BallLauncher ballLauncher = colliderObject.transform.parent.GetComponent<BallLauncher>();
-		Rigidbody ballRigidBody = colliderObject.GetComponent<Rigidbody>();
-		BallBehaviour ballBehaviour = colliderObject.GetComponent<BallBehaviour>();
+		BallLauncher ballLauncher = ballGo.transform.parent.GetComponent<BallLauncher>();
+		Rigidbody ballRigidBody = ballGo.GetComponent<Rigidbody>();
+		BallBehaviour ballBehaviour = ballGo.GetComponent<BallBehaviour>();
 
 		if (!DataManager.SaveData.AchievementProg.IThinkYouMissed &&
 			ballBehaviour.TmpBounces == 0 &&
@@ -43,8 +43,8 @@ public class GameReset : MonoBehaviour {
 		ballBehaviour.FiveBounceTrail.GetComponent<ParticleSystem>().Clear();
 		ballBehaviour.TenBounceTrail.GetComponent<ParticleSystem>().Stop();
 		ballBehaviour.TenBounceTrail.GetComponent<ParticleSystem>().Clear();
-		colliderObject.transform.position = ballLauncher.StartPosition;
-		colliderObject.transform.rotation = ballLauncher.StartRotation;
+		ballGo.transform.position = ballLauncher.StartPosition;
+		ballGo.transform.rotation = ballLauncher.StartRotation;
 		ballLauncher.LaunchPowerMeter = 0f;
 		ballLauncher.LaunchButtonText.text = ballLauncher.DefaultLaunchText;
 		ballRigidBody.isKinematic = true;
@@ -53,7 +53,7 @@ public class GameReset : MonoBehaviour {
 		ballBehaviour.TmpBounces = 0;
 		ballBehaviour.StartCountingScore = false;
 		ballBehaviour.UpdateScoreText();
-		StartCoroutine(ResetBallRoutine(colliderObject.gameObject, ballLauncher));
+		StartCoroutine(ResetBallRoutine(ballGo, ballLauncher));
 	}
 
 	IEnumerator ResetBallRoutine(GameObject ball, BallLauncher ballLauncher) {

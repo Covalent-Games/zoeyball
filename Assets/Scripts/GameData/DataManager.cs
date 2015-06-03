@@ -28,6 +28,8 @@ namespace GameData {
 		SessionTimeTracker thisTimeTracker = new SessionTimeTracker();
 		ISavedGameMetadata SavedGameMetaData;
 		bool Writing = false;
+		// Currently means literally the opposite.
+		bool ResolvingConflict = true;
 		#endregion
 
 		/// <summary>
@@ -51,30 +53,70 @@ namespace GameData {
 
 			if (Application.isEditor) {
 				Debug.LogWarning("Skipping Google Play Services. Loading LevelPicker.");
+				GameManager.Instance.ChangeBusyStatus(false);
 				Application.LoadLevel("LevelPicker");
 			}
 
-			savedGameClient.OpenWithAutomaticConflictResolution(
+			// The following code doesn't do what it looks like it does. So... ya. It may or may not in the future.
+
+			// If there was a save game conflict then we've just written a new, merged save file to the cloud
+			// Now we're opening it with the new metadata TimeSpan, and it SHOULD have the longest playtime.
+			if (ResolvingConflict) {
+				//ResolvingConflict = false;
+				savedGameClient.OpenWithAutomaticConflictResolution(
 					"save",
 					DataSource.ReadCacheOrNetwork,
 					ConflictResolutionStrategy.UseLongestPlaytime,
 					OnSavedGameOpened);
+				// This is the standard way of opening a file, and if we detect a conflict we'll merge files and
+				// come back to this again.
+			} else {
+				bool prefetchDataOnConflict = true;
+				savedGameClient.OpenWithManualConflictResolution(
+						"save",
+						DataSource.ReadCacheOrNetwork,
+						prefetchDataOnConflict,
+						OnSavedGameConflict,
+						OnSavedGameOpened);
+			}
 		}
 
 		public void StartSaveGameData() {
 
+			GameManager.Instance.ChangeBusyStatus(true);
 			Writing = true;
 			OpenSavedGame();
 		}
 
 		public void StartLoadGameData() {
 
+			GameManager.Instance.ChangeBusyStatus(true);
 			Writing = false;
 			OpenSavedGame();
 		}
 		#endregion
 
 		#region Data Manager Callbacks
+
+		void OnSavedGameConflict(IConflictResolver resolver, ISavedGameMetadata original, byte[] originalData,
+			ISavedGameMetadata unmerged, byte[] unmergedData) {
+
+			ResolvingConflict = true;
+
+			GameState originalState = Serializer.DeserializeGameState(originalData);
+			GameState unmergedState = Serializer.DeserializeGameState(unmergedData);
+
+			for (int i = 0; i < unmergedState.LevelList.Count; i++) {
+				if (originalState.LevelList[i].Score < unmergedState.LevelList[i].Score) {
+					originalState.LevelList[i] = unmergedState.LevelList[i];
+				}
+			}
+
+			thisTimeTracker.FalseTimeForConflicts = original.TotalTimePlayed + unmerged.TotalTimePlayed;
+			DataManager.SaveData = originalState;
+			StartSaveGameData();
+
+		}
 
 		void OnSavedGameOpened(SavedGameRequestStatus status, ISavedGameMetadata metaData) {
 
@@ -89,10 +131,13 @@ namespace GameData {
 						ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
 						SavedGameMetadataUpdate.Builder builder = new SavedGameMetadataUpdate.Builder();
 
+						// If there was a save file conflict then we want the "fake" merged time.
+						TimeSpan playTime = metaData.TotalTimePlayed;
+
 						builder = builder
 							.WithUpdatedDescription("Saved game at " + DateTime.Now)
 							.WithUpdatedPlayedTime(
-								thisTimeTracker.GetTimeSnapshot(metaData.TotalTimePlayed));
+								thisTimeTracker.GetTimeSnapshot(playTime));
 
 						SavedGameMetadataUpdate updatedMetadata = builder.Build();
 						savedGameClient.CommitUpdate(
@@ -129,6 +174,7 @@ namespace GameData {
 			switch (status) {
 				case SavedGameRequestStatus.Success:
 					OnDataSaved();
+					GameManager.Instance.ChangeBusyStatus(false);
 					break;
 				case SavedGameRequestStatus.AuthenticationError:
 					Debug.Log("SAVE FAILED! NO AUTHENTICATION!");
@@ -157,6 +203,7 @@ namespace GameData {
 					// Events to trigger once data has been loaded
 					if (OnDataLoaded != null) {
 						OnDataLoaded();
+						GameManager.Instance.ChangeBusyStatus(false);
 					} else {
 						Debug.LogError("No event registered for OnDataLoaded. LevelPicker scene won't be loaded");
 					}

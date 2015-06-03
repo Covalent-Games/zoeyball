@@ -14,6 +14,9 @@ public class BallBehaviour : MonoBehaviour {
 	Rigidbody thisRigidBody;
 	GameObject[] ImpactEffects = new GameObject[3];
 	int ImpactEffectPoolIndex;
+	Vector3 LastPosition;
+	GameReset ResetTrigger;
+	BallLauncher LaunchPlatform;
 
 	//TODO This doesn't feel like the best location for this.
 	public Text ScoreText;
@@ -25,7 +28,8 @@ public class BallBehaviour : MonoBehaviour {
 	void Awake() {
 
 		thisRigidBody = GetComponent<Rigidbody>();
-
+		LaunchPlatform = transform.parent.GetComponent<BallLauncher>();
+		ResetTrigger = GameObject.Find("GameResetTrigger").GetComponent<GameReset>();
 		GameObject resource = (GameObject)Resources.Load("Effects/ImpactEffect");
 		for (int i = 0; i < ImpactEffects.Length; i++) {
 			ImpactEffects[i] = Instantiate(resource) as GameObject;
@@ -79,6 +83,17 @@ public class BallBehaviour : MonoBehaviour {
 		yield return new WaitForSeconds(1.5f);
 	}
 
+	IEnumerator CheckForDeadPosition(Vector3 lastPosition) {
+
+		yield return new WaitForSeconds(.2f);
+		if (transform.position == lastPosition) {
+			if (!LaunchPlatform.CanLaunch) {
+				ResetTrigger.ResetLevel(gameObject);
+				StopAllCoroutines();
+			}
+		}
+	}
+
 	public void UpdateScoreText() {
 
 		ScoreText.text = Mathf.RoundToInt(TmpScore).ToString();
@@ -90,6 +105,19 @@ public class BallBehaviour : MonoBehaviour {
 		if (StartCountingScore) {
 			TmpScore += Time.deltaTime * 5;
 			UpdateScoreText();
+		}
+
+
+	}
+
+	void FixedUpdate() {
+
+		if (!LaunchPlatform.CanLaunch) {
+			if (LastPosition == transform.position) {
+				StartCoroutine(CheckForDeadPosition(LastPosition));
+			} else {
+				LastPosition = transform.position;
+			}
 		}
 	}
 }

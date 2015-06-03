@@ -5,6 +5,7 @@ using UnityEngine;
 public class SessionTimeTracker {
 
 	public const int NanoSecondDivider = 10000;
+	public TimeSpan FalseTimeForConflicts;
 	DateTime RecordingStartTime;
 	int PauseDuration;
 	bool TrackingStarted = false;

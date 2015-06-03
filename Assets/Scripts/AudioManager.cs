@@ -6,7 +6,10 @@ using System.Collections;
 [RequireComponent(typeof(AudioSource))]
 public class AudioManager : MonoBehaviour {
 
-	public AudioSource Audio;
+	public AudioSource[] AudioSources;
+	AudioSource Audio_Music;
+	AudioSource Audio_MinorClickSound;
+	AudioSource Audio_MajorClickSound;
 	public AudioMixer Mixer;
 	public Image MuteMusicImage;
 	public Image MuteSoundsImage;
@@ -19,7 +22,9 @@ public class AudioManager : MonoBehaviour {
 
 	void Awake() {
 
-		Audio = GetComponent<AudioSource>();
+		Audio_Music = AudioSources[0];
+		Audio_MinorClickSound = AudioSources[1];
+		Audio_MajorClickSound = AudioSources[2];
 
 		if (PlayerPrefs.HasKey("Music") && PlayerPrefs.GetString("Music") == "Off") {
 			ToggleMusic();
@@ -29,15 +34,20 @@ public class AudioManager : MonoBehaviour {
 		}
 	}
 
-	void Start() {
+	public void PlaySmallClickSound() {
 
+		Audio_MinorClickSound.Play();
+	}
 
+	public void PlayLargeClickSound() {
+
+		Audio_MajorClickSound.Play();
 	}
 
 	public void ChangeMusicVolume(float newVolume) {
 
 		if (!MusicMuted)
-			Audio.volume = newVolume;
+			Audio_Music.volume = newVolume;
 
 		PlayerPrefs.SetFloat("Volume", newVolume);
 	}
@@ -45,11 +55,11 @@ public class AudioManager : MonoBehaviour {
 	public void ToggleMusic() {
 
 		if (MusicMuted) {
-			Audio.mute = false;
+			Audio_Music.mute = false;
 			MuteMusicImage.sprite = MusicUnMutedIcon;
 			PlayerPrefs.SetString("Music", "On");
 		} else {
-			Audio.mute = true;
+			Audio_Music.mute = true;
 			MuteMusicImage.sprite = MusicMutedIcon;
 			PlayerPrefs.SetString("Music", "Off");
 		}

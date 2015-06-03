@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour {
 	public PlayServicesHandler GooglePlay;
 	public TextAsset LevelData;
 	public Canvas LevelCompleteCanvas;
+	public Canvas LoadingScreenCanvas;
 	public Image LevelSelectBkGrndImage;
 	public GameObject HighScoreStamp;
 	public Animator MenuAnimator;
@@ -45,6 +46,7 @@ public class GameManager : MonoBehaviour {
 		GooglePlay = GetComponent<PlayServicesHandler>();
 		DataWrangler.LoadLevelTemplate(LevelData);
 		AudioWrangler = GetComponent<AudioManager>();
+		LoadingScreenCanvas = transform.FindChildRecursive("LoadingScreenCanvas").GetComponent<Canvas>();
 		MenuAnimator = GameObject.FindGameObjectWithTag("MenuPanel").GetComponent<Animator>();
 		MenuAnimator.enabled = false;
 		LevelSelectBkGrndImage = GameObject.Find("LevelSelectBackground").GetComponent<Image>();
@@ -280,6 +282,11 @@ public class GameManager : MonoBehaviour {
 			GotHighScore = false;
 		}
 
+	}
+
+	public void ChangeBusyStatus(bool isbusy) {
+
+		LoadingScreenCanvas.enabled = isbusy;
 	}
 	#endregion
 
