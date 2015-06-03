@@ -14,7 +14,18 @@ using UnityEngine.Audio;
 public class GameManager : MonoBehaviour {
 
 	#region Members
-	public static GameManager Instance;
+	static GameManager _Instance;
+	public static GameManager Instance {
+		get {
+			if (_Instance == null) {
+				_Instance = GameObject.FindObjectOfType<GameManager>();
+			}
+			return _Instance;
+		}
+		private set {
+			_Instance = value;
+		}
+	}
 	public static Level CurrentLevel;
 	public PlayServicesHandler GooglePlay;
 	public TextAsset LevelData;
