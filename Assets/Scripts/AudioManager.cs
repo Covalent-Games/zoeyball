@@ -26,6 +26,11 @@ public class AudioManager : MonoBehaviour {
 		Audio_MinorClickSound = AudioSources[1];
 		Audio_MajorClickSound = AudioSources[2];
 
+	}
+
+	void Start() {
+
+		Audio_Music.Play();
 		if (PlayerPrefs.HasKey("Music") && PlayerPrefs.GetString("Music") == "Off") {
 			ToggleMusic();
 		}
@@ -69,17 +74,17 @@ public class AudioManager : MonoBehaviour {
 
 	public void ToggleSound() {
 
-		SoundMuted = !SoundMuted;
-		Debug.LogWarning("Muting sound effects not yet implemented!");
 		if (SoundMuted) {
-			Mixer.SetFloat("SoundVolume", -80f);
-			MuteSoundsImage.sprite = SoundMutedIcon;
-			PlayerPrefs.SetString("Sound", "Off");
-		} else {
 			Mixer.SetFloat("SoundVolume", 0f);
 			MuteSoundsImage.sprite = SoundUnmutedIcon;
 			PlayerPrefs.SetString("Sound", "On");
+		} else {
+			Mixer.SetFloat("SoundVolume", -80f);
+			MuteSoundsImage.sprite = SoundMutedIcon;
+			PlayerPrefs.SetString("Sound", "Off");
 		}
+
+		SoundMuted = !SoundMuted;
 	}
 
 }
