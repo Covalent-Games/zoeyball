@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour {
 	private AudioManager AudioWrangler;
 	private BallBehaviour _BallBehavior;
 	private BallLauncher _BallLauncher;
+	private float SkyBoxRotation = 0f;
 
 	private bool MenuOpen = false;
 	#endregion
@@ -69,6 +70,15 @@ public class GameManager : MonoBehaviour {
 		Time.timeScale = 1.15f;
 		GooglePlay.Activate();
 		GooglePlay.Authenticate();
+	}
+	#endregion
+
+	#region Polled methods
+	void Update() {
+
+		SkyBoxRotation += 3 * Time.deltaTime;
+		SkyBoxRotation %= 360;
+		RenderSettings.skybox.SetFloat("_Rotation", SkyBoxRotation);
 	}
 	#endregion
 
