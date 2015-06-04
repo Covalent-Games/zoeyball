@@ -21,6 +21,7 @@ namespace GameData {
 		public GameStateSerializer Serializer = new GameStateSerializer();
 
 		public delegate void DataChangedEventHandler();
+		public event DataChangedEventHandler OnDataChangeStarted;
 		public event DataChangedEventHandler OnDataLoaded;
 		public event DataChangedEventHandler OnDataSaved;
 		//public event DataChangedEventHandler OnDataDeleted;
@@ -46,6 +47,24 @@ namespace GameData {
 			thisTimeTracker.StartRecordingTime();
 		}
 
+		public void StartSaveGameData() {
+
+			if (OnDataChangeStarted != null) {
+				OnDataChangeStarted();
+			}
+			Writing = true;
+			OpenSavedGame();
+		}
+
+		public void StartLoadGameData() {
+
+			if (OnDataChangeStarted != null) {
+				OnDataChangeStarted();
+			}
+			Writing = false;
+			OpenSavedGame();
+		}
+
 		#region Game Saving/Loading
 		public void OpenSavedGame() {
 
@@ -53,8 +72,11 @@ namespace GameData {
 
 			if (Application.isEditor) {
 				Debug.LogWarning("Skipping Google Play Services. Loading LevelPicker.");
-				GameManager.Instance.ChangeBusyStatus(false);
+
+				GameManager.Instance.MarkAsNotBusy();
+
 				Application.LoadLevel("LevelPicker");
+				return;
 			}
 
 			// The following code doesn't do what it looks like it does. So... ya. It may or may not in the future.
@@ -79,20 +101,6 @@ namespace GameData {
 						OnSavedGameConflict,
 						OnSavedGameOpened);
 			}
-		}
-
-		public void StartSaveGameData() {
-
-			GameManager.Instance.ChangeBusyStatus(true);
-			Writing = true;
-			OpenSavedGame();
-		}
-
-		public void StartLoadGameData() {
-
-			GameManager.Instance.ChangeBusyStatus(true);
-			Writing = false;
-			OpenSavedGame();
 		}
 		#endregion
 
@@ -173,8 +181,9 @@ namespace GameData {
 
 			switch (status) {
 				case SavedGameRequestStatus.Success:
+					if (OnDataSaved != null)
+						Debug.Log("OnDataSaved event");
 					OnDataSaved();
-					GameManager.Instance.ChangeBusyStatus(false);
 					break;
 				case SavedGameRequestStatus.AuthenticationError:
 					Debug.Log("SAVE FAILED! NO AUTHENTICATION!");
@@ -202,8 +211,8 @@ namespace GameData {
 
 					// Events to trigger once data has been loaded
 					if (OnDataLoaded != null) {
+						Debug.Log("OnDataLoaded event");
 						OnDataLoaded();
-						GameManager.Instance.ChangeBusyStatus(false);
 					} else {
 						Debug.LogError("No event registered for OnDataLoaded. LevelPicker scene won't be loaded");
 					}

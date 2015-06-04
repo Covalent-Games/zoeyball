@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour {
 	public GameObject LevelButtonResource;
 	public Text LevelText;
 	public static bool GotHighScore = false;
+	public bool IsBusy = false;
 
 	private GameObject LevelDisplayCanvasGO;
 	private Text WorldName;
@@ -67,16 +68,20 @@ public class GameManager : MonoBehaviour {
 
 	void Start() {
 
+		DataWrangler.OnDataChangeStarted += MarkAsBusy;
+		DataWrangler.OnDataLoaded += MarkAsNotBusy;
+		DataWrangler.OnDataSaved += MarkAsNotBusy;
 		Time.timeScale = 1.15f;
 		GooglePlay.Activate();
 		GooglePlay.Authenticate();
 	}
+
 	#endregion
 
 	#region Polled methods
 	void Update() {
 
-		SkyBoxRotation += 3 * Time.deltaTime;
+		SkyBoxRotation += 2 * Time.deltaTime;
 		SkyBoxRotation %= 360;
 		RenderSettings.skybox.SetFloat("_Rotation", SkyBoxRotation);
 	}
@@ -85,12 +90,22 @@ public class GameManager : MonoBehaviour {
 	#region Button Handlers
 	public void Play() {
 
+		if (IsBusy) { return; }
+
 		try {
 			DataWrangler.OnDataLoaded += LoadLevelPicker;
 			DataWrangler.StartLoadGameData();
 			DataWrangler.StartRecordingPlayTime();
-		} catch (NullReferenceException) {
-			Debug.Log("LoadGameData failed to execute");
+		} catch (NullReferenceException e) {
+			Debug.Log(e.Message);
+			Debug.Log(e.StackTrace);
+			Debug.Log(e.InnerException);
+			if (e.Data.Count > 0) {
+				Debug.Log("EXCEPTION DATA:\n");
+				foreach (DictionaryEntry pair in e.Data) {
+					Debug.Log(string.Format("Key: {0}\nData: {1}", pair.Key.ToString(), pair.Value));
+				}
+			}
 
 			if (Application.isEditor) {
 				Debug.LogWarning(
@@ -105,7 +120,6 @@ public class GameManager : MonoBehaviour {
 		if (MenuOpen) {
 			ToggleMenu();
 		}
-		LoadLevelPicker();
 	}
 
 	public void ToggleMenu() {
@@ -291,23 +305,24 @@ public class GameManager : MonoBehaviour {
 
 	public void DisplayWinDetails() {
 
-		//GameObject ScoreRecapGO = LevelCompleteCanvas.transform.Find("LevelCompleteButtonLayout/Score Recap").gameObject;
-		//ScoreRecapGO.GetComponent<Text>().text = string.Format("High Score: {0}\n" +
-		//										 "New Score: {1}", Mathf.RoundToInt(CurrentLevel.Score), Mathf.RoundToInt(_BallBehavior.TmpScore));
 		if (GotHighScore) {
 			HighScoreStamp.GetComponent<RawImage>().enabled = true;
 			HighScoreStamp.GetComponent<Animation>().Play();
-			//HighScoreStamp.GetComponentInChildren<ParticleSystem>().Play();
-			//GameObject HighScoreParticles = (GameObject)Instantiate(HighScoreStamp.transform.GetChild(0).gameObject, HighScoreStamp.transform.position, HighScoreStamp.transform.rotation);
-			//HighScoreParticles.GetComponent<ParticleSystem>().Play();
 			GotHighScore = false;
 		}
 
 	}
 
-	public void ChangeBusyStatus(bool isbusy) {
+	public void MarkAsBusy() {
 
-		LoadingScreenCanvas.enabled = isbusy;
+		IsBusy = true;
+		LoadingScreenCanvas.enabled = true;
+	}
+
+	public void MarkAsNotBusy() {
+
+		IsBusy = false;
+		LoadingScreenCanvas.enabled = false;
 	}
 	#endregion
 

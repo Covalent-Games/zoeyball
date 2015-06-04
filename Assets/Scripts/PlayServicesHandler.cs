@@ -13,7 +13,6 @@ public class PlayServicesHandler : MonoBehaviour {
 
 	public void Activate() {
 
-		Debug.Log(LeaderBoards.UpInTheClouds);
 		PlayGamesPlatform.DebugLogEnabled = true;
 		PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
 			.EnableSavedGames()
