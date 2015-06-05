@@ -36,11 +36,13 @@ public class Follow : MonoBehaviour {
 
 	void LookAtTarget() {
 
-		Vector3 focalPoint = Vector3.Lerp(
-				WinBlock.transform.position + (Vector3)Offset,
-				FollowTarget.transform.position + (Vector3)Offset, FollowDistance);
-		FocusObject.transform.position = focalPoint;
-		transform.LookAt(FocusObject.transform);
+		if (FollowTarget) {
+			Vector3 focalPoint = Vector3.Lerp(
+					WinBlock.transform.position + (Vector3)Offset,
+					FollowTarget.transform.position + (Vector3)Offset, FollowDistance);
+			FocusObject.transform.position = focalPoint;
+			transform.LookAt(FocusObject.transform);
+		}
 	}
 
 	void Update() {

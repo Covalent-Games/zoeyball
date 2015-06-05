@@ -18,6 +18,8 @@ namespace GameData {
 
 		#region Members
 		public static GameState SaveData = new GameState();
+		public static GameObject[] BallObjects;
+		public static Dictionary<string, string> BallNamePathPairs = new Dictionary<string, string>();
 		public GameStateSerializer Serializer = new GameStateSerializer();
 
 		public delegate void DataChangedEventHandler();
@@ -32,6 +34,20 @@ namespace GameData {
 		// Currently means literally the opposite.
 		bool ResolvingConflict = true;
 		#endregion
+
+		public DataManager() {
+
+			DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/Resources/Balls");
+			FileInfo[] files = di.GetFiles("*.prefab");
+			foreach (FileInfo file in files) {
+				string name = Path.GetFileNameWithoutExtension(file.Name);
+				BallNamePathPairs.Add(name, "Balls/" + name);
+				// Check if it's not a default unlocked ball
+				if (name != "BallBlue" && name != "BallYellow") {
+					SaveData.UnlockedBalls.Add(name, false);
+				}
+			}
+		}
 
 		/// <summary>
 		/// Loads the basic level template. This is not the player's progress.
@@ -59,6 +75,7 @@ namespace GameData {
 		public void StartLoadGameData() {
 
 			if (OnDataChangeStarted != null) {
+				Debug.Log("Attempting to trigger OnDataChangeStarted");
 				OnDataChangeStarted();
 			}
 			Writing = false;
@@ -207,6 +224,21 @@ namespace GameData {
 					GameState tmpGameState = Serializer.DeserializeGameState(data);
 					for (int i = 0; i < tmpGameState.LevelList.Count; i++) {
 						DataManager.SaveData.LevelList[i] = tmpGameState.LevelList[i];
+					}
+
+					SaveData.AchievementProg = tmpGameState.AchievementProg;
+					SaveData.LeaderBoardScores = tmpGameState.LeaderBoardScores;
+					// Loop through all the unlocked/locked balls to guarantee we don't overwrite anything
+					// that's already unlocked.
+					foreach (var entry in tmpGameState.UnlockedBalls) {
+						// If the cache says the ball isn't unlocked...
+						if (!SaveData.UnlockedBalls[entry.Key]) {
+							// Check if the cloud save says it is...
+							if (tmpGameState.UnlockedBalls[entry.Key]) {
+								// then overwite the cache with the unlocked ball.
+								SaveData.UnlockedBalls[entry.Key] = tmpGameState.UnlockedBalls[entry.Key];
+							}
+						}
 					}
 
 					// Events to trigger once data has been loaded

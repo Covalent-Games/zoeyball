@@ -19,7 +19,6 @@ public class WinChecker : MonoBehaviour {
 
 	void Awake() {
 
-		_Ball = GameObject.FindObjectOfType<BallBehaviour>();
 		_Confetti = Resources.Load("ConfettiPopper") as GameObject;
 		_Blocks = GameObject.FindGameObjectsWithTag("Block");
 		_ControlUICanvas = GameObject.Find("ControlUICanvas").GetComponent<Canvas>();
@@ -28,6 +27,7 @@ public class WinChecker : MonoBehaviour {
 
 	void Start() {
 
+		_Ball = BallLauncher.Ball.GetComponent<BallBehaviour>();
 		AssignWinMessages();
 	}
 

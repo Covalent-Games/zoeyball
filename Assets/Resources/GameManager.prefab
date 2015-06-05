@@ -2770,7 +2770,7 @@ MonoBehaviour:
   GooglePlay: {fileID: 0}
   LevelData: {fileID: 4900000, guid: dbcde555c78beed48b9b0448228390dd, type: 3}
   LevelCompleteCanvas: {fileID: 22389670}
-  LoadingScreenCanvas: {fileID: 0}
+  LoadingScreenCanvas: {fileID: 22305750}
   LevelSelectBkGrndImage: {fileID: 0}
   HighScoreStamp: {fileID: 195342}
   MenuAnimator: {fileID: 0}

@@ -11,6 +11,8 @@ namespace GameData {
 		public Dictionary<string, long> LeaderBoardScores;
 		#region Achievement bools
 		public AchievementProgress AchievementProg;
+		public Dictionary<string, bool> UnlockedBalls;
+		public string CurrentSelectedBallName = "BallYellow";
 		#endregion
 
 		public GameState() {
@@ -20,6 +22,10 @@ namespace GameData {
 				{ PlayServicesHandler.LeaderBoards.UpInTheClouds, 0L }
 			};
 			AchievementProg = new AchievementProgress();
+			UnlockedBalls = new Dictionary<string, bool>();
+
+			UnlockedBalls.Add("BallYellow", true);
+			UnlockedBalls.Add("BallBlue", true);
 		}
 	}
 }

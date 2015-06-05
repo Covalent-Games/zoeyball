@@ -5,7 +5,7 @@ using System.Collections;
 
 public class BallLauncher : MonoBehaviour {
 
-	public GameObject Ball;
+	public static GameObject Ball;
 	public AudioSource LaunchSound;
 	public SpriteRenderer LaunchArrowRenderer;
 	public Text LaunchButtonText;
@@ -23,10 +23,35 @@ public class BallLauncher : MonoBehaviour {
 
 	void Awake() {
 
-		Ball.GetComponent<Rigidbody>().isKinematic = true;
+		LoadSelectedBall();
 		LaunchArrowRenderer = transform.FindChild("LaunchArrow").GetComponent<SpriteRenderer>();
 		LaunchSound = transform.FindChild("LaunchSound").GetComponent<AudioSource>();
 		LaunchButtonText = transform.parent.FindChildRecursive("LaunchButtonText").GetComponent<Text>();
+	}
+
+	void LoadSelectedBall() {
+
+		Ball = transform.GetChild(0).gameObject;
+		// Disable old ball's collider to prevent random collision effects.
+		BallLauncher.Ball.GetComponent<SphereCollider>().enabled = false;
+		// Create the new, selected ball.
+		GameObject ball = Instantiate(GameManager.SelectedBall);
+		ball.transform.position = BallLauncher.Ball.transform.position;
+		ball.transform.rotation = BallLauncher.Ball.transform.rotation;
+		// Get rid of the default ball.
+		Destroy(BallLauncher.Ball.gameObject);
+		BallLauncher.Ball = ball;
+		ball.transform.parent = transform;
+		BallBehaviour bb = Ball.GetComponent<BallBehaviour>();
+		bb.ScoreText = transform.parent.FindChildRecursive("ScoreText").GetComponent<Text>();
+		bb.BounceText = transform.parent.FindChildRecursive("BounceText").GetComponent<Text>();
+		bb.LaunchPlatform = this;
+		bb.PhysicsBody = bb.GetComponent<Rigidbody>();
+		GameObject resource = (GameObject)Resources.Load("Effects/ImpactEffect");
+		for (int i = 0; i < bb.ImpactEffects.Length; i++) {
+			bb.ImpactEffects[i] = Instantiate(resource) as GameObject;
+		}
+		Camera.main.gameObject.GetComponent<Follow>().FollowTarget = ball;
 	}
 
 	void FixedUpdate() {

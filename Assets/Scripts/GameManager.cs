@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 	public static Level CurrentLevel;
+	public static GameObject SelectedBall;
 	public PlayServicesHandler GooglePlay;
 	public TextAsset LevelData;
 	public Canvas LevelCompleteCanvas;
@@ -34,7 +35,7 @@ public class GameManager : MonoBehaviour {
 	public Image LevelSelectBkGrndImage;
 	public GameObject HighScoreStamp;
 	public Animator MenuAnimator;
-	public DataManager DataWrangler = new DataManager();
+	public DataManager DataWrangler;
 	public GameObject LevelButtonResource;
 	public Text LevelText;
 	public static bool GotHighScore = false;
@@ -57,12 +58,14 @@ public class GameManager : MonoBehaviour {
 
 		GameManager.Instance = this;
 		GooglePlay = GetComponent<PlayServicesHandler>();
+		DataWrangler = new DataManager();
 		DataWrangler.LoadLevelTemplate(LevelData);
 		AudioWrangler = GetComponent<AudioManager>();
 		LoadingScreenCanvas = transform.FindChildRecursive("LoadingScreenCanvas").GetComponent<Canvas>();
 		MenuAnimator = GameObject.FindGameObjectWithTag("MenuPanel").GetComponent<Animator>();
 		MenuAnimator.enabled = false;
 		LevelSelectBkGrndImage = GameObject.Find("LevelSelectBackground").GetComponent<Image>();
+		SelectedBall = (GameObject)Resources.Load("Balls/BallBlue");
 		DontDestroyOnLoad(gameObject);
 	}
 
@@ -93,6 +96,7 @@ public class GameManager : MonoBehaviour {
 		if (IsBusy) { return; }
 
 		try {
+			//MarkAsBusy();
 			DataWrangler.OnDataLoaded += LoadLevelPicker;
 			DataWrangler.StartLoadGameData();
 			DataWrangler.StartRecordingPlayTime();
@@ -120,6 +124,11 @@ public class GameManager : MonoBehaviour {
 		if (MenuOpen) {
 			ToggleMenu();
 		}
+	}
+
+	public void LoadBallSelection() {
+
+		Application.LoadLevel("BallSelection");
 	}
 
 	public void ToggleMenu() {
@@ -192,20 +201,6 @@ public class GameManager : MonoBehaviour {
 			LoadLevelByID(CurrentLevel.LevelID + 1);
 		else
 			ReturnToLevelPicker(true, true);
-	}
-
-	public void DisplaySaveSelection() {
-
-		uint maxNumToDisplay = 10;
-		bool allowCreateNew = false;
-		bool allowDelete = true;
-
-		ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
-		savedGameClient.ShowSelectSavedGameUI("Select saved game",
-			maxNumToDisplay,
-			allowCreateNew,
-			allowDelete,
-			OnSavedGameSelected);
 	}
 
 	public void NextWorldButton() {
@@ -316,13 +311,15 @@ public class GameManager : MonoBehaviour {
 	public void MarkAsBusy() {
 
 		IsBusy = true;
-		LoadingScreenCanvas.enabled = true;
+		Debug.Log("GameManager busy");
+		this.LoadingScreenCanvas.enabled = true;
 	}
 
 	public void MarkAsNotBusy() {
 
 		IsBusy = false;
-		LoadingScreenCanvas.enabled = false;
+		Debug.Log("GameManager Not Busy");
+		this.LoadingScreenCanvas.enabled = false;
 	}
 	#endregion
 
@@ -339,7 +336,8 @@ public class GameManager : MonoBehaviour {
 				LevelSelectBkGrndImage.enabled = false;
 				AudioWrangler.ChangeMusicVolume(.275f);
 				_BallLauncher = GameObject.FindObjectOfType<BallLauncher>();
-				_BallBehavior = _BallLauncher.Ball.GetComponent<BallBehaviour>();
+				// Now that Ball is static this reference isn't needed
+				_BallBehavior = BallLauncher.Ball.GetComponent<BallBehaviour>();
 				Text LevelText = _BallLauncher.transform.parent.FindChildRecursive("LevelText")
 					.GetComponent<Text>();
 				LevelText.text = string.Format("Level {0}", CurrentLevel.LevelID);
@@ -360,6 +358,9 @@ public class GameManager : MonoBehaviour {
 					.FindChildRecursive("LevelDisplayContent").gameObject;
 				PopulateLevelListUI();
 				AudioWrangler.ChangeMusicVolume(1f);
+				break;
+			case 2:
+				LevelSelectBkGrndImage.enabled = false;
 				break;
 		}
 	}

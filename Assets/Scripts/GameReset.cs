@@ -5,9 +5,11 @@ using GameData;
 public class GameReset : MonoBehaviour {
 
 	WinChecker _WinChecker;
+	static GameReset m_Instance;
 
 	void Awake() {
 
+		m_Instance = this;
 		_WinChecker = GameObject.FindObjectOfType<WinChecker>();
 	}
 
@@ -23,7 +25,7 @@ public class GameReset : MonoBehaviour {
 		}
 	}
 
-	public void ResetLevel(GameObject ballGo) {
+	public static void ResetLevel(GameObject ballGo) {
 
 		BallLauncher ballLauncher = ballGo.transform.parent.GetComponent<BallLauncher>();
 		Rigidbody ballRigidBody = ballGo.GetComponent<Rigidbody>();
@@ -54,7 +56,7 @@ public class GameReset : MonoBehaviour {
 		ballBehaviour.TmpBounces = 0;
 		ballBehaviour.StartCountingScore = false;
 		ballBehaviour.UpdateScoreText();
-		StartCoroutine(ResetBallRoutine(ballGo, ballLauncher));
+		GameReset.m_Instance.StartCoroutine(GameReset.m_Instance.ResetBallRoutine(ballGo, ballLauncher));
 	}
 
 	IEnumerator ResetBallRoutine(GameObject ball, BallLauncher ballLauncher) {

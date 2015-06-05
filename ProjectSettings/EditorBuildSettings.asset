@@ -10,6 +10,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Required/LevelPicker.unity
   - enabled: 1
+    path: Assets/Scenes/Required/BallSelection.unity
+  - enabled: 1
     path: Assets/Scenes/Levels/Level1.unity
   - enabled: 1
     path: Assets/Scenes/Levels/Level2.unity

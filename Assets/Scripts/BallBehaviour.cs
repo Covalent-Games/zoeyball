@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.TransformExtensions;
 using System.Collections;
 
 [RequireComponent(typeof(SphereCollider))]
@@ -11,12 +12,12 @@ public class BallBehaviour : MonoBehaviour {
 	public GameObject TenBounceParticle;
 	public GameObject TenBounceTrail;
 	public GameObject FifteenBounceParticle;
-	Rigidbody thisRigidBody;
-	GameObject[] ImpactEffects = new GameObject[3];
+	public BallLauncher LaunchPlatform;
+	public Rigidbody PhysicsBody;
+	public GameObject[] ImpactEffects = new GameObject[3];
 	int ImpactEffectPoolIndex;
 	Vector3 LastPosition;
-	GameReset ResetTrigger;
-	BallLauncher LaunchPlatform;
+	public GameReset ResetTrigger;
 
 	//TODO This doesn't feel like the best location for this.
 	public Text ScoreText;
@@ -25,25 +26,13 @@ public class BallBehaviour : MonoBehaviour {
 	public int TmpBounces;
 	public bool StartCountingScore = false;
 
-	void Awake() {
-
-		thisRigidBody = GetComponent<Rigidbody>();
-		LaunchPlatform = transform.parent.GetComponent<BallLauncher>();
-		ResetTrigger = GameObject.Find("GameResetTrigger").GetComponent<GameReset>();
-		GameObject resource = (GameObject)Resources.Load("Effects/ImpactEffect");
-		for (int i = 0; i < ImpactEffects.Length; i++) {
-			ImpactEffects[i] = Instantiate(resource) as GameObject;
-		}
-		UpdateScoreText();
-	}
-
 	void OnCollisionEnter(Collision obj) {
 
 		AudioSource audioSource = obj.gameObject.GetComponent<AudioSource>();
 		if (audioSource != null) {
 			// Raise or lower volume of impact based on ball velocity.
 			audioSource.volume = Vector3.Distance(
-					(thisRigidBody.velocity * Time.deltaTime) + transform.position,
+					(PhysicsBody.velocity * Time.deltaTime) + transform.position,
 					transform.position) * 3.3f;
 			audioSource.Play();
 		}
@@ -88,7 +77,7 @@ public class BallBehaviour : MonoBehaviour {
 		yield return new WaitForSeconds(.2f);
 		if (transform.position == lastPosition) {
 			if (!LaunchPlatform.CanLaunch) {
-				ResetTrigger.ResetLevel(gameObject);
+				GameReset.ResetLevel(gameObject);
 				StopAllCoroutines();
 			}
 		}
