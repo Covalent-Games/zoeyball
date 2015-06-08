@@ -44,7 +44,7 @@ namespace GameData {
 				BallNamePathPairs.Add(name, "Balls/" + name);
 				// Check if it's not a default unlocked ball
 				if (name != "BallBlue" && name != "BallYellow") {
-					SaveData.UnlockedBalls.Add(name, false);
+					SaveData.UnlockedBalls.Add(name, true);
 				}
 			}
 		}
