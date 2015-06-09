@@ -7,6 +7,7 @@ using GameData;
 public class WinChecker : MonoBehaviour {
 
 	public bool Winning = false;
+	public AudioClip WinClapAudio;
 	GameObject _Confetti;
 	BallBehaviour _Ball;
 	GameObject[] _Blocks;
@@ -87,6 +88,7 @@ public class WinChecker : MonoBehaviour {
 		if (colliderObject.gameObject.tag == "Ball") {
 			Winning = true;
 			_Ball.enabled = false;
+			AudioSource.PlayClipAtPoint(WinClapAudio, Camera.main.transform.position, .5f);
 
 			// LevelID is human readable, so is 1 higher than it's index.
 			if (GameManager.CurrentLevel.LevelID < DataManager.SaveData.LevelList.Count) {

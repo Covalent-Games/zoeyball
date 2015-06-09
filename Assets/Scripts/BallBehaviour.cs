@@ -56,10 +56,7 @@ public class BallBehaviour : MonoBehaviour {
 			FiveBounceTrail.GetComponent<ParticleSystem>().Stop();
 			TenBounceTrail.GetComponent<ParticleSystem>().Play();
 		} else if (TmpBounces == 15) {
-
-		} else {
-			//StartCoroutine(PulseScore());
-			//ScoreTextAnimation.GetComponent<Animator>().CrossFade("ScorePulse", 0f);
+			// Fireworks
 		}
 	}
 
