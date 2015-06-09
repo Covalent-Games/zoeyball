@@ -110,9 +110,9 @@ public class GameManager : MonoBehaviour {
 
 		try {
 			//MarkAsBusy();
-			DataWrangler.OnDataLoaded += LoadLevelPicker;
-			DataWrangler.StartLoadGameData();
-			DataWrangler.StartRecordingPlayTime();
+			GameManager.Instance.DataWrangler.OnDataLoaded += LoadLevelPicker;
+			GameManager.Instance.DataWrangler.StartLoadGameData();
+			GameManager.Instance.DataWrangler.StartRecordingPlayTime();
 		} catch (NullReferenceException e) {
 			Debug.Log(e.Message);
 			Debug.Log(e.StackTrace);

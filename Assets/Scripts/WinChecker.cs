@@ -106,7 +106,7 @@ public class WinChecker : MonoBehaviour {
 			}
 
 			if (GameManager.Instance != null) {
-				GameManager.Instance.CheckAchievements(colliderObject);
+				//GameManager.Instance.CheckAchievements(colliderObject);
 			} else {
 				Debug.Log("GameManger.Instance is null, for whatever reason...");
 			}

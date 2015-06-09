@@ -60,14 +60,14 @@ public class BallBehaviour : MonoBehaviour {
 		}
 	}
 
-	public IEnumerator PulseScore() {
+	//public IEnumerator PulseScore() {
 
-		Text scoreTextCopy = (Text)Instantiate(ScoreText);
-		Animator animator = scoreTextCopy.GetComponent<Animator>();
+	//	Text scoreTextCopy = (Text)Instantiate(ScoreText);
+	//	Animator animator = scoreTextCopy.GetComponent<Animator>();
 
-		animator.Play("ScorePulse");
-		yield return new WaitForSeconds(1.5f);
-	}
+	//	animator.Play("ScorePulse");
+	//	yield return new WaitForSeconds(1.5f);
+	//}
 
 	IEnumerator CheckForDeadPosition(Vector3 lastPosition) {
 
