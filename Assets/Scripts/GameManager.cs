@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour {
 	public TextAsset LevelData;
 	public Canvas LevelCompleteCanvas;
 	public Canvas LoadingScreenCanvas;
+	public Canvas AchievementCanvas;
 	public Image LevelSelectBkGrndImage;
 	public GameObject HighScoreStamp;
 	public Animator MenuAnimator;
@@ -62,11 +63,23 @@ public class GameManager : MonoBehaviour {
 		DataWrangler.LoadLevelTemplate(LevelData);
 		AudioWrangler = GetComponent<AudioManager>();
 		LoadingScreenCanvas = transform.FindChildRecursive("LoadingScreenCanvas").GetComponent<Canvas>();
+		AchievementCanvas = transform.FindChild("tmpAchievementCanvas").GetComponent<Canvas>();
 		MenuAnimator = GameObject.FindGameObjectWithTag("MenuPanel").GetComponent<Animator>();
 		MenuAnimator.enabled = false;
 		LevelSelectBkGrndImage = GameObject.Find("LevelSelectBackground").GetComponent<Image>();
 		SelectedBall = (GameObject)Resources.Load("Balls/BallBlue");
 		DontDestroyOnLoad(gameObject);
+
+		AchievementCodes.ADict = new Dictionary<string, string>(){
+			{"CgkI562Uo_MOEAIQAQ", "Check"},
+			{"CgkI562Uo_MOEAIQBw", "I Think You Missed"},
+			{"CgkI562Uo_MOEAIQAg", "Pentabounce"},
+			{"CgkI562Uo_MOEAIQBQ", "The Decabounce"},
+			{"CgkI562Uo_MOEAIQBA", "A Score of Bounces"},
+			{"CgkI562Uo_MOEAIQCA", "Champ"},
+			{"CgkI562Uo_MOEAIQCQ", "Olympian"},
+			{"CgkI562Uo_MOEAIQCg", "You're Ridiculous"},
+		};
 	}
 
 	void Start() {
@@ -320,6 +333,67 @@ public class GameManager : MonoBehaviour {
 		IsBusy = false;
 		Debug.Log("GameManager Not Busy");
 		this.LoadingScreenCanvas.enabled = false;
+	}
+
+	public void CheckAchievements(Collision colliderObject) {
+
+		BallBehaviour ball = colliderObject.gameObject.GetComponent<BallBehaviour>();
+		ShowAchievementPanel_tmp(AchievementCodes.ADict[AchievementCodes.Pentabounce]);
+		if (!DataManager.SaveData.AchievementProg.Pentabounce && ball.TmpBounces >= 5) {
+			//Social.ReportProgress(AchievementCodes.Pentabounce, 100f, (bool success) => {
+			//	DataManager.SaveData.AchievementProg.Pentabounce = true;
+			//});
+			ShowAchievementPanel_tmp(AchievementCodes.ADict[AchievementCodes.Pentabounce]);
+		}
+		if (!DataManager.SaveData.AchievementProg.TheDecabounce && ball.TmpBounces >= 10) {
+			//Social.ReportProgress(AchievementCodes.TheDecabounce, 100f, (bool success) => {
+			//	DataManager.SaveData.AchievementProg.TheDecabounce = true;
+			//});
+			ShowAchievementPanel_tmp(AchievementCodes.ADict[AchievementCodes.TheDecabounce]);
+		}
+		if (!DataManager.SaveData.AchievementProg.AScoreOfBounces && ball.TmpBounces >= 20) {
+			//Social.ReportProgress(AchievementCodes.AScoreOfBounces, 100f, (bool success) => {
+			//	DataManager.SaveData.AchievementProg.AScoreOfBounces = true;
+			//});
+			ShowAchievementPanel_tmp(AchievementCodes.ADict[AchievementCodes.AScoreOfBounces]);
+		}
+		if (!DataManager.SaveData.AchievementProg.Check && GameManager.CurrentLevel.LevelID == 20) {
+			//Social.ReportProgress(AchievementCodes.Check, 100f, (bool success) => {
+			//	DataManager.SaveData.AchievementProg.Check = true;
+			//});
+			ShowAchievementPanel_tmp(AchievementCodes.ADict[AchievementCodes.Check]);
+		}
+		if (!DataManager.SaveData.AchievementProg.Champ && ball.TmpScore >= 100) {
+			//Social.ReportProgress(AchievementCodes.Champ, 100f, (bool success) => {
+			//	DataManager.SaveData.AchievementProg.Champ = true;
+			//});
+			ShowAchievementPanel_tmp(AchievementCodes.ADict[AchievementCodes.Champ]);
+		}
+		if (!DataManager.SaveData.AchievementProg.Olympian && ball.TmpScore >= 200) {
+			//Social.ReportProgress(AchievementCodes.ADict[AchievementCodes.Olympian, 100f, (bool success) => {
+			//	DataManager.SaveData.AchievementProg.Olympian = true;
+			//});
+			ShowAchievementPanel_tmp(AchievementCodes.ADict[AchievementCodes.Olympian]);
+		}
+		if (!DataManager.SaveData.AchievementProg.YoureRidiculous && ball.TmpScore >= 500) {
+			//Social.ReportProgress(AchievementCodes.YoureRidiculous, 100f, (bool success) => {
+			//	DataManager.SaveData.AchievementProg.YoureRidiculous = true;
+			//});
+			ShowAchievementPanel_tmp(AchievementCodes.ADict[AchievementCodes.YoureRidiculous]);
+		}
+	}
+
+	void ShowAchievementPanel_tmp(string achievementTitle) {
+
+		AchievementCanvas.transform.FindChildRecursive("AchievementText").GetComponent<Text>().text =
+			achievementTitle;
+		AchievementCanvas.enabled = true;
+		Invoke("DisableAchievementPanel_tmp", 5f);
+	}
+
+	void DisableAchievementPanel_tmp() {
+
+		AchievementCanvas.enabled = false;
 	}
 	#endregion
 

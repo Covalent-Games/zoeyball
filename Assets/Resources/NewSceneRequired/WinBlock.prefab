@@ -288,6 +288,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Winning: 0
+  WinClapAudio: {fileID: 8300000, guid: afea548961cd20b4cad1533c984a434c, type: 3}
   YouWinLabelCanvas: {fileID: 22304654}
   YouWinLabel: {fileID: 11476924}
   WinMessages: []

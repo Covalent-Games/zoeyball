@@ -105,46 +105,11 @@ public class WinChecker : MonoBehaviour {
 				GameManager.CurrentLevel.Bounces = _Ball.TmpBounces;
 			}
 
-			CheckAchievements(colliderObject);
-		}
-	}
-
-	void CheckAchievements(Collision colliderObject) {
-
-		if (!DataManager.SaveData.AchievementProg.Pentabounce && _Ball.TmpBounces >= 5) {
-			Social.ReportProgress(AchievementCodes.Pentabounce, 100f, (bool success) => {
-				DataManager.SaveData.AchievementProg.Pentabounce = true;
-			});
-		}
-		if (!DataManager.SaveData.AchievementProg.TheDecabounce && _Ball.TmpBounces >= 10) {
-			Social.ReportProgress(AchievementCodes.TheDecabounce, 100f, (bool success) => {
-				DataManager.SaveData.AchievementProg.TheDecabounce = true;
-			});
-		}
-		if (!DataManager.SaveData.AchievementProg.AScoreOfBounces && _Ball.TmpBounces >= 20) {
-			Social.ReportProgress(AchievementCodes.AScoreOfBounces, 100f, (bool success) => {
-				DataManager.SaveData.AchievementProg.AScoreOfBounces = true;
-			});
-		}
-		if (!DataManager.SaveData.AchievementProg.Check && GameManager.CurrentLevel.LevelID == 20) {
-			Social.ReportProgress(AchievementCodes.Check, 100f, (bool success) => {
-				DataManager.SaveData.AchievementProg.Check = true;
-			});
-		}
-		if (!DataManager.SaveData.AchievementProg.Champ && _Ball.TmpScore >= 100) {
-			Social.ReportProgress(AchievementCodes.Champ, 100f, (bool success) => {
-				DataManager.SaveData.AchievementProg.Champ = true;
-			});
-		}
-		if (!DataManager.SaveData.AchievementProg.Olympian && _Ball.TmpScore >= 200) {
-			Social.ReportProgress(AchievementCodes.Olympian, 100f, (bool success) => {
-				DataManager.SaveData.AchievementProg.Olympian = true;
-			});
-		}
-		if (!DataManager.SaveData.AchievementProg.YoureRidiculous && _Ball.TmpScore >= 500) {
-			Social.ReportProgress(AchievementCodes.YoureRidiculous, 100f, (bool success) => {
-				DataManager.SaveData.AchievementProg.YoureRidiculous = true;
-			});
+			if (GameManager.Instance != null) {
+				GameManager.Instance.CheckAchievements(colliderObject);
+			} else {
+				Debug.Log("GameManger.Instance is null, for whatever reason...");
+			}
 		}
 	}
 

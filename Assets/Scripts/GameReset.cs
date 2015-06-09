@@ -34,11 +34,13 @@ public class GameReset : MonoBehaviour {
 		if (!DataManager.SaveData.AchievementProg.IThinkYouMissed &&
 			ballBehaviour.TmpBounces == 0 &&
 			GameManager.CurrentLevel.LevelID > 2) {
-			Social.ReportProgress(AchievementCodes.IThinkYouMissed, 100f, (bool success) => {
-				if (success) {
-					DataManager.SaveData.AchievementProg.IThinkYouMissed = true;
-				}
-			});
+			//Social.ReportProgress(AchievementCodes.IThinkYouMissed, 100f, (bool success) => {
+			//	if (success) {
+			//		DataManager.SaveData.AchievementProg.IThinkYouMissed = true;
+			//	}
+			//});
+			//TODO: Remove this warning once achievements are fully enabled again.
+			Debug.LogWarning("I Think You Missed achievement is surpressed.");
 		}
 
 		ballBehaviour.FiveBounceTrail.GetComponent<ParticleSystem>().Stop();
