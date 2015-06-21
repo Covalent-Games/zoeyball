@@ -58,18 +58,7 @@ public class BallBehaviour : MonoBehaviour {
 		} else if (TmpBounces == 15) {
 
 		} else {
-			//StartCoroutine(PulseScore());
-			//ScoreTextAnimation.GetComponent<Animator>().CrossFade("ScorePulse", 0f);
 		}
-	}
-
-	public IEnumerator PulseScore() {
-
-		Text scoreTextCopy = (Text)Instantiate(ScoreText);
-		Animator animator = scoreTextCopy.GetComponent<Animator>();
-
-		animator.Play("ScorePulse");
-		yield return new WaitForSeconds(1.5f);
 	}
 
 	IEnumerator CheckForDeadPosition(Vector3 lastPosition) {

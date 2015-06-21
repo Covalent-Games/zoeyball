@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour {
 	public Image LevelSelectBkGrndImage;
 	public GameObject HighScoreStamp;
 	public Animator MenuAnimator;
-	public DataManager DataWrangler;
+	public static DataManager DataWrangler;
 	public GameObject LevelButtonResource;
 	public Text LevelText;
 	public static bool GotHighScore = false;
@@ -101,9 +101,9 @@ public class GameManager : MonoBehaviour {
 			DataWrangler.StartLoadGameData();
 			DataWrangler.StartRecordingPlayTime();
 		} catch (NullReferenceException e) {
-			Debug.Log(e.Message);
+			Debug.Log("*******GameManager.Play exception: " + e.Message);
 			Debug.Log(e.StackTrace);
-			Debug.Log(e.InnerException);
+			Debug.Log("*******GameManager.Play innerexception: " + e.InnerException);
 			if (e.Data.Count > 0) {
 				Debug.Log("EXCEPTION DATA:\n");
 				foreach (DictionaryEntry pair in e.Data) {
@@ -311,14 +311,14 @@ public class GameManager : MonoBehaviour {
 	public void MarkAsBusy() {
 
 		IsBusy = true;
-		Debug.Log("GameManager busy");
+		Debug.Log("-------GameManager busy---------");
 		this.LoadingScreenCanvas.enabled = true;
 	}
 
 	public void MarkAsNotBusy() {
 
 		IsBusy = false;
-		Debug.Log("GameManager Not Busy");
+		Debug.Log("--------GameManager Not Busy----------");
 		this.LoadingScreenCanvas.enabled = false;
 	}
 	#endregion

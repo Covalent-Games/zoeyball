@@ -152,7 +152,7 @@ MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 11475324, guid: 11a8b0b5f84a6b949814034659f9ec61,
     type: 2}
-  m_PrefabInternal: {fileID: 1324695264}
+  m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -247,6 +247,7 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: .0219999999
+  m_StereoMirrorMode: 0
 --- !u!4 &1052666407
 Transform:
   m_ObjectHideFlags: 0
@@ -552,7 +553,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22487342, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -453.571198
+      value: -629.810242
       objectReference: {fileID: 0}
     - target: {fileID: 22487342, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_SizeDelta.x
@@ -560,7 +561,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22487342, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_SizeDelta.y
-      value: 877.142395
+      value: 1229.62048
       objectReference: {fileID: 0}
     - target: {fileID: 22427300, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_AnchorMin.y
@@ -576,7 +577,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22427300, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -453.571198
+      value: -629.810242
       objectReference: {fileID: 0}
     - target: {fileID: 22427300, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_SizeDelta.x
@@ -584,7 +585,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22427300, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_SizeDelta.y
-      value: 877.142395
+      value: 1229.62048
       objectReference: {fileID: 0}
     - target: {fileID: 22425584, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_AnchorMin.y
@@ -707,6 +708,7 @@ MonoBehaviour:
   m_SubmitButton: Submit
   m_CancelButton: Cancel
   m_InputActionsPerSecond: 10
+  m_RepeatDelay: .5
   m_AllowActivationOnMobileDevice: 0
 --- !u!114 &1469519480
 MonoBehaviour:

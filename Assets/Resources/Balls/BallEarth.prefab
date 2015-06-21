@@ -14,7 +14,7 @@ GameObject:
   - 54: {fileID: 5472378}
   - 114: {fileID: 11491030}
   m_Layer: 0
-  m_Name: BallBlackCross
+  m_Name: BallEarth
   m_TagString: Ball
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -224,7 +224,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: 7dfbc97e972d9634c8b7623d4fe7ee5f, type: 2}
+  - {fileID: 2100000, guid: 50260eda4261bd44eabcac36c477f7c0, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
