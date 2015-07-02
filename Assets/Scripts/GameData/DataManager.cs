@@ -36,15 +36,24 @@ namespace GameData {
 		#endregion
 
 		public DataManager() {
-
-			DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/Resources/Balls");
-			FileInfo[] files = di.GetFiles("*.prefab");
-			foreach (FileInfo file in files) {
-				string name = Path.GetFileNameWithoutExtension(file.Name);
-				BallNamePathPairs.Add(name, "Balls/" + name);
-				// Check if it's not a default unlocked ball
-				if (name != "BallBlue" && name != "BallYellow") {
-					SaveData.UnlockedBalls.Add(name, false);
+			//Debug.Log("******dataPath: " + Application.dataPath + "\n******persistantDataPath: " + Application.persistentDataPath + "\n******streamingAssetsPath: " + Application.streamingAssetsPath);
+			//Debug.Log("******Current directory: " + Directory.GetCurrentDirectory());
+			//DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/Resources/Balls");
+			if (Application.isEditor) {
+				DirectoryInfo di = new DirectoryInfo(Application.streamingAssetsPath + "/Resources/Balls");
+				FileInfo[] files = di.GetFiles("*.prefab");
+				foreach (FileInfo file in files) {
+					string name = Path.GetFileNameWithoutExtension(file.Name);
+					BallNamePathPairs.Add(name, "Balls/" + name);
+					// Check if it's not a default unlocked ball
+					if (name != "BallBlue" && name != "BallYellow") {
+						SaveData.UnlockedBalls.Add(name, true);
+					}
+				}
+			}
+			else {
+				foreach (var ball in Designs.Balls) {
+					BallNamePathPairs.Add(ball, "Balls/" + ball);
 				}
 			}
 		}
@@ -64,7 +73,7 @@ namespace GameData {
 		}
 
 		public void StartSaveGameData() {
-
+			Debug.Log("--------StartSaveGameData---------");
 			if (OnDataChangeStarted != null) {
 				OnDataChangeStarted();
 			}
@@ -73,6 +82,7 @@ namespace GameData {
 		}
 
 		public void StartLoadGameData() {
+			Debug.Log("--------StartLoadGameData---------");
 
 			if (OnDataChangeStarted != null) {
 				Debug.Log("Attempting to trigger OnDataChangeStarted");
@@ -144,13 +154,14 @@ namespace GameData {
 		}
 
 		void OnSavedGameOpened(SavedGameRequestStatus status, ISavedGameMetadata metaData) {
-
+			Debug.Log("-------OnSavedGameOpened--------- status: " + status.ToString());
 			switch (status) {
 				case SavedGameRequestStatus.Success:
 					SavedGameMetaData = metaData;
 
 					// Set to save the current game.
 					if (Writing) {
+						Debug.Log("------------Is Writing-----------");
 						byte[] savedData = Serializer.SerializeGameState(SaveData);
 
 						ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
@@ -173,6 +184,7 @@ namespace GameData {
 
 						// Set to load an existing game.
 					} else {
+						Debug.Log("--------Is reading----------");
 						ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
 						savedGameClient.ReadBinaryData(SavedGameMetaData, OnSavedGameDataRead);
 					}
@@ -218,7 +230,7 @@ namespace GameData {
 		}
 
 		void OnSavedGameDataRead(SavedGameRequestStatus status, byte[] data) {
-
+			Debug.Log("-----------OnSavedGameDataRead----------- status: " + status.ToString());
 			switch (status) {
 				case SavedGameRequestStatus.Success:
 					GameState tmpGameState = Serializer.DeserializeGameState(data);
@@ -230,23 +242,23 @@ namespace GameData {
 					SaveData.LeaderBoardScores = tmpGameState.LeaderBoardScores;
 					// Loop through all the unlocked/locked balls to guarantee we don't overwrite anything
 					// that's already unlocked.
-					foreach (var entry in tmpGameState.UnlockedBalls) {
-						// If the cache says the ball isn't unlocked...
-						if (!SaveData.UnlockedBalls[entry.Key]) {
-							// Check if the cloud save says it is...
-							if (tmpGameState.UnlockedBalls[entry.Key]) {
-								// then overwite the cache with the unlocked ball.
-								SaveData.UnlockedBalls[entry.Key] = tmpGameState.UnlockedBalls[entry.Key];
-							}
-						}
-					}
+					//foreach (var entry in tmpGameState.UnlockedBalls) {
+					//	// If the cache says the ball isn't unlocked...
+					//	if (!SaveData.UnlockedBalls[entry.Key]) {
+					//		// Check if the cloud save says it is...
+					//		if (tmpGameState.UnlockedBalls[entry.Key]) {
+					//			// then overwite the cache with the unlocked ball.
+					//			SaveData.UnlockedBalls[entry.Key] = tmpGameState.UnlockedBalls[entry.Key];
+					//		}
+					//	}
+					//}
 
 					// Events to trigger once data has been loaded
 					if (OnDataLoaded != null) {
-						Debug.Log("OnDataLoaded event");
+						Debug.Log("----------OnDataLoaded event------------");
 						OnDataLoaded();
 					} else {
-						Debug.LogError("No event registered for OnDataLoaded. LevelPicker scene won't be loaded");
+						Debug.LogError("-------------No event registered for OnDataLoaded. LevelPicker scene won't be loaded------------");
 					}
 
 					break;

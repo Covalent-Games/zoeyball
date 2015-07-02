@@ -11,7 +11,7 @@ public class BallSelectionHandler : MonoBehaviour {
 		GameObject ball;
 		Vector3 ballPosition = new Vector3(0, 0, 0);
 		foreach (var entry in DataManager.BallNamePathPairs) {
-			if (DataManager.SaveData.UnlockedBalls[entry.Key]) {
+			if (DataManager.SaveData.UnlockedBalls.ContainsKey(entry.Key)) {
 				ball = (GameObject)Instantiate(
 					Resources.Load(entry.Value));
 				ball.GetComponent<BallBehaviour>().enabled = false;
