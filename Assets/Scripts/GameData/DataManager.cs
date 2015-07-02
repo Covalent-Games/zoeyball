@@ -38,9 +38,10 @@ namespace GameData {
 		public DataManager() {
 			//Debug.Log("******dataPath: " + Application.dataPath + "\n******persistantDataPath: " + Application.persistentDataPath + "\n******streamingAssetsPath: " + Application.streamingAssetsPath);
 			//Debug.Log("******Current directory: " + Directory.GetCurrentDirectory());
-			//DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/Resources/Balls");
+			//DirectoryInfo di = new DirectoryInfo(Application.streamingAssetsPath + "/Resources/Balls");
+
 			if (Application.isEditor) {
-				DirectoryInfo di = new DirectoryInfo(Application.streamingAssetsPath + "/Resources/Balls");
+				DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/Resources/Balls");
 				FileInfo[] files = di.GetFiles("*.prefab");
 				foreach (FileInfo file in files) {
 					string name = Path.GetFileNameWithoutExtension(file.Name);
@@ -50,8 +51,7 @@ namespace GameData {
 						SaveData.UnlockedBalls.Add(name, true);
 					}
 				}
-			}
-			else {
+			} else {
 				foreach (var ball in Designs.Balls) {
 					BallNamePathPairs.Add(ball, "Balls/" + ball);
 				}

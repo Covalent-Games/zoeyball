@@ -338,7 +338,6 @@ public class GameManager : MonoBehaviour {
 	public void CheckAchievements(Collision colliderObject) {
 
 		BallBehaviour ball = colliderObject.gameObject.GetComponent<BallBehaviour>();
-		ShowAchievementPanel_tmp(AchievementCodes.ADict[AchievementCodes.Pentabounce]);
 		if (!DataManager.SaveData.AchievementProg.Pentabounce && ball.TmpBounces >= 5) {
 			//Social.ReportProgress(AchievementCodes.Pentabounce, 100f, (bool success) => {
 			//	DataManager.SaveData.AchievementProg.Pentabounce = true;
