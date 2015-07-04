@@ -31,7 +31,7 @@ public class PlayServicesHandler : MonoBehaviour {
 				Debug.Log("Signed into Google Play!");
 				returnValue = success;
 			} else {
-				Debug.Log("Well dang... nothin'");
+				Debug.Log("Not signed into Google Play.");
 				returnValue = success;
 			}
 		});

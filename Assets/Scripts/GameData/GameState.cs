@@ -24,8 +24,13 @@ namespace GameData {
 			AchievementProg = new AchievementProgress();
 			UnlockedBalls = new Dictionary<string, bool>();
 
-			UnlockedBalls.Add("BallYellow", true);
-			UnlockedBalls.Add("BallBlue", true);
+			foreach (var ball in Designs.Balls) {
+				if (ball == "BallYellow" || ball == "BallBlue") {
+					UnlockedBalls.Add(ball, true);
+				} else if (PlayerPrefs.HasKey(ball) && PlayerPrefs.GetInt(ball) == 1) {
+					UnlockedBalls.Add(ball, true);
+				}
+			}
 		}
 	}
 }

@@ -9,3 +9,15 @@ public class World {
 	};
 
 }
+
+public class Designs {
+
+	public static List<string> Balls = new List<string>() {
+		"BallYellow",
+		"BallBlue",
+		"BallEarth",
+		"BallPokeball",
+		"Ball8Ball",
+		"BallBaseBall"
+	};
+}

@@ -110,6 +110,52 @@ public class WinChecker : MonoBehaviour {
 			} else {
 				Debug.Log("GameManger.Instance is null, for whatever reason...");
 			}
+			//CheckAchievements(colliderObject);
+		}
+	}
+
+	void CheckAchievements(Collision colliderObject) {
+
+		if (!DataManager.SaveData.AchievementProg.Pentabounce && _Ball.TmpBounces >= 5) {
+			Social.ReportProgress(AchievementCodes.Pentabounce, 100f, (bool success) => {
+				DataManager.SaveData.AchievementProg.Pentabounce = true;
+			});
+		}
+		if (!DataManager.SaveData.AchievementProg.TheDecabounce && _Ball.TmpBounces >= 10) {
+			Social.ReportProgress(AchievementCodes.TheDecabounce, 100f, (bool success) => {
+				DataManager.SaveData.AchievementProg.TheDecabounce = true;
+			});
+			DataManager.SaveData.UnlockedBalls.Add("BallBaseBall", true);
+			PlayerPrefs.SetInt("BallBaseBall", 1);
+		}
+		if (!DataManager.SaveData.AchievementProg.AScoreOfBounces && _Ball.TmpBounces >= 20) {
+			Social.ReportProgress(AchievementCodes.AScoreOfBounces, 100f, (bool success) => {
+				DataManager.SaveData.AchievementProg.AScoreOfBounces = true;
+			});
+		}
+		if (!DataManager.SaveData.AchievementProg.Check && GameManager.CurrentLevel.LevelID == 20) {
+			Social.ReportProgress(AchievementCodes.Check, 100f, (bool success) => {
+				DataManager.SaveData.AchievementProg.Check = true;
+			});
+			DataManager.SaveData.UnlockedBalls.Add("BallEarth", true);
+			PlayerPrefs.SetInt("BallEarth", 1);
+		}
+		if (!DataManager.SaveData.AchievementProg.Champ && _Ball.TmpScore >= 100) {
+			Social.ReportProgress(AchievementCodes.Champ, 100f, (bool success) => {
+				DataManager.SaveData.AchievementProg.Champ = true;
+			});
+			DataManager.SaveData.UnlockedBalls.Add("BallPokeball", true);
+			PlayerPrefs.SetInt("BallPokeball", 1);
+		}
+		if (!DataManager.SaveData.AchievementProg.Olympian && _Ball.TmpScore >= 200) {
+			Social.ReportProgress(AchievementCodes.Olympian, 100f, (bool success) => {
+				DataManager.SaveData.AchievementProg.Olympian = true;
+			});
+		}
+		if (!DataManager.SaveData.AchievementProg.YoureRidiculous && _Ball.TmpScore >= 500) {
+			Social.ReportProgress(AchievementCodes.YoureRidiculous, 100f, (bool success) => {
+				DataManager.SaveData.AchievementProg.YoureRidiculous = true;
+			});
 		}
 	}
 

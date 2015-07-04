@@ -56,18 +56,10 @@ public class BallBehaviour : MonoBehaviour {
 			FiveBounceTrail.GetComponent<ParticleSystem>().Stop();
 			TenBounceTrail.GetComponent<ParticleSystem>().Play();
 		} else if (TmpBounces == 15) {
-			// Fireworks
+
+		} else {
 		}
 	}
-
-	//public IEnumerator PulseScore() {
-
-	//	Text scoreTextCopy = (Text)Instantiate(ScoreText);
-	//	Animator animator = scoreTextCopy.GetComponent<Animator>();
-
-	//	animator.Play("ScorePulse");
-	//	yield return new WaitForSeconds(1.5f);
-	//}
 
 	IEnumerator CheckForDeadPosition(Vector3 lastPosition) {
 
