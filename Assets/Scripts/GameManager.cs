@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour {
 		MenuAnimator = GameObject.FindGameObjectWithTag("MenuPanel").GetComponent<Animator>();
 		MenuAnimator.enabled = false;
 		LevelSelectBkGrndImage = GameObject.Find("LevelSelectBackground").GetComponent<Image>();
-		SelectedBall = (GameObject)Resources.Load("Balls/BallBlue");
+		SelectedBall = (GameObject)Resources.Load("Balls/" + (PlayerPrefs.HasKey("CurrentBall") ? PlayerPrefs.GetString("CurrentBall") : "BallYellow"));
 		DontDestroyOnLoad(gameObject);
 
 		AchievementCodes.ADict = new Dictionary<string, string>(){
@@ -110,9 +110,9 @@ public class GameManager : MonoBehaviour {
 
 		try {
 			//MarkAsBusy();
-			GameManager.Instance.DataWrangler.OnDataLoaded += LoadLevelPicker;
-			GameManager.Instance.DataWrangler.StartLoadGameData();
-			GameManager.Instance.DataWrangler.StartRecordingPlayTime();
+			DataWrangler.OnDataLoaded += LoadLevelPicker;
+			DataWrangler.StartLoadGameData();
+			DataWrangler.StartRecordingPlayTime();
 		} catch (NullReferenceException e) {
 			Debug.Log("*******GameManager.Play exception: " + e.Message);
 			Debug.Log(e.StackTrace);
@@ -349,6 +349,8 @@ public class GameManager : MonoBehaviour {
 			//	DataManager.SaveData.AchievementProg.TheDecabounce = true;
 			//});
 			ShowAchievementPanel_tmp(AchievementCodes.ADict[AchievementCodes.TheDecabounce]);
+			//DataManager.SaveData.UnlockedBalls.Add("BallBaseBall", true);
+			//PlayerPrefs.SetInt("BallBaseBall", 1);
 		}
 		if (!DataManager.SaveData.AchievementProg.AScoreOfBounces && ball.TmpBounces >= 20) {
 			//Social.ReportProgress(AchievementCodes.AScoreOfBounces, 100f, (bool success) => {
@@ -361,12 +363,16 @@ public class GameManager : MonoBehaviour {
 			//	DataManager.SaveData.AchievementProg.Check = true;
 			//});
 			ShowAchievementPanel_tmp(AchievementCodes.ADict[AchievementCodes.Check]);
+			//DataManager.SaveData.UnlockedBalls.Add("BallEarth", true);
+			//PlayerPrefs.SetInt("BallEarth", 1);
 		}
 		if (!DataManager.SaveData.AchievementProg.Champ && ball.TmpScore >= 100) {
 			//Social.ReportProgress(AchievementCodes.Champ, 100f, (bool success) => {
 			//	DataManager.SaveData.AchievementProg.Champ = true;
 			//});
 			ShowAchievementPanel_tmp(AchievementCodes.ADict[AchievementCodes.Champ]);
+			//DataManager.SaveData.UnlockedBalls.Add("BallPokeball", true);
+			//PlayerPrefs.SetInt("Ball8Ball", 1);
 		}
 		if (!DataManager.SaveData.AchievementProg.Olympian && ball.TmpScore >= 200) {
 			//Social.ReportProgress(AchievementCodes.ADict[AchievementCodes.Olympian, 100f, (bool success) => {

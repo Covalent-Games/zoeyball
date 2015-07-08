@@ -16,7 +16,6 @@ public class Designs {
 		"BallYellow",
 		"BallBlue",
 		"BallEarth",
-		"BallPokeball",
 		"Ball8Ball",
 		"BallBaseBall"
 	};

@@ -88,7 +88,9 @@ public class WinChecker : MonoBehaviour {
 		if (colliderObject.gameObject.tag == "Ball") {
 			Winning = true;
 			_Ball.enabled = false;
-			AudioSource.PlayClipAtPoint(WinClapAudio, Camera.main.transform.position, .5f);
+			if (!(PlayerPrefs.HasKey("Sound") && PlayerPrefs.GetString("Sound") == "Off")) {
+				AudioSource.PlayClipAtPoint(WinClapAudio, Camera.main.transform.position, .5f);
+			}
 
 			// LevelID is human readable, so is 1 higher than it's index.
 			if (GameManager.CurrentLevel.LevelID < DataManager.SaveData.LevelList.Count) {
@@ -145,7 +147,7 @@ public class WinChecker : MonoBehaviour {
 				DataManager.SaveData.AchievementProg.Champ = true;
 			});
 			DataManager.SaveData.UnlockedBalls.Add("BallPokeball", true);
-			PlayerPrefs.SetInt("BallPokeball", 1);
+			PlayerPrefs.SetInt("Ball8Ball", 1);
 		}
 		if (!DataManager.SaveData.AchievementProg.Olympian && _Ball.TmpScore >= 200) {
 			Social.ReportProgress(AchievementCodes.Olympian, 100f, (bool success) => {

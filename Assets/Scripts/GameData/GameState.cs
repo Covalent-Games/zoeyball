@@ -25,11 +25,18 @@ namespace GameData {
 			UnlockedBalls = new Dictionary<string, bool>();
 
 			foreach (var ball in Designs.Balls) {
-				if (ball == "BallYellow" || ball == "BallBlue") {
-					UnlockedBalls.Add(ball, true);
-				} else if (PlayerPrefs.HasKey(ball) && PlayerPrefs.GetInt(ball) == 1) {
-					UnlockedBalls.Add(ball, true);
-				}
+				UnlockedBalls.Add(ball, true);
+				//if (ball == "BallYellow" || ball == "BallBlue") {
+				//	UnlockedBalls.Add(ball, true);
+				//	Debug.Log("-------------Unlocked " + ball);
+				//} else if (PlayerPrefs.HasKey(ball) && PlayerPrefs.GetInt(ball) == 1) {
+				//	UnlockedBalls.Add(ball, true);
+				//	Debug.Log("-------------Unlocked " + ball);
+				//}
+			}
+
+			if (PlayerPrefs.HasKey("CurrentBall")) {
+				CurrentSelectedBallName = PlayerPrefs.GetString("CurrentBall");
 			}
 		}
 	}
