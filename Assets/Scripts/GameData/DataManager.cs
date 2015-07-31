@@ -59,8 +59,8 @@ namespace GameData {
 				foreach (var ball in Designs.Balls) {
 					//if (ball == "BallYellow" || ball == "BallBlue")
 					//if (PlayerPrefs.HasKey(ball)) {
-						BallNamePathPairs.Add(ball, "Balls/" + ball);
-						Debug.Log("-------------Added " + ball);
+					BallNamePathPairs.Add(ball, "Balls/" + ball);
+					Debug.Log("-------------Added " + ball);
 
 					//}
 				}
@@ -250,6 +250,11 @@ namespace GameData {
 			Debug.Log("-----------OnSavedGameDataRead----------- status: " + status.ToString());
 			switch (status) {
 				case SavedGameRequestStatus.Success:
+					if (data.Length == 0) {
+						// If stuff starts happening and shouldn't after loading, this might be why!!!
+						OnDataLoaded();
+						return;
+					}
 					GameState tmpGameState = Serializer.DeserializeGameState(data);
 					for (int i = 0; i < tmpGameState.LevelList.Count; i++) {
 						DataManager.SaveData.LevelList[i] = tmpGameState.LevelList[i];
@@ -257,6 +262,7 @@ namespace GameData {
 
 					SaveData.AchievementProg = tmpGameState.AchievementProg;
 					SaveData.LeaderBoardScores = tmpGameState.LeaderBoardScores;
+					OnDataLoaded();
 					// Loop through all the unlocked/locked balls to guarantee we don't overwrite anything
 					// that's already unlocked.
 					//foreach (var entry in tmpGameState.UnlockedBalls) {

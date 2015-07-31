@@ -410,6 +410,11 @@ public class GameManager : MonoBehaviour {
 
 	void OnLevelWasLoaded(int levelIndex) {
 
+		if (IsBusy) {
+			// In case something went wrong, we don't want the loading screen stuck open.
+			MarkAsNotBusy();
+		}
+
 		switch (levelIndex) {
 			default:
 				LevelSelectBkGrndImage.enabled = false;
