@@ -80,6 +80,8 @@ public class WinChecker : MonoBehaviour {
 			"I think you can do better...",
 			"Well, you beat *my* score!",
 			"You should try that one again, though.",
+			"It's super effective!",
+
 		};
 	}
 
