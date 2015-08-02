@@ -28,9 +28,6 @@ public class BallBehaviour : MonoBehaviour {
 
 	void OnCollisionEnter(Collision obj) {
 
-		Debug.Log(string.Format("Position: {0} -- Rotation: ({1}, {2}, {3})", transform.position,
-			PhysicsBody.angularVelocity.x, PhysicsBody.angularVelocity.y, PhysicsBody.angularVelocity.z));
-
 		AudioSource audioSource = obj.gameObject.GetComponent<AudioSource>();
 		if (audioSource != null) {
 			// Raise or lower volume of impact based on ball velocity.

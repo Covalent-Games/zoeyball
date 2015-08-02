@@ -36,9 +36,6 @@ namespace GameData {
 		#endregion
 
 		public DataManager() {
-			//Debug.Log("******dataPath: " + Application.dataPath + "\n******persistantDataPath: " + Application.persistentDataPath + "\n******streamingAssetsPath: " + Application.streamingAssetsPath);
-			//Debug.Log("******Current directory: " + Directory.GetCurrentDirectory());
-			//DirectoryInfo di = new DirectoryInfo(Application.streamingAssetsPath + "/Resources/Balls");
 
 			if (Application.isEditor) {
 				DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/Resources/Balls");
@@ -51,27 +48,12 @@ namespace GameData {
 						if (PlayerPrefs.HasKey(name) && !SaveData.UnlockedBalls.ContainsKey(name)) {
 							SaveData.UnlockedBalls.Add(name, true);
 						}
-
-						//SaveData.UnlockedBalls.Add(name, true);
 					}
 				}
 			} else {
 				foreach (var ball in Designs.Balls) {
-					//if (ball == "BallYellow" || ball == "BallBlue")
-					//if (PlayerPrefs.HasKey(ball)) {
 					BallNamePathPairs.Add(ball, "Balls/" + ball);
-					Debug.Log("-------------Added " + ball);
-
-					//}
 				}
-				//if (!SaveData.UnlockedBalls.ContainsKey("BallYellow")) {
-				//	BallNamePathPairs.Add("BallYellow", "Balls/BallYellow");
-				//	Debug.Log("-------------Added Yellow Ball");
-				//}
-				//if (!SaveData.UnlockedBalls.ContainsKey("BallBlue")) {
-				//	BallNamePathPairs.Add("BallBlue", "Balls/BallBlue");
-				//	Debug.Log("-------------Added Blue Ball");
-				//}
 			}
 		}
 

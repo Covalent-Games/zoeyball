@@ -675,7 +675,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22487342, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -473.240509
+      value: -473.329681
       objectReference: {fileID: 0}
     - target: {fileID: 22487342, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_SizeDelta.x
@@ -683,7 +683,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22487342, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_SizeDelta.y
-      value: 916.481018
+      value: 916.659363
       objectReference: {fileID: 0}
     - target: {fileID: 22427300, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_AnchorMin.y
@@ -699,7 +699,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22427300, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -473.240509
+      value: -473.329681
       objectReference: {fileID: 0}
     - target: {fileID: 22427300, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_SizeDelta.x
@@ -707,7 +707,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22427300, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_SizeDelta.y
-      value: 916.481018
+      value: 916.659363
       objectReference: {fileID: 0}
     - target: {fileID: 22356002, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_Enabled
@@ -715,27 +715,27 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22457164, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 22457164, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 22457164, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 960.090027
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22457164, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 539.950012
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22457164, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_SizeDelta.x
-      value: 1920.19995
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22457164, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_SizeDelta.y
-      value: 1079.90002
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22457164, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_LocalScale.x
@@ -808,6 +808,14 @@ Prefab:
     - target: {fileID: 22408556, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
       propertyPath: m_LocalPosition.z
       value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 22451470, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -134.740021
+      objectReference: {fileID: 0}
+    - target: {fileID: 22451470, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
+      propertyPath: m_SizeDelta.y
+      value: -27.0599785
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 11a8b0b5f84a6b949814034659f9ec61, type: 2}
@@ -1064,7 +1072,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11495956, guid: 6ab2a3052b0012445a1ed5478e945100, type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 11460026, guid: 6ab2a3052b0012445a1ed5478e945100, type: 2}
       propertyPath: m_Enabled

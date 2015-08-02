@@ -11,9 +11,7 @@ public class BallSelectionHandler : MonoBehaviour {
 		GameObject ball;
 		Vector3 ballPosition = new Vector3(0, 0, 0);
 		foreach (var entry in DataManager.BallNamePathPairs) {
-			Debug.Log("------------Found ball: " + entry.Value);
 			if (DataManager.SaveData.UnlockedBalls.ContainsKey(entry.Key)) {
-				Debug.Log("*************Add unlocked ball " + entry.Value);
 				ball = (GameObject)Instantiate(
 					Resources.Load(entry.Value));
 				ball.GetComponent<BallBehaviour>().enabled = false;
@@ -62,9 +60,9 @@ public class BallSelectionHandler : MonoBehaviour {
 	void Update() {
 
 		if (transform == null) {
-			Debug.Log("--------------Transform is null!!!! HUH!?!?!");
+			Debug.Log("Transform is null!!!! HUH!?!?!");
 		} else if (transform.childCount == 0) {
-			Debug.Log("--------------No children");
+			Debug.Log("No children");
 		} else {
 			Transform child = transform.GetChild(CurrentChildIndex);
 			if (child != null) {

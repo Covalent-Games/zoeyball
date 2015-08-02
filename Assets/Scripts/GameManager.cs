@@ -101,6 +101,21 @@ public class GameManager : MonoBehaviour {
 		SkyBoxRotation += 2 * Time.deltaTime;
 		SkyBoxRotation %= 360;
 		RenderSettings.skybox.SetFloat("_Rotation", SkyBoxRotation);
+
+		if (Input.GetKeyDown(KeyCode.Escape)) {
+			// Start screen and level select
+			if (Application.loadedLevel == 0 || Application.loadedLevel == 1) {
+				Quit();
+			}
+			// Ball selection
+			else if (Application.loadedLevel == 2) {
+				ReturnButton();
+			} 
+			// Level
+			else {
+				ReturnButton();
+			}
+		}
 	}
 	#endregion
 
@@ -161,7 +176,9 @@ public class GameManager : MonoBehaviour {
 
 		DataWrangler.OnDataSaved += Application.Quit;
 		// Close the menu
-		ToggleMenu();
+		if (MenuOpen) {
+			ToggleMenu();
+		}
 		DataWrangler.StartSaveGameData();
 	}
 
@@ -196,7 +213,7 @@ public class GameManager : MonoBehaviour {
 		_BallBehavior.TenBounceTrail.GetComponent<ParticleSystem>().Stop();
 		_BallBehavior.TenBounceTrail.GetComponent<ParticleSystem>().Clear();
 		LevelCompleteCanvas.enabled = false;
-		HighScoreStamp.GetComponent<RawImage>().enabled = false;
+		HighScoreStamp.GetComponent<Image>().enabled = false;
 
 		if (toggleMenu) {
 			ToggleMenu();
