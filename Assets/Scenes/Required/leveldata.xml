@@ -3,82 +3,102 @@
   <Level>
     <LevelID>1</LevelID>
     <WorldID>0</WorldID>
+    <BounceGoal>0</BounceGoal>
   </Level>
   <Level>
     <LevelID>2</LevelID>
     <WorldID>0</WorldID>
+    <BounceGoal>2</BounceGoal>
   </Level>
   <Level>
     <LevelID>3</LevelID>
     <WorldID>0</WorldID>
+    <BounceGoal>3</BounceGoal>
   </Level>
   <Level>
     <LevelID>4</LevelID>
     <WorldID>0</WorldID>
+    <BounceGoal>5</BounceGoal>
   </Level>
-    <Level>
+  <Level>
     <LevelID>5</LevelID>
     <WorldID>0</WorldID>
+    <BounceGoal>5</BounceGoal>
   </Level>
-    <Level>
+  <Level>
     <LevelID>6</LevelID>
     <WorldID>0</WorldID>
+    <BounceGoal>5</BounceGoal>
   </Level>
   <Level>
     <LevelID>7</LevelID>
     <WorldID>0</WorldID>
-  </Level>
- <Level>
-    <LevelID>8</LevelID>
-    <WorldID>0</WorldID>
+    <BounceGoal>5</BounceGoal>
   </Level>
   <Level>
-    <LevelID>9</LevelID>
+    <LevelID>8</LevelID>
     <WorldID>0</WorldID>
+   <BounceGoal>5</BounceGoal>
+  </Level>
+  <Level>
+   <LevelID>9</LevelID>
+   <WorldID>0</WorldID>
+   <BounceGoal>5</BounceGoal>
   </Level>
   <Level>
     <LevelID>10</LevelID>
     <WorldID>0</WorldID>
+    <BounceGoal>5</BounceGoal>
   </Level>  
-    <Level>
+  <Level>
     <LevelID>11</LevelID>
     <WorldID>0</WorldID>
+    <BounceGoal>5</BounceGoal>
   </Level>
   <Level>
     <LevelID>12</LevelID>
     <WorldID>0</WorldID>
+    <BounceGoal>5</BounceGoal>
   </Level>
   <Level>
     <LevelID>13</LevelID>
     <WorldID>0</WorldID>
+    <BounceGoal>5</BounceGoal>
   </Level>
   <Level>
     <LevelID>14</LevelID>
     <WorldID>0</WorldID>
+    <BounceGoal>5</BounceGoal>
   </Level>
-    <Level>
+  <Level>
     <LevelID>15</LevelID>
     <WorldID>0</WorldID>
+    <BounceGoal>5</BounceGoal>
   </Level>
-    <Level>
+  <Level>
     <LevelID>16</LevelID>
     <WorldID>0</WorldID>
+    <BounceGoal>5</BounceGoal>
   </Level>
   <Level>
     <LevelID>17</LevelID>
     <WorldID>0</WorldID>
+    <BounceGoal>5</BounceGoal>
   </Level>
- <Level>
+  <Level>
     <LevelID>18</LevelID>
     <WorldID>0</WorldID>
+   <BounceGoal>5</BounceGoal>
   </Level>
   <Level>
     <LevelID>19</LevelID>
     <WorldID>0</WorldID>
+    <BounceGoal>5</BounceGoal>
   </Level>
   <Level>
     <LevelID>20</LevelID>
     <WorldID>0</WorldID>
+    <BounceGoal>5</BounceGoal>
   </Level>  
 
 </ArrayOfLevel>

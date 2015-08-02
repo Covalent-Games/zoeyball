@@ -67,7 +67,7 @@ public class WinChecker : MonoBehaviour {
 			"Woah, close call.",
 			"Did Han really shoot first?",
 			"That was awesome!",
-			"What!? I said WHAT!? WHHAAT!? But really, well done.",
+			"What!? I said what!? WHHAAT!? But really, well done.",
 			"That was a risky move, but it paid off.",
 			"You're good at this",
 			"Don't forget to check the Leaderboards!",
@@ -81,7 +81,13 @@ public class WinChecker : MonoBehaviour {
 			"Well, you beat *my* score!",
 			"You should try that one again, though.",
 			"It's super effective!",
-
+			"Yes, I believe the answer is 19?",
+			"Sure, I'll clap.",
+			"Pneumonoultramicroscopicsilicovolcanoconiosis. My uncle had it.",
+			"The day just keeps getting better.",
+			"Thanks for playing! Come back and see us again soon!",
+			"Nailed it. Am I right, Or am I right?",
+			"It's Madison's fault I keep saying all this weird stuff.",
 		};
 	}
 
@@ -90,9 +96,6 @@ public class WinChecker : MonoBehaviour {
 		if (colliderObject.gameObject.tag == "Ball") {
 			Winning = true;
 			_Ball.enabled = false;
-			if (!(PlayerPrefs.HasKey("Sound") && PlayerPrefs.GetString("Sound") == "Off")) {
-				AudioSource.PlayClipAtPoint(WinClapAudio, Camera.main.transform.position, .5f);
-			}
 
 			// LevelID is human readable, so is 1 higher than it's index.
 			if (GameManager.CurrentLevel.LevelID < DataManager.SaveData.LevelList.Count) {
@@ -167,6 +170,9 @@ public class WinChecker : MonoBehaviour {
 
 		GameManager.Instance.LevelCompleteCanvas.enabled = true;
 		GameManager.Instance.DisplayWinDetails();
+		if (!(PlayerPrefs.HasKey("Sound") && PlayerPrefs.GetString("Sound") == "Off")) {
+			AudioSource.PlayClipAtPoint(WinClapAudio, Camera.main.transform.position, .5f);
+		}
 
 	}
 
@@ -184,6 +190,11 @@ public class WinChecker : MonoBehaviour {
 			_ControlUICanvas.enabled = false;
 			Invoke("DisplayWinUI", 1f);
 		}
+	}
+
+	void OnGUI() {
+
+		GUI.Label(new Rect(200f, 20f, 100f, 30f), string.Format("Goal: {0}", GameManager.CurrentLevel.BounceGoal));
 	}
 
 }

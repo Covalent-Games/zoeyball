@@ -10,6 +10,9 @@ namespace GameData {
 
 		public int LevelID;
 		public int WorldID;
+		public int BounceGoal;
+		[XmlIgnore]
+		public bool BounceGoalUnlocked = false;
 		[XmlIgnore]
 		public bool IsUnlocked = false;
 		[XmlIgnore]
