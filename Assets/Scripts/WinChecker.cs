@@ -96,20 +96,21 @@ public class WinChecker : MonoBehaviour {
 		if (colliderObject.gameObject.tag == "Ball") {
 			Winning = true;
 			_Ball.enabled = false;
+			_Ball.TenBounceParticle.GetComponent<ParticleSystem>().Play();
 
 			// LevelID is human readable, so is 1 higher than it's index.
 			if (GameManager.CurrentLevel.LevelID < DataManager.SaveData.LevelList.Count) {
 				var nextLevel = DataManager.SaveData.LevelList[GameManager.CurrentLevel.LevelID];
 				nextLevel.IsUnlocked = true;
 			}
-			if (_Ball.TmpScore > GameManager.CurrentLevel.Score) {
+			if (_Ball.CurrentScore > GameManager.CurrentLevel.Score) {
 				PlayServicesHandler.UpdateLeaderBoard(
 					PlayServicesHandler.LeaderBoards.UpInTheClouds,
 					Mathf.RoundToInt(GameManager.CurrentLevel.Score),
-					Mathf.RoundToInt(_Ball.TmpScore));
+					Mathf.RoundToInt(_Ball.CurrentScore));
 				GameManager.GotHighScore = true;
-				GameManager.CurrentLevel.Score = _Ball.TmpScore;
-				GameManager.CurrentLevel.Bounces = _Ball.TmpBounces;
+				GameManager.CurrentLevel.Score = _Ball.CurrentScore;
+				GameManager.CurrentLevel.Bounces = _Ball.CurrentBounces;
 			}
 
 			if (GameManager.Instance != null) {
@@ -123,19 +124,19 @@ public class WinChecker : MonoBehaviour {
 
 	void CheckAchievements(Collision colliderObject) {
 
-		if (!DataManager.SaveData.AchievementProg.Pentabounce && _Ball.TmpBounces >= 5) {
+		if (!DataManager.SaveData.AchievementProg.Pentabounce && _Ball.CurrentBounces >= 5) {
 			Social.ReportProgress(AchievementCodes.Pentabounce, 100f, (bool success) => {
 				DataManager.SaveData.AchievementProg.Pentabounce = true;
 			});
 		}
-		if (!DataManager.SaveData.AchievementProg.TheDecabounce && _Ball.TmpBounces >= 10) {
+		if (!DataManager.SaveData.AchievementProg.TheDecabounce && _Ball.CurrentBounces >= 10) {
 			Social.ReportProgress(AchievementCodes.TheDecabounce, 100f, (bool success) => {
 				DataManager.SaveData.AchievementProg.TheDecabounce = true;
 			});
 			DataManager.SaveData.UnlockedBalls.Add("BallBaseBall", true);
 			PlayerPrefs.SetInt("BallBaseBall", 1);
 		}
-		if (!DataManager.SaveData.AchievementProg.AScoreOfBounces && _Ball.TmpBounces >= 20) {
+		if (!DataManager.SaveData.AchievementProg.AScoreOfBounces && _Ball.CurrentBounces >= 20) {
 			Social.ReportProgress(AchievementCodes.AScoreOfBounces, 100f, (bool success) => {
 				DataManager.SaveData.AchievementProg.AScoreOfBounces = true;
 			});
@@ -147,19 +148,19 @@ public class WinChecker : MonoBehaviour {
 			DataManager.SaveData.UnlockedBalls.Add("BallEarth", true);
 			PlayerPrefs.SetInt("BallEarth", 1);
 		}
-		if (!DataManager.SaveData.AchievementProg.Champ && _Ball.TmpScore >= 100) {
+		if (!DataManager.SaveData.AchievementProg.Champ && _Ball.CurrentScore >= 100) {
 			Social.ReportProgress(AchievementCodes.Champ, 100f, (bool success) => {
 				DataManager.SaveData.AchievementProg.Champ = true;
 			});
 			DataManager.SaveData.UnlockedBalls.Add("BallPokeball", true);
 			PlayerPrefs.SetInt("Ball8Ball", 1);
 		}
-		if (!DataManager.SaveData.AchievementProg.Olympian && _Ball.TmpScore >= 200) {
+		if (!DataManager.SaveData.AchievementProg.Olympian && _Ball.CurrentScore >= 200) {
 			Social.ReportProgress(AchievementCodes.Olympian, 100f, (bool success) => {
 				DataManager.SaveData.AchievementProg.Olympian = true;
 			});
 		}
-		if (!DataManager.SaveData.AchievementProg.YoureRidiculous && _Ball.TmpScore >= 500) {
+		if (!DataManager.SaveData.AchievementProg.YoureRidiculous && _Ball.CurrentScore >= 500) {
 			Social.ReportProgress(AchievementCodes.YoureRidiculous, 100f, (bool success) => {
 				DataManager.SaveData.AchievementProg.YoureRidiculous = true;
 			});
@@ -169,7 +170,14 @@ public class WinChecker : MonoBehaviour {
 	void DisplayWinUI() {
 
 		GameManager.Instance.LevelCompleteCanvas.enabled = true;
-		GameManager.Instance.DisplayWinDetails();
+		if (GameManager.GotHighScore || _Ball.CurrentBounces >= GameManager.CurrentLevel.BounceGoal) {
+			//TODO: Since all this method does is enable elements, it should just be here instead.
+			GameManager.Instance.DisplayWinDetails();
+		} else {
+			// Moves the accolade container up one step in the hierarchy.
+			GameManager.Instance.HighScoreStamp.transform.parent =
+				GameManager.Instance.HighScoreStamp.transform.parent.parent;
+		}
 		if (!(PlayerPrefs.HasKey("Sound") && PlayerPrefs.GetString("Sound") == "Off")) {
 			AudioSource.PlayClipAtPoint(WinClapAudio, Camera.main.transform.position, .5f);
 		}

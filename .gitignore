@@ -8,6 +8,7 @@ Temp/
 Library/
 server/deploy/log/
 server/deploy/bin_Win64/log/
+*.orig
 
 # ===================================== #
 # Visual Studio / MonoDevelop generated #
@@ -39,3 +40,5 @@ Thumbs.db
 # Build Data #
 # ========== #
 Build/*
+*.orig
+/Assets/Scenes/Required/Startup.unity.orig

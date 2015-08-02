@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour {
 	public bool IsBusy = false;
 
 	private GameObject LevelDisplayCanvasGO;
+	private Transform LevelDisplayElementContainer;
 	private Text WorldName;
 	private int SelectedWorldID = 0;
 	private GameObject LevelDisplayContent;
@@ -66,6 +67,7 @@ public class GameManager : MonoBehaviour {
 		LoadingScreenCanvas = transform.FindChildRecursive("LoadingScreenCanvas").GetComponent<Canvas>();
 		AchievementCanvas = transform.FindChild("tmpAchievementCanvas").GetComponent<Canvas>();
 		MenuAnimator = GameObject.FindGameObjectWithTag("MenuPanel").GetComponent<Animator>();
+		LevelDisplayElementContainer = transform.FindChildRecursive("ElementContainer");
 		MenuAnimator.enabled = false;
 		LevelSelectBkGrndImage = GameObject.Find("LevelSelectBackground").GetComponent<Image>();
 		SelectedBall = (GameObject)Resources.Load("Balls/" + (PlayerPrefs.HasKey("CurrentBall") ? PlayerPrefs.GetString("CurrentBall") : "BallYellow"));
@@ -101,21 +103,6 @@ public class GameManager : MonoBehaviour {
 		SkyBoxRotation += 2 * Time.deltaTime;
 		SkyBoxRotation %= 360;
 		RenderSettings.skybox.SetFloat("_Rotation", SkyBoxRotation);
-
-		if (Input.GetKeyDown(KeyCode.Escape)) {
-			// Start screen and level select
-			if (Application.loadedLevel == 0 || Application.loadedLevel == 1) {
-				Quit();
-			}
-			// Ball selection
-			else if (Application.loadedLevel == 2) {
-				ReturnButton();
-			} 
-			// Level
-			else {
-				ReturnButton();
-			}
-		}
 	}
 	#endregion
 
@@ -176,9 +163,7 @@ public class GameManager : MonoBehaviour {
 
 		DataWrangler.OnDataSaved += Application.Quit;
 		// Close the menu
-		if (MenuOpen) {
-			ToggleMenu();
-		}
+		ToggleMenu();
 		DataWrangler.StartSaveGameData();
 	}
 
@@ -202,8 +187,8 @@ public class GameManager : MonoBehaviour {
 			return;
 		}
 
-		RestartCache.Score = _BallBehavior.TmpScore;
-		RestartCache.Bounces = _BallBehavior.TmpBounces;
+		RestartCache.Score = _BallBehavior.CurrentScore;
+		RestartCache.Bounces = _BallBehavior.CurrentBounces;
 		RestartCache.StartBlockRotation = _BallLauncher.transform.rotation;
 		RestartCache.Powerbar = _BallLauncher.LaunchPowerMeter;
 		RestartCache.LoadFromCache = true;
@@ -214,7 +199,6 @@ public class GameManager : MonoBehaviour {
 		_BallBehavior.TenBounceTrail.GetComponent<ParticleSystem>().Clear();
 		LevelCompleteCanvas.enabled = false;
 		HighScoreStamp.GetComponent<Image>().enabled = false;
-		BounceGoalStamp.GetComponent<Image>().enabled = false;
 
 		if (toggleMenu) {
 			ToggleMenu();
@@ -228,7 +212,6 @@ public class GameManager : MonoBehaviour {
 
 		LevelCompleteCanvas.enabled = false;
 		HighScoreStamp.GetComponent<Image>().enabled = false;
-		BounceGoalStamp.GetComponent<Image>().enabled = false;
 		// If next level exists, load it.
 		if (DataManager.SaveData.LevelList[CurrentLevel.LevelID] != null)
 			LoadLevelByID(CurrentLevel.LevelID + 1);
@@ -293,11 +276,11 @@ public class GameManager : MonoBehaviour {
 	void ApplyCacheToLoadedLevel() {
 
 		_BallLauncher.transform.rotation = RestartCache.StartBlockRotation;
-		_BallBehavior.TmpScore = RestartCache.Score;
-		_BallBehavior.TmpBounces = RestartCache.Bounces;
+		_BallBehavior.CurrentScore = RestartCache.Score;
+		_BallBehavior.CurrentBounces = RestartCache.Bounces;
 		_BallBehavior.UpdateScoreText();
-		_BallBehavior.TmpScore = 0;
-		_BallBehavior.TmpBounces = 0;
+		_BallBehavior.CurrentScore = 0;
+		_BallBehavior.CurrentBounces = 0;
 		_BallLauncher.LanchMeterImage.fillAmount = RestartCache.Powerbar / _BallLauncher.MaxLaunchPower;
 	}
 
@@ -352,6 +335,7 @@ public class GameManager : MonoBehaviour {
 
 	public void DisplayWinDetails() {
 
+		HighScoreStamp.transform.parent.SetParent(LevelDisplayElementContainer);
 		if (GotHighScore) {
 			HighScoreStamp.GetComponent<Image>().enabled = true;
 			HighScoreStamp.GetComponent<Animation>().Play();
@@ -359,9 +343,7 @@ public class GameManager : MonoBehaviour {
 			//	.GetComponent<ParticleSystem>().Play();
 			GotHighScore = false;
 		}
-		if (_BallBehavior.TmpBounces >= CurrentLevel.BounceGoal) {
-			Debug.Log(_BallBehavior.TmpBounces);
-			Debug.Log(CurrentLevel.BounceGoal);
+		if (_BallBehavior.CurrentBounces >= CurrentLevel.BounceGoal && CurrentLevel.BounceGoal != 0) {
 			BounceGoalStamp.transform.parent = HighScoreStamp.transform.parent;
 			CurrentLevel.BounceGoalUnlocked = true;
 			BounceGoalStamp.GetComponent<Image>().enabled = true;
@@ -390,52 +372,59 @@ public class GameManager : MonoBehaviour {
 	public void CheckAchievements(Collision colliderObject) {
 
 		BallBehaviour ball = colliderObject.gameObject.GetComponent<BallBehaviour>();
-		if (!DataManager.SaveData.AchievementProg.Pentabounce && ball.TmpBounces >= 5) {
+		if (!DataManager.SaveData.AchievementProg.Pentabounce && ball.CurrentBounces >= 5) {
 			//Social.ReportProgress(AchievementCodes.Pentabounce, 100f, (bool success) => {
 			//	DataManager.SaveData.AchievementProg.Pentabounce = true;
 			//});
+			DataManager.SaveData.AchievementProg.Pentabounce = true;
 			ShowAchievementPanel_tmp(AchievementCodes.ADict[AchievementCodes.Pentabounce]);
 		}
-		if (!DataManager.SaveData.AchievementProg.TheDecabounce && ball.TmpBounces >= 10) {
+		if (!DataManager.SaveData.AchievementProg.TheDecabounce && ball.CurrentBounces >= 10) {
 			//Social.ReportProgress(AchievementCodes.TheDecabounce, 100f, (bool success) => {
 			//	DataManager.SaveData.AchievementProg.TheDecabounce = true;
 			//});
+			DataManager.SaveData.AchievementProg.TheDecabounce = true;
 			ShowAchievementPanel_tmp(AchievementCodes.ADict[AchievementCodes.TheDecabounce]);
 			//DataManager.SaveData.UnlockedBalls.Add("BallBaseBall", true);
 			//PlayerPrefs.SetInt("BallBaseBall", 1);
 		}
-		if (!DataManager.SaveData.AchievementProg.AScoreOfBounces && ball.TmpBounces >= 20) {
+		if (!DataManager.SaveData.AchievementProg.AScoreOfBounces && ball.CurrentBounces >= 20) {
 			//Social.ReportProgress(AchievementCodes.AScoreOfBounces, 100f, (bool success) => {
 			//	DataManager.SaveData.AchievementProg.AScoreOfBounces = true;
 			//});
+			DataManager.SaveData.AchievementProg.AScoreOfBounces = true;
 			ShowAchievementPanel_tmp(AchievementCodes.ADict[AchievementCodes.AScoreOfBounces]);
 		}
 		if (!DataManager.SaveData.AchievementProg.Check && GameManager.CurrentLevel.LevelID == 20) {
 			//Social.ReportProgress(AchievementCodes.Check, 100f, (bool success) => {
 			//	DataManager.SaveData.AchievementProg.Check = true;
 			//});
+			DataManager.SaveData.AchievementProg.Check = true;
 			ShowAchievementPanel_tmp(AchievementCodes.ADict[AchievementCodes.Check]);
 			//DataManager.SaveData.UnlockedBalls.Add("BallEarth", true);
 			//PlayerPrefs.SetInt("BallEarth", 1);
 		}
-		if (!DataManager.SaveData.AchievementProg.Champ && ball.TmpScore >= 100) {
+		if (!DataManager.SaveData.AchievementProg.Champ && ball.CurrentScore >= 100) {
 			//Social.ReportProgress(AchievementCodes.Champ, 100f, (bool success) => {
 			//	DataManager.SaveData.AchievementProg.Champ = true;
 			//});
+			DataManager.SaveData.AchievementProg.Champ = true;
 			ShowAchievementPanel_tmp(AchievementCodes.ADict[AchievementCodes.Champ]);
 			//DataManager.SaveData.UnlockedBalls.Add("BallPokeball", true);
 			//PlayerPrefs.SetInt("Ball8Ball", 1);
 		}
-		if (!DataManager.SaveData.AchievementProg.Olympian && ball.TmpScore >= 200) {
+		if (!DataManager.SaveData.AchievementProg.Olympian && ball.CurrentScore >= 200) {
 			//Social.ReportProgress(AchievementCodes.ADict[AchievementCodes.Olympian, 100f, (bool success) => {
 			//	DataManager.SaveData.AchievementProg.Olympian = true;
 			//});
+			DataManager.SaveData.AchievementProg.Olympian = true;
 			ShowAchievementPanel_tmp(AchievementCodes.ADict[AchievementCodes.Olympian]);
 		}
-		if (!DataManager.SaveData.AchievementProg.YoureRidiculous && ball.TmpScore >= 500) {
+		if (!DataManager.SaveData.AchievementProg.YoureRidiculous && ball.CurrentScore >= 500) {
 			//Social.ReportProgress(AchievementCodes.YoureRidiculous, 100f, (bool success) => {
 			//	DataManager.SaveData.AchievementProg.YoureRidiculous = true;
 			//});
+			DataManager.SaveData.AchievementProg.YoureRidiculous = true;
 			ShowAchievementPanel_tmp(AchievementCodes.ADict[AchievementCodes.YoureRidiculous]);
 		}
 	}

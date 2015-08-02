@@ -32,7 +32,7 @@ public class GameReset : MonoBehaviour {
 		BallBehaviour ballBehaviour = ballGo.GetComponent<BallBehaviour>();
 
 		if (!DataManager.SaveData.AchievementProg.IThinkYouMissed &&
-			ballBehaviour.TmpBounces == 0 &&
+			ballBehaviour.CurrentBounces == 0 &&
 			GameManager.CurrentLevel.LevelID > 2) {
 			//Social.ReportProgress(AchievementCodes.IThinkYouMissed, 100f, (bool success) => {
 			//	if (success) {
@@ -54,8 +54,8 @@ public class GameReset : MonoBehaviour {
 		ballLauncher.LaunchArrowRenderer.enabled = true;
 		ballRigidBody.isKinematic = true;
 		ballRigidBody.velocity = Vector3.zero;
-		ballBehaviour.TmpScore = 0f;
-		ballBehaviour.TmpBounces = 0;
+		ballBehaviour.CurrentScore = 0f;
+		ballBehaviour.CurrentBounces = 0;
 		ballBehaviour.StartCountingScore = false;
 		ballBehaviour.UpdateScoreText();
 		GameReset.m_Instance.StartCoroutine(GameReset.m_Instance.ResetBallRoutine(ballGo, ballLauncher));

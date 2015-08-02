@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine.TransformExtensions;
 using System.Collections;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(SphereCollider))]
 [RequireComponent(typeof(Rigidbody))]
@@ -22,9 +23,18 @@ public class BallBehaviour : MonoBehaviour {
 	//TODO This doesn't feel like the best location for this.
 	public Text ScoreText;
 	public Text BounceText;
-	public float TmpScore;
-	public int TmpBounces;
+	public float CurrentScore;
+	public int CurrentBounces;
 	public bool StartCountingScore = false;
+
+	private GameObject _plusFivePrefab;
+	private List<GameObject> _plusFives = new List<GameObject>();
+
+	void Awake() {
+
+		_plusFivePrefab = (GameObject)Resources.Load("PlusFive");
+		GetComponent<Rigidbody>().angularDrag = 0f;
+	}
 
 	void OnCollisionEnter(Collision obj) {
 
@@ -44,21 +54,71 @@ public class BallBehaviour : MonoBehaviour {
 		ImpactEffectPoolIndex++;
 
 		if (obj.gameObject.tag == "Block") {
-			TmpBounces++;
-			TmpScore += 5;
+			CurrentBounces++;
+			CurrentScore += 5;
+			StartCoroutine(PlusFiveRoutine());
 		}
 
-		if (TmpBounces == 5) {
+		if (CurrentBounces == 5) {
 			Instantiate(FiveBounceParticle, transform.position, Quaternion.identity);
 			FiveBounceTrail.GetComponent<ParticleSystem>().Play();
-		} else if (TmpBounces == 10) {
+		} else if (CurrentBounces == 10) {
 			Instantiate(TenBounceParticle, transform.position, Quaternion.identity);
 			FiveBounceTrail.GetComponent<ParticleSystem>().Stop();
 			TenBounceTrail.GetComponent<ParticleSystem>().Play();
-		} else if (TmpBounces == 15) {
+		} else if (CurrentBounces == 15) {
 
-		} else {
 		}
+	}
+
+	/// <summary>
+	/// Animates a '+5' to fall and fade from the score text.
+	/// </summary>
+	IEnumerator PlusFiveRoutine() {
+
+		Text plusFive = null;
+		float duration = Time.time + 1f;
+
+		// Look through existing pool for an inactive object
+		lock (_plusFives) {
+			for (int i = 0; i < _plusFives.Count; i++) {
+				if (_plusFives[i].activeSelf) {
+					plusFive = _plusFives[i].GetComponent<Text>();
+					plusFive.gameObject.SetActive(true);
+					break;
+				}
+			}
+		}
+		// No objects were available, so make a new one and add it to the pool
+		if (plusFive == null) {
+			GameObject plusFiveGO = (GameObject)Instantiate(
+				_plusFivePrefab,
+				ScoreText.transform.position,
+				Quaternion.identity);
+			_plusFives.Add(plusFiveGO);
+			plusFive = plusFiveGO.GetComponent<Text>();
+			plusFive.transform.SetParent(ScoreText.transform);
+		}
+		Outline outline = plusFive.GetComponent<Outline>();
+		Color color = plusFive.color;
+		color.a = 1f;
+		plusFive.color = color;
+		plusFive.transform.position = ScoreText.transform.position + new Vector3(0, -25, 0);
+		Vector3 pos = plusFive.transform.position + new Vector3(0, -75, 0);
+
+		while (Time.time < duration) {
+			plusFive.transform.position = Vector3.MoveTowards(
+				plusFive.transform.position,
+				pos,
+				50 * Time.deltaTime);
+			color.a = Mathf.MoveTowards(color.a, 0, Time.deltaTime);
+			plusFive.color = color;
+			outline.effectColor = new Color(0, 0, 0, color.a);
+			yield return null;
+		}
+		// We're done animating, so set it inactive so we can use it again.
+		plusFive.gameObject.SetActive(false);
+
 	}
 
 	IEnumerator CheckForDeadPosition(Vector3 lastPosition) {
@@ -74,14 +134,14 @@ public class BallBehaviour : MonoBehaviour {
 
 	public void UpdateScoreText() {
 
-		ScoreText.text = Mathf.RoundToInt(TmpScore).ToString();
-		BounceText.text = TmpBounces.ToString();
+		ScoreText.text = Mathf.RoundToInt(CurrentScore).ToString();
+		BounceText.text = CurrentBounces.ToString();
 	}
 
 	void Update() {
 
 		if (StartCountingScore) {
-			TmpScore += Time.deltaTime * 5;
+			CurrentScore += Time.deltaTime * 5;
 			UpdateScoreText();
 		}
 
