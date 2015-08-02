@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour {
 	public Canvas AchievementCanvas;
 	public Image LevelSelectBkGrndImage;
 	public GameObject HighScoreStamp;
+	public GameObject BounceGoalStamp;
 	public Animator MenuAnimator;
 	public static DataManager DataWrangler;
 	public GameObject LevelButtonResource;
@@ -208,7 +209,7 @@ public class GameManager : MonoBehaviour {
 		RestartCache.LoadFromCache = false;
 
 		LevelCompleteCanvas.enabled = false;
-		HighScoreStamp.GetComponent<RawImage>().enabled = false;
+		HighScoreStamp.GetComponent<Image>().enabled = false;
 		// If next level exists, load it.
 		if (DataManager.SaveData.LevelList[CurrentLevel.LevelID] != null)
 			LoadLevelByID(CurrentLevel.LevelID + 1);
@@ -314,9 +315,21 @@ public class GameManager : MonoBehaviour {
 	public void DisplayWinDetails() {
 
 		if (GotHighScore) {
-			HighScoreStamp.GetComponent<RawImage>().enabled = true;
+			HighScoreStamp.GetComponent<Image>().enabled = true;
 			HighScoreStamp.GetComponent<Animation>().Play();
+			//HighScoreStamp.transform.FindChild("HighScoreParticles")
+			//	.GetComponent<ParticleSystem>().Play();
 			GotHighScore = false;
+		}
+		if (_BallBehavior.TmpBounces >= CurrentLevel.BounceGoal) {
+			Debug.Log(_BallBehavior.TmpBounces);
+			Debug.Log(CurrentLevel.BounceGoal);
+			BounceGoalStamp.transform.parent = HighScoreStamp.transform.parent;
+			BounceGoalStamp.GetComponent<Image>().enabled = true;
+			BounceGoalStamp.GetComponent<Animation>().Play();
+		} else {
+			BounceGoalStamp.SetActive(false);
+			BounceGoalStamp.transform.parent = HighScoreStamp.transform.parent.parent;
 		}
 
 	}

@@ -72,14 +72,14 @@ PlayerSettings:
     16:9: 1
     Others: 1
   bundleIdentifier: com.covalentgames.zoeyball
-  bundleVersion: 0.0.5
+  bundleVersion: 0.0.7
   preloadedAssets: []
   metroEnableIndependentInputSource: 0
   metroEnableLowLatencyPresentationAPI: 0
   xboxOneDisableKinectGpuReservation: 0
   virtualRealitySupported: 0
   productGUID: a20574692fc41004fbb7a948ca9401e6
-  AndroidBundleVersionCode: 5
+  AndroidBundleVersionCode: 7
   AndroidMinSdkVersion: 19
   AndroidPreferredInstallLocation: 1
   aotOptions: 
@@ -121,7 +121,7 @@ PlayerSettings:
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: C:/Users/Dell/Programming/Unity/zoeyball/zoeyball.keystore
+  AndroidKeystoreName: C:/Users/Justin/Projects/ZoeyBall/zoeyball.keystore
   AndroidKeyaliasName: zoeyball
   AndroidTVCompatibility: 0
   AndroidIsGame: 1

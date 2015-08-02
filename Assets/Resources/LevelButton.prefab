@@ -157,6 +157,8 @@ MonoBehaviour:
   LevelToLoad:
     LevelID: 0
     WorldID: 0
+    BounceGoal: 0
+    BounceGoalUnlocked: 0
     IsUnlocked: 0
     Score: 0
     Bounces: 0
@@ -370,8 +372,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Sprite: {fileID: 21300000, guid: 5eeeae36bdba9cc42a8ba5cda6c1458e, type: 3}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: ede9443358e4ea14c8bc11ebc99f22ac, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -527,7 +529,16 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ede9443358e4ea14c8bc11ebc99f22ac,
+        type: 3}
+    - target: {fileID: 0}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 189052}
