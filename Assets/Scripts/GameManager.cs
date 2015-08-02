@@ -304,6 +304,11 @@ public class GameManager : MonoBehaviour {
 		if (!LevelDisplayContent) {
 			Debug.LogError("Content panel missing or renamed.");
 		}
+		Text levelName;
+		Image padlock;
+		Text scoreText;
+		Text bounceText;
+		Image crown;
 
 		GameObject button;
 		foreach (var level in DataManager.SaveData.LevelList) {
@@ -316,15 +321,29 @@ public class GameManager : MonoBehaviour {
 
 			button.GetComponent<LoadLevelButton>().LevelToLoad = level;
 
-			button.transform.FindChild("LevelName").GetComponent<Text>().text =
-				string.Format("Level {0}", level.LevelID);
-			button.transform.FindChild("ScoreText").GetComponent<Text>().text =
-				Mathf.RoundToInt(level.Score).ToString();
-			button.transform.FindChild("BounceText").GetComponent<Text>().text =
-				level.Bounces.ToString();
+			levelName = button.transform.FindChild("LevelName").GetComponent<Text>();
+			padlock = button.transform.FindChild("Padlock").GetComponent<Image>();
+			scoreText = button.transform.FindChild("ScoreText").GetComponent<Text>();
+			bounceText = button.transform.FindChild("BounceText").GetComponent<Text>();
+			crown = button.transform.FindChild("Crown").GetComponent<Image>();
 
+			levelName.text = string.Format("Level {0}", level.LevelID);
 			if (!level.IsUnlocked && level.LevelID != 1) {
 				button.transform.FindChild("LevelName").GetComponent<Text>().color = Color.black;
+				padlock.enabled = true;
+				button.transform.FindChild("Overlay").GetComponent<Image>().enabled = true;
+			} else {
+				scoreText.text = Mathf.RoundToInt(level.Score).ToString();
+				if (level.BounceGoalUnlocked) {
+					bounceText.text = string.Format("{0} / {1}", level.Bounces.ToString(), level.BounceGoal);
+					crown.enabled = true;
+				} else if (level.Score == 0) {
+					bounceText.text = level.Bounces.ToString();
+					crown.enabled = false;
+				} else {
+					bounceText.text = string.Format("{0} / {1}", level.Bounces.ToString(), level.BounceGoal);
+					crown.enabled = false;
+				}
 			}
 		}
 	}
@@ -342,6 +361,7 @@ public class GameManager : MonoBehaviour {
 			Debug.Log(_BallBehavior.TmpBounces);
 			Debug.Log(CurrentLevel.BounceGoal);
 			BounceGoalStamp.transform.parent = HighScoreStamp.transform.parent;
+			CurrentLevel.BounceGoalUnlocked = true;
 			BounceGoalStamp.GetComponent<Image>().enabled = true;
 			BounceGoalStamp.GetComponent<Animation>().Play();
 		} else {
