@@ -214,6 +214,7 @@ public class GameManager : MonoBehaviour {
 		_BallBehavior.TenBounceTrail.GetComponent<ParticleSystem>().Clear();
 		LevelCompleteCanvas.enabled = false;
 		HighScoreStamp.GetComponent<Image>().enabled = false;
+		BounceGoalStamp.GetComponent<Image>().enabled = false;
 
 		if (toggleMenu) {
 			ToggleMenu();
@@ -227,6 +228,7 @@ public class GameManager : MonoBehaviour {
 
 		LevelCompleteCanvas.enabled = false;
 		HighScoreStamp.GetComponent<Image>().enabled = false;
+		BounceGoalStamp.GetComponent<Image>().enabled = false;
 		// If next level exists, load it.
 		if (DataManager.SaveData.LevelList[CurrentLevel.LevelID] != null)
 			LoadLevelByID(CurrentLevel.LevelID + 1);
