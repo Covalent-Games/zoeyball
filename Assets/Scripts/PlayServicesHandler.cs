@@ -10,6 +10,7 @@ public class PlayServicesHandler : MonoBehaviour {
 	public static class LeaderBoards {
 		public const string UpInTheClouds = "CgkI562Uo_MOEAIQBg";
 	}
+	public static bool LoggingIn = true;
 
 	public void Activate() {
 
@@ -22,21 +23,29 @@ public class PlayServicesHandler : MonoBehaviour {
 
 	}
 
-	public bool Authenticate() {
+	public void Authenticate() {
 
-		bool returnValue = true;
-
+		GameObject playButton = GameObject.Find("PlayButton");
+		playButton.SetActive(false);
+		LoggingIn = true;
 		Social.localUser.Authenticate((bool success) => {
 			if (success) {
 				Debug.Log("Signed into Google Play!");
-				returnValue = success;
+				if (playButton) {
+					playButton.SetActive(true);
+				}
 			} else {
 				Debug.Log("Not signed into Google Play.");
-				returnValue = success;
+				if (Application.isEditor) {
+					Debug.Log(playButton);
+					if (playButton) {
+						playButton.SetActive(true);
+					}
+				}
 			}
+			LoggingIn = false;
 		});
 
-		return returnValue;
 	}
 
 	public void ShowLeaderboard(string leaderboard = null) {

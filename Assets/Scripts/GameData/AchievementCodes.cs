@@ -13,5 +13,5 @@ public class AchievementCodes {
 	public const string Olympian = "CgkI562Uo_MOEAIQCQ";
 	public const string YoureRidiculous = "CgkI562Uo_MOEAIQCg";
 
-	public static Dictionary<string, string> ADict;
+	public static Dictionary<string, string> CodeToNameDict;
 }
