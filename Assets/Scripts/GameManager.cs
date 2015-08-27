@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour {
 	public Canvas LevelCompleteCanvas;
 	public Canvas LoadingScreenCanvas;
 	public Canvas AchievementCanvas;
+	public Canvas QuitConfirmCanvas;
 	public Image LevelSelectBkGrndImage;
 	public GameObject HighScoreStamp;
 	public GameObject BounceGoalStamp;
@@ -111,7 +112,7 @@ public class GameManager : MonoBehaviour {
 
 		if (Input.GetKeyDown(KeyCode.Escape)) {
 			if (Application.loadedLevel == 0 || Application.loadedLevel == 1) {
-				Quit();
+				QuitConfirmCanvas.GetComponent<Canvas>().enabled = true;
 			} else {
 				ReturnToLevelPicker(true);
 			}

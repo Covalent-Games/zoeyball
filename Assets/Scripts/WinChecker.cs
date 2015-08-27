@@ -200,8 +200,8 @@ public class WinChecker : MonoBehaviour {
 				Destroy(block);
 			}
 			_ControlUICanvas.enabled = false;
-			Invoke("UpdateCloudData", .95f);
-			Invoke("DisplayWinUI", 1f);
+			UpdateCloudData();
+			DisplayWinUI();
 		}
 	}
 }
