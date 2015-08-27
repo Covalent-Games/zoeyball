@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using GameData;
@@ -154,6 +155,8 @@ public class WinChecker : MonoBehaviour {
 
 	void DisplayWinUI() {
 
+		GameManager.DataWrangler.OnDataSaved -= DisplayWinUI;
+		GameManager.DataWrangler.OnDataSaveFailedGeneric -= DisplayWinUI;
 		GameManager.Instance.LevelCompleteCanvas.enabled = true;
 		if (GameManager.GotHighScore || _Ball.CurrentBounces >= GameManager.CurrentLevel.BounceGoal) {
 			//TODO: Since all this method does is enable elements, it should just be here instead.
@@ -171,6 +174,8 @@ public class WinChecker : MonoBehaviour {
 
 	void UpdateCloudData() {
 
+		GameManager.DataWrangler.OnDataSaved += DisplayWinUI;
+		GameManager.DataWrangler.OnDataSaveFailedGeneric += DisplayWinUI;
 		GameManager.DataWrangler.StartSaveGameData();
 		// LevelID is human readable, so is 1 higher than it's index.
 		if (GameManager.CurrentLevel.LevelID < DataManager.SaveData.LevelList.Count) {
@@ -191,7 +196,7 @@ public class WinChecker : MonoBehaviour {
 	void Update() {
 
 		if (Winning) {
-			int index = Random.Range(0, WinMessages.Count);
+			int index = UnityEngine.Random.Range(0, WinMessages.Count);
 			YouWinLabel.text = WinMessages[index];
 			YouWinLabelCanvas.enabled = true;
 			enabled = false;
@@ -200,8 +205,7 @@ public class WinChecker : MonoBehaviour {
 				Destroy(block);
 			}
 			_ControlUICanvas.enabled = false;
-			Invoke("UpdateCloudData", .95f);
-			Invoke("DisplayWinUI", 1f);
+			UpdateCloudData();
 		}
 	}
 }

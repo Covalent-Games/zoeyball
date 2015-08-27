@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour {
 	public PlayServicesHandler GooglePlay;
 	public TextAsset LevelData;
 	public Canvas LevelCompleteCanvas;
-	public Canvas LoadingScreenCanvas;
+	public LoadingScreenManager LoadingScreen;
 	public Canvas AchievementCanvas;
 	public Image LevelSelectBkGrndImage;
 	public GameObject HighScoreStamp;
@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour {
 		DataWrangler = new DataManager();
 		DataWrangler.LoadLevelTemplate(LevelData);
 		AudioWrangler = GetComponent<AudioManager>();
-		LoadingScreenCanvas = transform.FindChildRecursive("LoadingScreenCanvas").GetComponent<Canvas>();
+		LoadingScreen = transform.FindChildRecursive("LoadingScreenCanvas").GetComponent<LoadingScreenManager>();
 		AchievementCanvas = transform.FindChild("tmpAchievementCanvas").GetComponent<Canvas>();
 		MenuAnimator = GameObject.FindGameObjectWithTag("MenuPanel").GetComponent<Animator>();
 		LevelDisplayElementContainer = transform.FindChildRecursive("ElementContainer");
@@ -371,14 +371,18 @@ public class GameManager : MonoBehaviour {
 
 		IsBusy = true;
 		Debug.Log("-------GameManager busy---------");
-		this.LoadingScreenCanvas.enabled = true;
+		if (Application.loadedLevel <= 2) {
+			this.LoadingScreen.ActivateLoadingscreen(LoadingScreenManager.Screens.WallOfText);
+		} else {
+			this.LoadingScreen.ActivateLoadingscreen(LoadingScreenManager.Screens.Saving);
+		}
 	}
 
 	public void MarkAsNotBusy() {
 
 		IsBusy = false;
 		Debug.Log("--------GameManager Not Busy----------");
-		this.LoadingScreenCanvas.enabled = false;
+		this.LoadingScreen.DeactivateLoadingscreen();
 	}
 
 	public void CheckAchievements(Collision colliderObject) {
