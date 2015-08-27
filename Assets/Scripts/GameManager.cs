@@ -335,7 +335,7 @@ public class GameManager : MonoBehaviour {
 
 	public void DisplayWinDetails() {
 
-		HighScoreStamp.transform.parent.SetParent(LevelDisplayElementContainer);
+		HighScoreStamp.transform.SetParent(LevelDisplayElementContainer);
 		if (GotHighScore) {
 			HighScoreStamp.GetComponent<Image>().enabled = true;
 			HighScoreStamp.GetComponent<Animation>().Play();
