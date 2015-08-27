@@ -98,21 +98,6 @@ public class WinChecker : MonoBehaviour {
 			_Ball.enabled = false;
 			_Ball.TenBounceParticle.GetComponent<ParticleSystem>().Play();
 
-			// LevelID is human readable, so is 1 higher than it's index.
-			if (GameManager.CurrentLevel.LevelID < DataManager.SaveData.LevelList.Count) {
-				var nextLevel = DataManager.SaveData.LevelList[GameManager.CurrentLevel.LevelID];
-				nextLevel.IsUnlocked = true;
-			}
-			if (_Ball.CurrentScore > GameManager.CurrentLevel.Score) {
-				PlayServicesHandler.UpdateLeaderBoard(
-					PlayServicesHandler.LeaderBoards.UpInTheClouds,
-					Mathf.RoundToInt(GameManager.CurrentLevel.Score),
-					Mathf.RoundToInt(_Ball.CurrentScore));
-				GameManager.GotHighScore = true;
-				GameManager.CurrentLevel.Score = _Ball.CurrentScore;
-				GameManager.CurrentLevel.Bounces = _Ball.CurrentBounces;
-			}
-
 			if (GameManager.Instance != null) {
 				GameManager.Instance.CheckAchievements(colliderObject);
 			} else {
@@ -184,6 +169,25 @@ public class WinChecker : MonoBehaviour {
 
 	}
 
+	void UpdateCloudData() {
+
+		GameManager.DataWrangler.StartSaveGameData();
+		// LevelID is human readable, so is 1 higher than it's index.
+		if (GameManager.CurrentLevel.LevelID < DataManager.SaveData.LevelList.Count) {
+			var nextLevel = DataManager.SaveData.LevelList[GameManager.CurrentLevel.LevelID];
+			nextLevel.IsUnlocked = true;
+		}
+		if (_Ball.CurrentScore > GameManager.CurrentLevel.Score) {
+			PlayServicesHandler.UpdateLeaderBoard(
+				PlayServicesHandler.LeaderBoards.UpInTheClouds,
+				Mathf.RoundToInt(GameManager.CurrentLevel.Score),
+				Mathf.RoundToInt(_Ball.CurrentScore));
+			GameManager.GotHighScore = true;
+			GameManager.CurrentLevel.Score = _Ball.CurrentScore;
+			GameManager.CurrentLevel.Bounces = _Ball.CurrentBounces;
+		}
+	}
+
 	void Update() {
 
 		if (Winning) {
@@ -196,13 +200,8 @@ public class WinChecker : MonoBehaviour {
 				Destroy(block);
 			}
 			_ControlUICanvas.enabled = false;
+			Invoke("UpdateCloudData", .95f);
 			Invoke("DisplayWinUI", 1f);
 		}
 	}
-
-	void OnGUI() {
-
-		GUI.Label(new Rect(200f, 20f, 100f, 30f), string.Format("Goal: {0}", GameManager.CurrentLevel.BounceGoal));
-	}
-
 }

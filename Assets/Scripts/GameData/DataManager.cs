@@ -26,6 +26,10 @@ namespace GameData {
 		public event DataChangedEventHandler OnDataChangeStarted;
 		public event DataChangedEventHandler OnDataLoaded;
 		public event DataChangedEventHandler OnDataSaved;
+		public event DataChangedEventHandler OnFailedAuthentication;
+		public event DataChangedEventHandler OnInternalError;
+		public event DataChangedEventHandler OnTimeOut;
+		public event DataChangedEventHandler OnBadInput;
 		//public event DataChangedEventHandler OnDataDeleted;
 
 		SessionTimeTracker thisTimeTracker = new SessionTimeTracker();
@@ -72,7 +76,6 @@ namespace GameData {
 		}
 
 		public void StartSaveGameData() {
-			Debug.Log("--------StartSaveGameData---------");
 			if (OnDataChangeStarted != null) {
 				OnDataChangeStarted();
 			}
@@ -81,10 +84,8 @@ namespace GameData {
 		}
 
 		public void StartLoadGameData() {
-			Debug.Log("--------StartLoadGameData---------");
 
 			if (OnDataChangeStarted != null) {
-				Debug.Log("Attempting to trigger OnDataChangeStarted");
 				OnDataChangeStarted();
 			}
 			Writing = false;
@@ -153,14 +154,12 @@ namespace GameData {
 		}
 
 		void OnSavedGameOpened(SavedGameRequestStatus status, ISavedGameMetadata metaData) {
-			Debug.Log("-------OnSavedGameOpened--------- status: " + status.ToString());
 			switch (status) {
 				case SavedGameRequestStatus.Success:
 					SavedGameMetaData = metaData;
 
 					// Set to save the current game.
 					if (Writing) {
-						Debug.Log("------------Is Writing-----------");
 						byte[] savedData = Serializer.SerializeGameState(SaveData);
 
 						ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
@@ -183,7 +182,6 @@ namespace GameData {
 
 						// Set to load an existing game.
 					} else {
-						Debug.Log("--------Is reading----------");
 						ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
 						savedGameClient.ReadBinaryData(SavedGameMetaData, OnSavedGameDataRead);
 					}
@@ -229,7 +227,7 @@ namespace GameData {
 		}
 
 		void OnSavedGameDataRead(SavedGameRequestStatus status, byte[] data) {
-			Debug.Log("-----------OnSavedGameDataRead----------- status: " + status.ToString());
+
 			switch (status) {
 				case SavedGameRequestStatus.Success:
 					if (data.Length == 0) {
@@ -263,26 +261,32 @@ namespace GameData {
 						Debug.Log("----------OnDataLoaded event------------");
 						OnDataLoaded();
 					} else {
-						Debug.LogError("-------------No event registered for OnDataLoaded. LevelPicker scene won't be loaded------------");
+						Debug.LogError("No event registered for OnDataLoaded. LevelPicker scene won't be loaded.");
 					}
 
 					break;
 				case SavedGameRequestStatus.AuthenticationError:
 					Debug.Log("LOAD FAILED! NO AUTHENTICATION!");
+					if (OnFailedAuthentication != null)
+						OnFailedAuthentication();
 					break;
 				case SavedGameRequestStatus.BadInputError:
 					Debug.Log("LOAD FAILED! BAD INPUT!");
+					if (OnBadInput != null)
+						OnBadInput();
 					break;
 				case SavedGameRequestStatus.InternalError:
 					Debug.Log("LOAD FAILED BUT IT LIKELY ISN'T OUR FAULT! INTERNAL ERROR!");
+					if (OnInternalError != null)
+						OnInternalError();
 					break;
 				case SavedGameRequestStatus.TimeoutError:
 					Debug.Log("TIMEOUT LOADING FILE");
+					if (OnTimeOut != null)
+						OnTimeOut();
 					break;
 			}
 		}
-
 		#endregion
-
 	}
 }

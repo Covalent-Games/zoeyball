@@ -54,6 +54,8 @@ public class GameManager : MonoBehaviour {
 	private float SkyBoxRotation = 0f;
 
 	private bool MenuOpen = false;
+	private bool _loadError = false;
+	private GameObject _playButton;
 	#endregion
 
 	#region Initializers
@@ -71,9 +73,11 @@ public class GameManager : MonoBehaviour {
 		MenuAnimator.enabled = false;
 		LevelSelectBkGrndImage = GameObject.Find("LevelSelectBackground").GetComponent<Image>();
 		SelectedBall = (GameObject)Resources.Load("Balls/" + (PlayerPrefs.HasKey("CurrentBall") ? PlayerPrefs.GetString("CurrentBall") : "BallYellow"));
+		_playButton = GameObject.Find("PlayButton");
+		//_playButton.SetActive(false);
 		DontDestroyOnLoad(gameObject);
 
-		AchievementCodes.ADict = new Dictionary<string, string>(){
+		AchievementCodes.CodeToNameDict = new Dictionary<string, string>(){
 			{"CgkI562Uo_MOEAIQAQ", "Check"},
 			{"CgkI562Uo_MOEAIQBw", "I Think You Missed"},
 			{"CgkI562Uo_MOEAIQAg", "Pentabounce"},
@@ -83,6 +87,9 @@ public class GameManager : MonoBehaviour {
 			{"CgkI562Uo_MOEAIQCQ", "Olympian"},
 			{"CgkI562Uo_MOEAIQCg", "You're Ridiculous"},
 		};
+
+		GooglePlay.Activate();
+		GooglePlay.Authenticate();
 	}
 
 	void Start() {
@@ -91,8 +98,6 @@ public class GameManager : MonoBehaviour {
 		DataWrangler.OnDataLoaded += MarkAsNotBusy;
 		DataWrangler.OnDataSaved += MarkAsNotBusy;
 		Time.timeScale = 1.15f;
-		GooglePlay.Activate();
-		GooglePlay.Authenticate();
 	}
 
 	#endregion
@@ -103,6 +108,14 @@ public class GameManager : MonoBehaviour {
 		SkyBoxRotation += 2 * Time.deltaTime;
 		SkyBoxRotation %= 360;
 		RenderSettings.skybox.SetFloat("_Rotation", SkyBoxRotation);
+
+		if (Input.GetKeyDown(KeyCode.Escape)) {
+			if (Application.loadedLevel == 0 || Application.loadedLevel == 1) {
+				Quit();
+			} else {
+				ReturnToLevelPicker(true);
+			}
+		}
 	}
 	#endregion
 
@@ -112,11 +125,11 @@ public class GameManager : MonoBehaviour {
 		if (IsBusy) { return; }
 
 		try {
-			//MarkAsBusy();
+			Debug.Log("Play pressed. Starting data loading.");
 			DataWrangler.OnDataLoaded += LoadLevelPicker;
 			DataWrangler.StartLoadGameData();
 			DataWrangler.StartRecordingPlayTime();
-		} catch (NullReferenceException e) {
+		} catch (Exception e) {
 			Debug.Log("*******GameManager.Play exception: " + e.Message);
 			Debug.Log(e.StackTrace);
 			Debug.Log("*******GameManager.Play innerexception: " + e.InnerException);
@@ -142,6 +155,11 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
+	void DisplayLoadError() {
+
+		_loadError = true;
+	}
+
 	public void LoadBallSelection() {
 
 		Application.LoadLevel("BallSelection");
@@ -161,10 +179,7 @@ public class GameManager : MonoBehaviour {
 
 	public void Quit() {
 
-		DataWrangler.OnDataSaved += Application.Quit;
-		// Close the menu
-		ToggleMenu();
-		DataWrangler.StartSaveGameData();
+		Application.Quit();
 	}
 
 	public void ReturnButton() {
@@ -177,7 +192,7 @@ public class GameManager : MonoBehaviour {
 		// Close the menu
 		if (MenuOpen)
 			ToggleMenu();
-		ReturnToLevelPicker(true, true);
+		ReturnToLevelPicker(true);
 	}
 
 	public void Restart(bool toggleMenu = false) {
@@ -216,7 +231,7 @@ public class GameManager : MonoBehaviour {
 		if (DataManager.SaveData.LevelList[CurrentLevel.LevelID] != null)
 			LoadLevelByID(CurrentLevel.LevelID + 1);
 		else
-			ReturnToLevelPicker(true, true);
+			ReturnToLevelPicker(true);
 	}
 
 	public void NextWorldButton() {
@@ -236,13 +251,10 @@ public class GameManager : MonoBehaviour {
 		Application.LoadLevel("LevelPicker");
 	}
 
-	public void ReturnToLevelPicker(bool save, bool immediate = false) {
+	public void ReturnToLevelPicker(bool immediate = false) {
 
 		RestartCache.LoadFromCache = false;
 
-		if (save) {
-			DataWrangler.StartSaveGameData();
-		}
 		if (immediate) {
 			Application.LoadLevel("LevelPicker");
 		} else {
@@ -344,13 +356,13 @@ public class GameManager : MonoBehaviour {
 			GotHighScore = false;
 		}
 		if (_BallBehavior.CurrentBounces >= CurrentLevel.BounceGoal && CurrentLevel.BounceGoal != 0) {
-			BounceGoalStamp.transform.parent = HighScoreStamp.transform.parent;
+			BounceGoalStamp.transform.SetParent(HighScoreStamp.transform.parent);
 			CurrentLevel.BounceGoalUnlocked = true;
 			BounceGoalStamp.GetComponent<Image>().enabled = true;
 			BounceGoalStamp.GetComponent<Animation>().Play();
 		} else {
 			BounceGoalStamp.SetActive(false);
-			BounceGoalStamp.transform.parent = HighScoreStamp.transform.parent.parent;
+			BounceGoalStamp.transform.SetParent(HighScoreStamp.transform.parent.parent);
 		}
 
 	}
@@ -377,14 +389,14 @@ public class GameManager : MonoBehaviour {
 			//	DataManager.SaveData.AchievementProg.Pentabounce = true;
 			//});
 			DataManager.SaveData.AchievementProg.Pentabounce = true;
-			ShowAchievementPanel_tmp(AchievementCodes.ADict[AchievementCodes.Pentabounce]);
+			ShowAchievementPanel_tmp(AchievementCodes.CodeToNameDict[AchievementCodes.Pentabounce]);
 		}
 		if (!DataManager.SaveData.AchievementProg.TheDecabounce && ball.CurrentBounces >= 10) {
 			//Social.ReportProgress(AchievementCodes.TheDecabounce, 100f, (bool success) => {
 			//	DataManager.SaveData.AchievementProg.TheDecabounce = true;
 			//});
 			DataManager.SaveData.AchievementProg.TheDecabounce = true;
-			ShowAchievementPanel_tmp(AchievementCodes.ADict[AchievementCodes.TheDecabounce]);
+			ShowAchievementPanel_tmp(AchievementCodes.CodeToNameDict[AchievementCodes.TheDecabounce]);
 			//DataManager.SaveData.UnlockedBalls.Add("BallBaseBall", true);
 			//PlayerPrefs.SetInt("BallBaseBall", 1);
 		}
@@ -393,14 +405,14 @@ public class GameManager : MonoBehaviour {
 			//	DataManager.SaveData.AchievementProg.AScoreOfBounces = true;
 			//});
 			DataManager.SaveData.AchievementProg.AScoreOfBounces = true;
-			ShowAchievementPanel_tmp(AchievementCodes.ADict[AchievementCodes.AScoreOfBounces]);
+			ShowAchievementPanel_tmp(AchievementCodes.CodeToNameDict[AchievementCodes.AScoreOfBounces]);
 		}
 		if (!DataManager.SaveData.AchievementProg.Check && GameManager.CurrentLevel.LevelID == 20) {
 			//Social.ReportProgress(AchievementCodes.Check, 100f, (bool success) => {
 			//	DataManager.SaveData.AchievementProg.Check = true;
 			//});
 			DataManager.SaveData.AchievementProg.Check = true;
-			ShowAchievementPanel_tmp(AchievementCodes.ADict[AchievementCodes.Check]);
+			ShowAchievementPanel_tmp(AchievementCodes.CodeToNameDict[AchievementCodes.Check]);
 			//DataManager.SaveData.UnlockedBalls.Add("BallEarth", true);
 			//PlayerPrefs.SetInt("BallEarth", 1);
 		}
@@ -409,7 +421,7 @@ public class GameManager : MonoBehaviour {
 			//	DataManager.SaveData.AchievementProg.Champ = true;
 			//});
 			DataManager.SaveData.AchievementProg.Champ = true;
-			ShowAchievementPanel_tmp(AchievementCodes.ADict[AchievementCodes.Champ]);
+			ShowAchievementPanel_tmp(AchievementCodes.CodeToNameDict[AchievementCodes.Champ]);
 			//DataManager.SaveData.UnlockedBalls.Add("BallPokeball", true);
 			//PlayerPrefs.SetInt("Ball8Ball", 1);
 		}
@@ -418,14 +430,14 @@ public class GameManager : MonoBehaviour {
 			//	DataManager.SaveData.AchievementProg.Olympian = true;
 			//});
 			DataManager.SaveData.AchievementProg.Olympian = true;
-			ShowAchievementPanel_tmp(AchievementCodes.ADict[AchievementCodes.Olympian]);
+			ShowAchievementPanel_tmp(AchievementCodes.CodeToNameDict[AchievementCodes.Olympian]);
 		}
 		if (!DataManager.SaveData.AchievementProg.YoureRidiculous && ball.CurrentScore >= 500) {
 			//Social.ReportProgress(AchievementCodes.YoureRidiculous, 100f, (bool success) => {
 			//	DataManager.SaveData.AchievementProg.YoureRidiculous = true;
 			//});
 			DataManager.SaveData.AchievementProg.YoureRidiculous = true;
-			ShowAchievementPanel_tmp(AchievementCodes.ADict[AchievementCodes.YoureRidiculous]);
+			ShowAchievementPanel_tmp(AchievementCodes.CodeToNameDict[AchievementCodes.YoureRidiculous]);
 		}
 	}
 
@@ -499,4 +511,11 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 	#endregion
+
+	void OnGUI() {
+
+		if (_loadError) {
+			GUI.Box(new Rect(10, 10, 20, Screen.width), "Something went wrong while loading the data.");
+		}
+	}
 }
