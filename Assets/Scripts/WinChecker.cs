@@ -157,11 +157,11 @@ public class WinChecker : MonoBehaviour {
 		GameManager.Instance.LevelCompleteCanvas.enabled = true;
 		if (GameManager.GotHighScore || _Ball.CurrentBounces >= GameManager.CurrentLevel.BounceGoal) {
 			//TODO: Since all this method does is enable elements, it should just be here instead.
+			GameManager.Instance.HighScoreStamp.transform.parent.gameObject.SetActive(true);
 			GameManager.Instance.DisplayWinDetails();
 		} else {
 			// Moves the accolade container up one step in the hierarchy.
-			GameManager.Instance.HighScoreStamp.transform.parent =
-				GameManager.Instance.HighScoreStamp.transform.parent.parent;
+			GameManager.Instance.HighScoreStamp.transform.parent.gameObject.SetActive(false);
 		}
 		if (!(PlayerPrefs.HasKey("Sound") && PlayerPrefs.GetString("Sound") == "Off")) {
 			AudioSource.PlayClipAtPoint(WinClapAudio, Camera.main.transform.position, .5f);

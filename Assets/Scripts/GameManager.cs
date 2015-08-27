@@ -347,7 +347,8 @@ public class GameManager : MonoBehaviour {
 
 	public void DisplayWinDetails() {
 
-		HighScoreStamp.transform.SetParent(LevelDisplayElementContainer);
+		HighScoreStamp.transform.parent.GetComponent<HorizontalLayoutGroup>().enabled = true;
+		//HighScoreStamp.transform.SetParent(LevelDisplayElementContainer);
 		if (GotHighScore) {
 			HighScoreStamp.GetComponent<Image>().enabled = true;
 			HighScoreStamp.GetComponent<Animation>().Play();
@@ -356,13 +357,14 @@ public class GameManager : MonoBehaviour {
 			GotHighScore = false;
 		}
 		if (_BallBehavior.CurrentBounces >= CurrentLevel.BounceGoal && CurrentLevel.BounceGoal != 0) {
-			BounceGoalStamp.transform.SetParent(HighScoreStamp.transform.parent);
+			//BounceGoalStamp.transform.SetParent(HighScoreStamp.transform.parent);
+			BounceGoalStamp.SetActive(true);
 			CurrentLevel.BounceGoalUnlocked = true;
 			BounceGoalStamp.GetComponent<Image>().enabled = true;
 			BounceGoalStamp.GetComponent<Animation>().Play();
 		} else {
 			BounceGoalStamp.SetActive(false);
-			BounceGoalStamp.transform.SetParent(HighScoreStamp.transform.parent.parent);
+			//BounceGoalStamp.transform.SetParent(HighScoreStamp.transform.parent.parent);
 		}
 
 	}
