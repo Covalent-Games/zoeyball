@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour {
 	public Canvas LevelCompleteCanvas;
 	public LoadingScreenManager LoadingScreen;
 	public Canvas AchievementCanvas;
+	public Canvas QuitConfirmCanvas;
 	public Image LevelSelectBkGrndImage;
 	public GameObject HighScoreStamp;
 	public GameObject BounceGoalStamp;
@@ -111,7 +112,7 @@ public class GameManager : MonoBehaviour {
 
 		if (Input.GetKeyDown(KeyCode.Escape)) {
 			if (Application.loadedLevel == 0 || Application.loadedLevel == 1) {
-				Quit();
+				QuitConfirmCanvas.GetComponent<Canvas>().enabled = true;
 			} else {
 				ReturnToLevelPicker(true);
 			}
@@ -347,7 +348,8 @@ public class GameManager : MonoBehaviour {
 
 	public void DisplayWinDetails() {
 
-		HighScoreStamp.transform.parent.SetParent(LevelDisplayElementContainer);
+		HighScoreStamp.transform.parent.GetComponent<HorizontalLayoutGroup>().enabled = true;
+		//HighScoreStamp.transform.SetParent(LevelDisplayElementContainer);
 		if (GotHighScore) {
 			HighScoreStamp.GetComponent<Image>().enabled = true;
 			HighScoreStamp.GetComponent<Animation>().Play();
@@ -356,13 +358,14 @@ public class GameManager : MonoBehaviour {
 			GotHighScore = false;
 		}
 		if (_BallBehavior.CurrentBounces >= CurrentLevel.BounceGoal && CurrentLevel.BounceGoal != 0) {
-			BounceGoalStamp.transform.SetParent(HighScoreStamp.transform.parent);
+			//BounceGoalStamp.transform.SetParent(HighScoreStamp.transform.parent);
+			BounceGoalStamp.SetActive(true);
 			CurrentLevel.BounceGoalUnlocked = true;
 			BounceGoalStamp.GetComponent<Image>().enabled = true;
 			BounceGoalStamp.GetComponent<Animation>().Play();
 		} else {
 			BounceGoalStamp.SetActive(false);
-			BounceGoalStamp.transform.SetParent(HighScoreStamp.transform.parent.parent);
+			//BounceGoalStamp.transform.SetParent(HighScoreStamp.transform.parent.parent);
 		}
 
 	}

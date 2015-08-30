@@ -156,15 +156,15 @@ public class WinChecker : MonoBehaviour {
 	void DisplayWinUI() {
 
 		GameManager.DataWrangler.OnDataSaved -= DisplayWinUI;
-		GameManager.DataWrangler.OnDataSaveFailedGeneric -= DisplayWinUI;
+		GameManager.DataWrangler.OnDataSaveFailedAny -= DisplayWinUI;
 		GameManager.Instance.LevelCompleteCanvas.enabled = true;
 		if (GameManager.GotHighScore || _Ball.CurrentBounces >= GameManager.CurrentLevel.BounceGoal) {
 			//TODO: Since all this method does is enable elements, it should just be here instead.
+			GameManager.Instance.HighScoreStamp.transform.parent.gameObject.SetActive(true);
 			GameManager.Instance.DisplayWinDetails();
 		} else {
 			// Moves the accolade container up one step in the hierarchy.
-			GameManager.Instance.HighScoreStamp.transform.parent =
-				GameManager.Instance.HighScoreStamp.transform.parent.parent;
+			GameManager.Instance.HighScoreStamp.transform.parent.gameObject.SetActive(false);
 		}
 		if (!(PlayerPrefs.HasKey("Sound") && PlayerPrefs.GetString("Sound") == "Off")) {
 			AudioSource.PlayClipAtPoint(WinClapAudio, Camera.main.transform.position, .5f);
@@ -175,7 +175,7 @@ public class WinChecker : MonoBehaviour {
 	void UpdateCloudData() {
 
 		GameManager.DataWrangler.OnDataSaved += DisplayWinUI;
-		GameManager.DataWrangler.OnDataSaveFailedGeneric += DisplayWinUI;
+		GameManager.DataWrangler.OnDataSaveFailedAny += DisplayWinUI;
 		GameManager.DataWrangler.StartSaveGameData();
 		// LevelID is human readable, so is 1 higher than it's index.
 		if (GameManager.CurrentLevel.LevelID < DataManager.SaveData.LevelList.Count) {
