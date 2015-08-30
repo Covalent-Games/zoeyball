@@ -9,14 +9,15 @@ public class BallLauncher : MonoBehaviour {
 	public AudioSource LaunchSound;
 	public SpriteRenderer LaunchArrowRenderer;
 	public Text LaunchButtonText;
-	public Image LanchMeterImage;
+	public Image LaunchMeterImage;
+	public Image PreviousPower;
 	public float LaunchPowerMeter;
 	public float MaxLaunchPower;
 	public int RotationDirection;
 	public Vector3 StartPosition;
 	public Quaternion StartRotation;
 	public bool CanLaunch = true;
-	public string DefaultLaunchText = "Pew!";
+	public string DefaultLaunchText = "Hold to launch";
 	public string LaunchResetText = "Restart";
 	bool IncreasePower = false;
 	float RotateSpeed = 20f;
@@ -26,6 +27,8 @@ public class BallLauncher : MonoBehaviour {
 		LoadSelectedBall();
 		LaunchArrowRenderer = transform.FindChild("LaunchArrow").GetComponent<SpriteRenderer>();
 		LaunchSound = transform.FindChild("LaunchSound").GetComponent<AudioSource>();
+		LaunchMeterImage = GameObject.Find("LaunchBar").GetComponent<Image>();
+		PreviousPower = GameObject.Find("PreviousPowerIndicator").GetComponent<Image>();
 		LaunchButtonText = transform.parent.FindChildRecursive("LaunchButtonText").GetComponent<Text>();
 	}
 
@@ -107,7 +110,7 @@ public class BallLauncher : MonoBehaviour {
 	void IncreasePowerMeter() {
 
 		LaunchPowerMeter = Mathf.MoveTowards(LaunchPowerMeter, MaxLaunchPower, Time.deltaTime * 3);
-		LanchMeterImage.fillAmount = LaunchPowerMeter / MaxLaunchPower;
+		LaunchMeterImage.fillAmount = LaunchPowerMeter / MaxLaunchPower;
 	}
 
 	public void LaunchBall() {
@@ -125,5 +128,17 @@ public class BallLauncher : MonoBehaviour {
 			CanLaunch = false;
 			LaunchButtonText.text = LaunchResetText;
 		}
+	}
+
+	internal void SetPreviousPowerIcon() {
+
+		Vector3 pos = PreviousPower.transform.localPosition;
+		Debug.Log("Line position old:" + pos);
+		pos.x = (LaunchMeterImage.fillAmount * LaunchMeterImage.rectTransform.rect.width) -
+			(LaunchMeterImage.rectTransform.rect.width / 2f);
+		PreviousPower.transform.localPosition = pos;
+		Debug.Log("Line position new:" + pos);
+		Debug.Log("Parent pos: " + PreviousPower.transform.parent.position);
+
 	}
 }

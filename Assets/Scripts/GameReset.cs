@@ -40,15 +40,17 @@ public class GameReset : MonoBehaviour {
 			//	}
 			//});
 			//TODO: Remove this warning once achievements are fully enabled again.
-			Debug.LogWarning("I Think You Missed achievement is surpressed.");
+			Debug.LogWarning("'I Think You Missed' achievement is surpressed.");
 		}
 
+		//TODO: This is silly and should be moved to methods within the referenced objects.
 		ballBehaviour.FiveBounceTrail.GetComponent<ParticleSystem>().Stop();
 		ballBehaviour.FiveBounceTrail.GetComponent<ParticleSystem>().Clear();
 		ballBehaviour.TenBounceTrail.GetComponent<ParticleSystem>().Stop();
 		ballBehaviour.TenBounceTrail.GetComponent<ParticleSystem>().Clear();
 		ballGo.transform.position = ballLauncher.StartPosition;
 		ballGo.transform.rotation = ballLauncher.StartRotation;
+		ballLauncher.SetPreviousPowerIcon();
 		ballLauncher.LaunchPowerMeter = 0f;
 		ballLauncher.LaunchButtonText.text = ballLauncher.DefaultLaunchText;
 		ballLauncher.LaunchArrowRenderer.enabled = true;
