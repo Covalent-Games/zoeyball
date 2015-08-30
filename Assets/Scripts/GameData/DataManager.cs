@@ -26,7 +26,7 @@ namespace GameData {
 		public event DataChangedEventHandler OnDataChangeStarted;
 		public event DataChangedEventHandler OnDataLoaded;
 		public event DataChangedEventHandler OnDataSaved;
-		public event DataChangedEventHandler OnDataSaveFailedGeneric;
+		public event DataChangedEventHandler OnDataSaveFailedAny;
 		public event DataChangedEventHandler OnFailedAuthentication;
 		public event DataChangedEventHandler OnInternalError;
 		public event DataChangedEventHandler OnTimeOut;
@@ -227,8 +227,8 @@ namespace GameData {
 					break;
 			}
 			if (status != SavedGameRequestStatus.Success) {
-				if (OnDataSaveFailedGeneric != null) {
-					OnDataSaveFailedGeneric.Invoke();
+				if (OnDataSaveFailedAny != null) {
+					OnDataSaveFailedAny.Invoke();
 				}
 			}
 		}
