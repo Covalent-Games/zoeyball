@@ -44,19 +44,18 @@ public class GameManager : MonoBehaviour {
 	public static bool GotHighScore = false;
 	public bool IsBusy = false;
 
-	private GameObject LevelDisplayCanvasGO;
-	private Transform LevelDisplayElementContainer;
-	private Text WorldName;
-	private int SelectedWorldID = 0;
-	private GameObject LevelDisplayContent;
-	private AudioManager AudioWrangler;
-	private BallBehaviour _BallBehavior;
-	private BallLauncher _BallLauncher;
-	private float SkyBoxRotation = 0f;
+	private GameObject _levelDisplayCanvasGO;
+	private Transform _levelDisplayElementContainer;
+	private Text _worldName;
+	private int _selectedWorldID = 0;
+	private GameObject _levelDisplayContent;
+	private AudioManager _audioWrangler;
+	private BallBehaviour _ballBehavior;
+	private BallLauncher _ballLauncher;
+	private float _skyBoxRotation = 0f;
 
-	private bool MenuOpen = false;
+	private bool _menuOpen = false;
 	private bool _loadError = false;
-	private GameObject _playButton;
 	#endregion
 
 	#region Initializers
@@ -66,16 +65,14 @@ public class GameManager : MonoBehaviour {
 		GooglePlay = GetComponent<PlayServicesHandler>();
 		DataWrangler = new DataManager();
 		DataWrangler.LoadLevelTemplate(LevelData);
-		AudioWrangler = GetComponent<AudioManager>();
+		_audioWrangler = GetComponent<AudioManager>();
 		LoadingScreen = transform.FindChildRecursive("LoadingScreenCanvas").GetComponent<LoadingScreenManager>();
 		AchievementCanvas = transform.FindChild("tmpAchievementCanvas").GetComponent<Canvas>();
 		MenuAnimator = GameObject.FindGameObjectWithTag("MenuPanel").GetComponent<Animator>();
-		LevelDisplayElementContainer = transform.FindChildRecursive("ElementContainer");
+		_levelDisplayElementContainer = transform.FindChildRecursive("ElementContainer");
 		MenuAnimator.enabled = false;
 		LevelSelectBkGrndImage = GameObject.Find("LevelSelectBackground").GetComponent<Image>();
 		SelectedBall = (GameObject)Resources.Load("Balls/" + (PlayerPrefs.HasKey("CurrentBall") ? PlayerPrefs.GetString("CurrentBall") : "BallYellow"));
-		_playButton = GameObject.Find("PlayButton");
-		//_playButton.SetActive(false);
 		DontDestroyOnLoad(gameObject);
 
 		AchievementCodes.CodeToNameDict = new Dictionary<string, string>(){
@@ -106,9 +103,9 @@ public class GameManager : MonoBehaviour {
 	#region Polled methods
 	void Update() {
 
-		SkyBoxRotation += 2 * Time.deltaTime;
-		SkyBoxRotation %= 360;
-		RenderSettings.skybox.SetFloat("_Rotation", SkyBoxRotation);
+		_skyBoxRotation += 2 * Time.deltaTime;
+		_skyBoxRotation %= 360;
+		RenderSettings.skybox.SetFloat("_Rotation", _skyBoxRotation);
 
 		if (Input.GetKeyDown(KeyCode.Escape)) {
 			if (Application.loadedLevel == 0 || Application.loadedLevel == 1) {
@@ -144,14 +141,14 @@ public class GameManager : MonoBehaviour {
 			if (Application.isEditor) {
 				Debug.LogWarning(
 					"Loading LevelPicker. You're running in the Editor so no save files used!");
-				if (MenuOpen) {
+				if (_menuOpen) {
 					ToggleMenu();
 				}
 				LoadLevelPicker();
 				return;
 			}
 		}
-		if (MenuOpen) {
+		if (_menuOpen) {
 			ToggleMenu();
 		}
 	}
@@ -169,12 +166,12 @@ public class GameManager : MonoBehaviour {
 	public void ToggleMenu() {
 
 		MenuAnimator.enabled = true;
-		if (MenuOpen) {
+		if (_menuOpen) {
 			MenuAnimator.Play("MenuSlideOut");
 		} else {
 			MenuAnimator.Play("MenuSlideIn");
 		}
-		MenuOpen = !MenuOpen;
+		_menuOpen = !_menuOpen;
 
 	}
 
@@ -191,7 +188,7 @@ public class GameManager : MonoBehaviour {
 		}
 		LevelCompleteCanvas.enabled = false;
 		// Close the menu
-		if (MenuOpen)
+		if (_menuOpen)
 			ToggleMenu();
 		ReturnToLevelPicker(true);
 	}
@@ -203,16 +200,16 @@ public class GameManager : MonoBehaviour {
 			return;
 		}
 
-		RestartCache.Score = _BallBehavior.CurrentScore;
-		RestartCache.Bounces = _BallBehavior.CurrentBounces;
-		RestartCache.StartBlockRotation = _BallLauncher.transform.rotation;
-		RestartCache.Powerbar = _BallLauncher.LaunchPowerMeter;
+		RestartCache.Score = _ballBehavior.CurrentScore;
+		RestartCache.Bounces = _ballBehavior.CurrentBounces;
+		RestartCache.StartBlockRotation = _ballLauncher.transform.rotation;
+		RestartCache.Powerbar = _ballLauncher.LaunchPowerMeter;
 		RestartCache.LoadFromCache = true;
 
-		_BallBehavior.FiveBounceTrail.GetComponent<ParticleSystem>().Stop();
-		_BallBehavior.FiveBounceTrail.GetComponent<ParticleSystem>().Clear();
-		_BallBehavior.TenBounceTrail.GetComponent<ParticleSystem>().Stop();
-		_BallBehavior.TenBounceTrail.GetComponent<ParticleSystem>().Clear();
+		_ballBehavior.FiveBounceTrail.GetComponent<ParticleSystem>().Stop();
+		_ballBehavior.FiveBounceTrail.GetComponent<ParticleSystem>().Clear();
+		_ballBehavior.TenBounceTrail.GetComponent<ParticleSystem>().Stop();
+		_ballBehavior.TenBounceTrail.GetComponent<ParticleSystem>().Clear();
 		LevelCompleteCanvas.enabled = false;
 		HighScoreStamp.GetComponent<Image>().enabled = false;
 
@@ -237,9 +234,9 @@ public class GameManager : MonoBehaviour {
 
 	public void NextWorldButton() {
 
-		SelectedWorldID++;
-		if (DataManager.SaveData.LevelList[-1].WorldID < SelectedWorldID) {
-			SelectedWorldID--;
+		_selectedWorldID++;
+		if (DataManager.SaveData.LevelList[-1].WorldID < _selectedWorldID) {
+			_selectedWorldID--;
 		} else {
 			//Do world switching stuff.
 		}
@@ -288,18 +285,18 @@ public class GameManager : MonoBehaviour {
 
 	void ApplyCacheToLoadedLevel() {
 
-		_BallLauncher.transform.rotation = RestartCache.StartBlockRotation;
-		_BallBehavior.CurrentScore = RestartCache.Score;
-		_BallBehavior.CurrentBounces = RestartCache.Bounces;
-		_BallBehavior.UpdateScoreText();
-		_BallBehavior.CurrentScore = 0;
-		_BallBehavior.CurrentBounces = 0;
-		_BallLauncher.LaunchMeterImage.fillAmount = RestartCache.Powerbar / _BallLauncher.MaxLaunchPower;
+		_ballLauncher.transform.rotation = RestartCache.StartBlockRotation;
+		_ballBehavior.CurrentScore = RestartCache.Score;
+		_ballBehavior.CurrentBounces = RestartCache.Bounces;
+		_ballBehavior.UpdateScoreText();
+		_ballBehavior.CurrentScore = 0;
+		_ballBehavior.CurrentBounces = 0;
+		_ballLauncher.LaunchMeterImage.fillAmount = RestartCache.Powerbar / _ballLauncher.MaxLaunchPower;
 	}
 
 	void PopulateLevelListUI() {
 
-		if (!LevelDisplayContent) {
+		if (!_levelDisplayContent) {
 			Debug.LogError("Content panel missing or renamed.");
 		}
 		Text levelName;
@@ -310,12 +307,12 @@ public class GameManager : MonoBehaviour {
 
 		GameObject button;
 		foreach (var level in DataManager.SaveData.LevelList) {
-			if (level.WorldID < SelectedWorldID) { continue; }
-			if (level.WorldID > SelectedWorldID) { break; }
+			if (level.WorldID < _selectedWorldID) { continue; }
+			if (level.WorldID > _selectedWorldID) { break; }
 			//TOOD: Have this not set every time.
-			WorldName.text = World.Names[level.WorldID];
+			_worldName.text = World.Names[level.WorldID];
 			button = Instantiate(LevelButtonResource);
-			button.transform.SetParent(LevelDisplayContent.transform, false);
+			button.transform.SetParent(_levelDisplayContent.transform, false);
 
 			button.GetComponent<LoadLevelButton>().LevelToLoad = level;
 
@@ -357,7 +354,7 @@ public class GameManager : MonoBehaviour {
 			//	.GetComponent<ParticleSystem>().Play();
 			GotHighScore = false;
 		}
-		if (_BallBehavior.CurrentBounces >= CurrentLevel.BounceGoal && CurrentLevel.BounceGoal != 0) {
+		if (_ballBehavior.CurrentBounces >= CurrentLevel.BounceGoal && CurrentLevel.BounceGoal != 0) {
 			//BounceGoalStamp.transform.SetParent(HighScoreStamp.transform.parent);
 			BounceGoalStamp.SetActive(true);
 			CurrentLevel.BounceGoalUnlocked = true;
@@ -478,11 +475,11 @@ public class GameManager : MonoBehaviour {
 		switch (levelIndex) {
 			default:
 				LevelSelectBkGrndImage.enabled = false;
-				AudioWrangler.ChangeMusicVolume(.275f);
-				_BallLauncher = GameObject.FindObjectOfType<BallLauncher>();
+				_audioWrangler.ChangeMusicVolume(.275f);
+				_ballLauncher = GameObject.FindObjectOfType<BallLauncher>();
 				// Now that Ball is static this reference isn't needed
-				_BallBehavior = BallLauncher.Ball.GetComponent<BallBehaviour>();
-				Text LevelText = _BallLauncher.transform.parent.FindChildRecursive("LevelText")
+				_ballBehavior = BallLauncher.Ball.GetComponent<BallBehaviour>();
+				Text LevelText = _ballLauncher.transform.parent.FindChildRecursive("LevelText")
 					.GetComponent<Text>();
 				LevelText.text = string.Format("Level {0}", CurrentLevel.LevelID);
 				if (RestartCache.LoadFromCache) {
@@ -491,17 +488,17 @@ public class GameManager : MonoBehaviour {
 				break;
 			case 0:
 				LevelSelectBkGrndImage.enabled = false;
-				AudioWrangler.ChangeMusicVolume(1f);
+				_audioWrangler.ChangeMusicVolume(1f);
 				break;
 			case 1:
 				LevelSelectBkGrndImage.enabled = true;
-				LevelDisplayCanvasGO = GameObject.Find("LevelDisplayCanvas");
-				WorldName = LevelDisplayCanvasGO.transform.FindChildRecursive("WorldName")
+				_levelDisplayCanvasGO = GameObject.Find("LevelDisplayCanvas");
+				_worldName = _levelDisplayCanvasGO.transform.FindChildRecursive("WorldName")
 					.GetComponent<Text>();
-				LevelDisplayContent = LevelDisplayCanvasGO.transform
+				_levelDisplayContent = _levelDisplayCanvasGO.transform
 					.FindChildRecursive("LevelDisplayContent").gameObject;
 				PopulateLevelListUI();
-				AudioWrangler.ChangeMusicVolume(1f);
+				_audioWrangler.ChangeMusicVolume(1f);
 				break;
 			case 2:
 				LevelSelectBkGrndImage.enabled = false;

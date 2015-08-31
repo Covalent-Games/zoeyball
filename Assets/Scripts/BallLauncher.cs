@@ -35,26 +35,30 @@ public class BallLauncher : MonoBehaviour {
 	void LoadSelectedBall() {
 
 		Ball = transform.GetChild(0).gameObject;
-		// Disable old ball's collider to prevent random collision effects.
-		BallLauncher.Ball.GetComponent<SphereCollider>().enabled = false;
-		// Create the new, selected ball.
-		GameObject ball = Instantiate(GameManager.SelectedBall);
-		ball.transform.position = BallLauncher.Ball.transform.position;
-		ball.transform.rotation = BallLauncher.Ball.transform.rotation;
-		// Get rid of the default ball.
-		Destroy(BallLauncher.Ball.gameObject);
-		BallLauncher.Ball = ball;
-		ball.transform.parent = transform;
+		if (!Application.isEditor) {
+			Time.timeScale = 1.25f;
+			// Disable old ball's collider to prevent random collision effects.
+			BallLauncher.Ball.GetComponent<SphereCollider>().enabled = false;
+			// Create the new, selected ball.
+			GameObject ball = Instantiate(GameManager.SelectedBall);
+			ball.transform.position = BallLauncher.Ball.transform.position;
+			ball.transform.rotation = BallLauncher.Ball.transform.rotation;
+			// Get rid of the default ball.
+			Destroy(BallLauncher.Ball.gameObject);
+			BallLauncher.Ball = ball;
+			ball.transform.parent = transform;
+		}
 		BallBehaviour bb = Ball.GetComponent<BallBehaviour>();
 		bb.ScoreText = transform.parent.FindChildRecursive("ScoreText").GetComponent<Text>();
 		bb.BounceText = transform.parent.FindChildRecursive("BounceText").GetComponent<Text>();
 		bb.LaunchPlatform = this;
 		bb.PhysicsBody = bb.GetComponent<Rigidbody>();
+		bb.PhysicsBody.isKinematic = true;
 		GameObject resource = (GameObject)Resources.Load("Effects/ImpactEffect");
 		for (int i = 0; i < bb.ImpactEffects.Length; i++) {
 			bb.ImpactEffects[i] = Instantiate(resource) as GameObject;
 		}
-		Camera.main.gameObject.GetComponent<Follow>().FollowTarget = ball;
+		Camera.main.gameObject.GetComponent<Follow>().FollowTarget = BallLauncher.Ball;
 	}
 
 	void FixedUpdate() {
@@ -128,6 +132,14 @@ public class BallLauncher : MonoBehaviour {
 			CanLaunch = false;
 			LaunchButtonText.text = LaunchResetText;
 		}
+	}
+
+	public void Reset() {
+
+		SetPreviousPowerIcon();
+		LaunchPowerMeter = 0f;
+		LaunchButtonText.text = DefaultLaunchText;
+		LaunchArrowRenderer.enabled = true;
 	}
 
 	internal void SetPreviousPowerIcon() {

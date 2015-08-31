@@ -102,7 +102,7 @@ public class WinChecker : MonoBehaviour {
 			if (GameManager.Instance != null) {
 				GameManager.Instance.CheckAchievements(colliderObject);
 			} else {
-				Debug.Log("GameManger.Instance is null, for whatever reason...");
+				Debug.Log("GameManger.Instance is null. Hopefully you're in UNITY_EDITOR!");
 			}
 			//CheckAchievements(colliderObject);
 		}
@@ -205,7 +205,12 @@ public class WinChecker : MonoBehaviour {
 				Destroy(block);
 			}
 			_ControlUICanvas.enabled = false;
+#if !UNITY_EDITOR
 			UpdateCloudData();
+#else
+			Debug.LogWarning("You're in a standalone level. Level Complete UI cannot be displayed. Resetting level");
+			Application.LoadLevel(Application.loadedLevel);
+#endif
 		}
 	}
 }
