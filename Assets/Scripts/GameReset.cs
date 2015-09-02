@@ -1,23 +1,26 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using GameData;
 
 public class GameReset : MonoBehaviour {
 
-	WinChecker _WinChecker;
-	static GameReset m_Instance;
+	private WinChecker _winChecker;
+	private static GameReset _instance;
+	private Canvas _winCanvas;
 
 	void Awake() {
 
-		m_Instance = this;
-		_WinChecker = GameObject.FindObjectOfType<WinChecker>();
+		_instance = this;
+		_winChecker = GameObject.FindObjectOfType<WinChecker>();
+		_winCanvas = GameObject.Find("YouWinLabelCanvas").GetComponent<Canvas>();
 	}
 
 	void OnTriggerEnter(Collider colliderObject) {
 
-		if (!_WinChecker.Winning) {
+		if (!_winChecker.Winning) {
 			if (colliderObject.tag == "Ball") {
-				ResetLevel(colliderObject.gameObject);
+				ResetLevel(colliderObject.gameObject.GetComponent<BallBehaviour>());
 			}
 		} else {
 			colliderObject.GetComponent<MeshRenderer>().enabled = false;
@@ -25,12 +28,9 @@ public class GameReset : MonoBehaviour {
 		}
 	}
 
-	public static void ResetLevel(GameObject ballGo) {
+	public static void ResetLevel(BallBehaviour ballBehaviour) {
 
-		BallLauncher ballLauncher = ballGo.transform.parent.GetComponent<BallLauncher>();
-		Rigidbody ballRigidBody = ballGo.GetComponent<Rigidbody>();
-		BallBehaviour ballBehaviour = ballGo.GetComponent<BallBehaviour>();
-
+#if !UNITY_EDITOR
 		if (!DataManager.SaveData.AchievementProg.IThinkYouMissed &&
 			ballBehaviour.CurrentBounces == 0 &&
 			GameManager.CurrentLevel.LevelID > 2) {
@@ -40,28 +40,17 @@ public class GameReset : MonoBehaviour {
 			//	}
 			//});
 			//TODO: Remove this warning once achievements are fully enabled again.
-			Debug.LogWarning("I Think You Missed achievement is surpressed.");
+			Debug.LogWarning("'I Think You Missed' achievement is surpressed.");
 		}
+#endif
 
-		ballBehaviour.FiveBounceTrail.GetComponent<ParticleSystem>().Stop();
-		ballBehaviour.FiveBounceTrail.GetComponent<ParticleSystem>().Clear();
-		ballBehaviour.TenBounceTrail.GetComponent<ParticleSystem>().Stop();
-		ballBehaviour.TenBounceTrail.GetComponent<ParticleSystem>().Clear();
-		ballGo.transform.position = ballLauncher.StartPosition;
-		ballGo.transform.rotation = ballLauncher.StartRotation;
-		ballLauncher.LaunchPowerMeter = 0f;
-		ballLauncher.LaunchButtonText.text = ballLauncher.DefaultLaunchText;
-		ballLauncher.LaunchArrowRenderer.enabled = true;
-		ballRigidBody.isKinematic = true;
-		ballRigidBody.velocity = Vector3.zero;
-		ballBehaviour.CurrentScore = 0f;
-		ballBehaviour.CurrentBounces = 0;
-		ballBehaviour.StartCountingScore = false;
-		ballBehaviour.UpdateScoreText();
-		GameReset.m_Instance.StartCoroutine(GameReset.m_Instance.ResetBallRoutine(ballGo, ballLauncher));
+		//TODO: This is silly and should be moved to methods within the referenced objects.
+		ballBehaviour.Reset();
+		ballBehaviour.LaunchPlatform.Reset();
+		GameReset._instance.StartCoroutine(GameReset._instance.ResetBallRoutine(ballBehaviour));
 	}
 
-	IEnumerator ResetBallRoutine(GameObject ball, BallLauncher ballLauncher) {
+	IEnumerator ResetBallRoutine(BallBehaviour ball) {
 
 		Vector3 scale = ball.transform.localScale;
 		ball.transform.localScale = Vector3.zero;
@@ -70,12 +59,7 @@ public class GameReset : MonoBehaviour {
 			ball.transform.localScale = Vector3.MoveTowards(ball.transform.localScale, scale, Time.deltaTime * 5);
 			yield return null;
 		}
-		ballLauncher.CanLaunch = true;
-		GameObject WinCanvas = GameObject.Find("YouWinLabelCanvas");
-		if (WinCanvas) {
-			WinCanvas.GetComponent<Canvas>().enabled = false;
-		} else {
-			Debug.LogError("Whoops, no canvas to turn off");
-		}
+		ball.LaunchPlatform.CanLaunch = true;
+		_winCanvas.enabled = false;
 	}
 }

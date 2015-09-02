@@ -26,6 +26,7 @@ namespace GameData {
 		public event DataChangedEventHandler OnDataChangeStarted;
 		public event DataChangedEventHandler OnDataLoaded;
 		public event DataChangedEventHandler OnDataSaved;
+		public event DataChangedEventHandler OnDataSaveFailedAny;
 		public event DataChangedEventHandler OnFailedAuthentication;
 		public event DataChangedEventHandler OnInternalError;
 		public event DataChangedEventHandler OnTimeOut;
@@ -207,9 +208,10 @@ namespace GameData {
 
 			switch (status) {
 				case SavedGameRequestStatus.Success:
-					if (OnDataSaved != null)
+					if (OnDataSaved != null) {
 						Debug.Log("OnDataSaved event");
-					OnDataSaved();
+						OnDataSaved();
+					}
 					break;
 				case SavedGameRequestStatus.AuthenticationError:
 					Debug.Log("SAVE FAILED! NO AUTHENTICATION!");
@@ -223,6 +225,11 @@ namespace GameData {
 				case SavedGameRequestStatus.TimeoutError:
 					Debug.Log("TIMEOUT SAVING FILE");
 					break;
+			}
+			if (status != SavedGameRequestStatus.Success) {
+				if (OnDataSaveFailedAny != null) {
+					OnDataSaveFailedAny.Invoke();
+				}
 			}
 		}
 

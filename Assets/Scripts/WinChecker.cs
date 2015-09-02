@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using GameData;
@@ -87,7 +88,7 @@ public class WinChecker : MonoBehaviour {
 			"The day just keeps getting better.",
 			"Thanks for playing! Come back and see us again soon!",
 			"Nailed it. Am I right, Or am I right?",
-			"It's Madison's fault I keep saying all this weird stuff.",
+			"It's Madison's fault.",
 		};
 	}
 
@@ -97,11 +98,12 @@ public class WinChecker : MonoBehaviour {
 			Winning = true;
 			_Ball.enabled = false;
 			_Ball.TenBounceParticle.GetComponent<ParticleSystem>().Play();
-
+			// Do not remove.
+			Debug.Log(string.Format("Score: {0}, Bounces {1}", _Ball.CurrentScore, _Ball.CurrentBounces));
 			if (GameManager.Instance != null) {
 				GameManager.Instance.CheckAchievements(colliderObject);
 			} else {
-				Debug.Log("GameManger.Instance is null, for whatever reason...");
+				Debug.Log("GameManger.Instance is null. Hopefully you're in UNITY_EDITOR!");
 			}
 			//CheckAchievements(colliderObject);
 		}
@@ -154,6 +156,8 @@ public class WinChecker : MonoBehaviour {
 
 	void DisplayWinUI() {
 
+		GameManager.DataWrangler.OnDataSaved -= DisplayWinUI;
+		GameManager.DataWrangler.OnDataSaveFailedAny -= DisplayWinUI;
 		GameManager.Instance.LevelCompleteCanvas.enabled = true;
 		if (GameManager.GotHighScore || _Ball.CurrentBounces >= GameManager.CurrentLevel.BounceGoal) {
 			//TODO: Since all this method does is enable elements, it should just be here instead.
@@ -171,6 +175,8 @@ public class WinChecker : MonoBehaviour {
 
 	void UpdateCloudData() {
 
+		GameManager.DataWrangler.OnDataSaved += DisplayWinUI;
+		GameManager.DataWrangler.OnDataSaveFailedAny += DisplayWinUI;
 		GameManager.DataWrangler.StartSaveGameData();
 		// LevelID is human readable, so is 1 higher than it's index.
 		if (GameManager.CurrentLevel.LevelID < DataManager.SaveData.LevelList.Count) {
@@ -191,7 +197,7 @@ public class WinChecker : MonoBehaviour {
 	void Update() {
 
 		if (Winning) {
-			int index = Random.Range(0, WinMessages.Count);
+			int index = UnityEngine.Random.Range(0, WinMessages.Count);
 			YouWinLabel.text = WinMessages[index];
 			YouWinLabelCanvas.enabled = true;
 			enabled = false;
@@ -200,8 +206,12 @@ public class WinChecker : MonoBehaviour {
 				Destroy(block);
 			}
 			_ControlUICanvas.enabled = false;
+#if !UNITY_EDITOR
 			UpdateCloudData();
-			DisplayWinUI();
+#else
+			Debug.LogWarning("You're in a standalone level. Level Complete UI cannot be displayed. Resetting level");
+			Application.LoadLevel(Application.loadedLevel);
+#endif
 		}
 	}
 }

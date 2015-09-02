@@ -29,11 +29,15 @@ public class BallBehaviour : MonoBehaviour {
 
 	private GameObject _plusFivePrefab;
 	private List<GameObject> _plusFives = new List<GameObject>();
+	private List<Vector3> _flightPath = new List<Vector3>();
+	private LineRenderer _lineRenderer;
 
 	void Awake() {
 
 		_plusFivePrefab = (GameObject)Resources.Load("PlusFive");
 		GetComponent<Rigidbody>().angularDrag = 0f;
+		_lineRenderer = GetComponent<LineRenderer>();
+		_lineRenderer.enabled = false;
 	}
 
 	void OnCollisionEnter(Collision obj) {
@@ -126,7 +130,7 @@ public class BallBehaviour : MonoBehaviour {
 		yield return new WaitForSeconds(.2f);
 		if (transform.position == lastPosition) {
 			if (!LaunchPlatform.CanLaunch) {
-				GameReset.ResetLevel(gameObject);
+				GameReset.ResetLevel(gameObject.GetComponent<BallBehaviour>());
 				StopAllCoroutines();
 			}
 		}
@@ -138,14 +142,45 @@ public class BallBehaviour : MonoBehaviour {
 		BounceText.text = CurrentBounces.ToString();
 	}
 
+	public void Reset() {
+
+		FiveBounceTrail.GetComponent<ParticleSystem>().Stop();
+		FiveBounceTrail.GetComponent<ParticleSystem>().Clear();
+		TenBounceTrail.GetComponent<ParticleSystem>().Stop();
+		TenBounceTrail.GetComponent<ParticleSystem>().Clear();
+
+		transform.position = LaunchPlatform.transform.position;
+		transform.rotation = LaunchPlatform.transform.rotation;
+
+		PhysicsBody.isKinematic = true;
+		PhysicsBody.velocity = Vector3.zero;
+
+		CurrentScore = 0f;
+		CurrentBounces = 0;
+		StartCountingScore = false;
+		UpdateScoreText();
+		DrawPreviousFlightPath();
+	}
+
+	private void DrawPreviousFlightPath() {
+
+		_lineRenderer.enabled = true;
+		_lineRenderer.SetVertexCount(_flightPath.Count);
+		_lineRenderer.SetColors(Color.blue, Color.blue);
+		_lineRenderer.SetWidth(0.1f, 0.1f);
+
+		for (int i = 0; i < _flightPath.Count; i++) {
+			_lineRenderer.SetPosition(i, _flightPath[i]);
+		}
+		_flightPath.Clear();
+	}
+
 	void Update() {
 
 		if (StartCountingScore) {
 			CurrentScore += Time.deltaTime * 5;
 			UpdateScoreText();
 		}
-
-
 	}
 
 	void FixedUpdate() {
@@ -155,6 +190,8 @@ public class BallBehaviour : MonoBehaviour {
 				StartCoroutine(CheckForDeadPosition(LastPosition));
 			} else {
 				LastPosition = transform.position;
+				//TODO: Monitor this. If it gets too expensive limit iterations via coroutine.
+				_flightPath.Add(transform.position);
 			}
 		}
 	}

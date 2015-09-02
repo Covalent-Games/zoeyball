@@ -37,7 +37,6 @@ public class PlayServicesHandler : MonoBehaviour {
 			} else {
 				Debug.Log("Not signed into Google Play.");
 				if (Application.isEditor) {
-					Debug.Log(playButton);
 					if (playButton) {
 						playButton.SetActive(true);
 					}

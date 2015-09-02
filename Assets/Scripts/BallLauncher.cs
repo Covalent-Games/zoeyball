@@ -9,14 +9,15 @@ public class BallLauncher : MonoBehaviour {
 	public AudioSource LaunchSound;
 	public SpriteRenderer LaunchArrowRenderer;
 	public Text LaunchButtonText;
-	public Image LanchMeterImage;
+	public Image LaunchMeterImage;
+	public Image PreviousPower;
 	public float LaunchPowerMeter;
 	public float MaxLaunchPower;
 	public int RotationDirection;
 	public Vector3 StartPosition;
 	public Quaternion StartRotation;
 	public bool CanLaunch = true;
-	public string DefaultLaunchText = "Pew!";
+	public string DefaultLaunchText = "Hold to launch";
 	public string LaunchResetText = "Restart";
 	bool IncreasePower = false;
 	float RotateSpeed = 20f;
@@ -26,32 +27,38 @@ public class BallLauncher : MonoBehaviour {
 		LoadSelectedBall();
 		LaunchArrowRenderer = transform.FindChild("LaunchArrow").GetComponent<SpriteRenderer>();
 		LaunchSound = transform.FindChild("LaunchSound").GetComponent<AudioSource>();
+		LaunchMeterImage = GameObject.Find("LaunchBar").GetComponent<Image>();
+		PreviousPower = GameObject.Find("PreviousPowerIndicator").GetComponent<Image>();
 		LaunchButtonText = transform.parent.FindChildRecursive("LaunchButtonText").GetComponent<Text>();
 	}
 
 	void LoadSelectedBall() {
 
 		Ball = transform.GetChild(0).gameObject;
-		// Disable old ball's collider to prevent random collision effects.
-		BallLauncher.Ball.GetComponent<SphereCollider>().enabled = false;
-		// Create the new, selected ball.
-		GameObject ball = Instantiate(GameManager.SelectedBall);
-		ball.transform.position = BallLauncher.Ball.transform.position;
-		ball.transform.rotation = BallLauncher.Ball.transform.rotation;
-		// Get rid of the default ball.
-		Destroy(BallLauncher.Ball.gameObject);
-		BallLauncher.Ball = ball;
-		ball.transform.parent = transform;
+		if (!Application.isEditor) {
+			Time.timeScale = 1.25f;
+			// Disable old ball's collider to prevent random collision effects.
+			BallLauncher.Ball.GetComponent<SphereCollider>().enabled = false;
+			// Create the new, selected ball.
+			GameObject ball = Instantiate(GameManager.SelectedBall);
+			ball.transform.position = BallLauncher.Ball.transform.position;
+			ball.transform.rotation = BallLauncher.Ball.transform.rotation;
+			// Get rid of the default ball.
+			Destroy(BallLauncher.Ball.gameObject);
+			BallLauncher.Ball = ball;
+			ball.transform.parent = transform;
+		}
 		BallBehaviour bb = Ball.GetComponent<BallBehaviour>();
 		bb.ScoreText = transform.parent.FindChildRecursive("ScoreText").GetComponent<Text>();
 		bb.BounceText = transform.parent.FindChildRecursive("BounceText").GetComponent<Text>();
 		bb.LaunchPlatform = this;
 		bb.PhysicsBody = bb.GetComponent<Rigidbody>();
+		bb.PhysicsBody.isKinematic = true;
 		GameObject resource = (GameObject)Resources.Load("Effects/ImpactEffect");
 		for (int i = 0; i < bb.ImpactEffects.Length; i++) {
 			bb.ImpactEffects[i] = Instantiate(resource) as GameObject;
 		}
-		Camera.main.gameObject.GetComponent<Follow>().FollowTarget = ball;
+		Camera.main.gameObject.GetComponent<Follow>().FollowTarget = BallLauncher.Ball;
 	}
 
 	void FixedUpdate() {
@@ -107,7 +114,7 @@ public class BallLauncher : MonoBehaviour {
 	void IncreasePowerMeter() {
 
 		LaunchPowerMeter = Mathf.MoveTowards(LaunchPowerMeter, MaxLaunchPower, Time.deltaTime * 3);
-		LanchMeterImage.fillAmount = LaunchPowerMeter / MaxLaunchPower;
+		LaunchMeterImage.fillAmount = LaunchPowerMeter / MaxLaunchPower;
 	}
 
 	public void LaunchBall() {
@@ -125,5 +132,21 @@ public class BallLauncher : MonoBehaviour {
 			CanLaunch = false;
 			LaunchButtonText.text = LaunchResetText;
 		}
+	}
+
+	public void Reset() {
+
+		SetPreviousPowerIcon();
+		LaunchPowerMeter = 0f;
+		LaunchButtonText.text = DefaultLaunchText;
+		LaunchArrowRenderer.enabled = true;
+	}
+
+	internal void SetPreviousPowerIcon() {
+
+		Vector3 pos = PreviousPower.transform.localPosition;
+		pos.x = (LaunchMeterImage.fillAmount * LaunchMeterImage.rectTransform.rect.width) -
+			(LaunchMeterImage.rectTransform.rect.width / 2f);
+		PreviousPower.transform.localPosition = pos;
 	}
 }
