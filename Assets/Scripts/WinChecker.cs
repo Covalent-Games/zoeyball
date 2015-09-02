@@ -88,7 +88,7 @@ public class WinChecker : MonoBehaviour {
 			"The day just keeps getting better.",
 			"Thanks for playing! Come back and see us again soon!",
 			"Nailed it. Am I right, Or am I right?",
-			"It's Madison's fault I keep saying all this weird stuff.",
+			"It's Madison's fault.",
 		};
 	}
 
@@ -98,7 +98,8 @@ public class WinChecker : MonoBehaviour {
 			Winning = true;
 			_Ball.enabled = false;
 			_Ball.TenBounceParticle.GetComponent<ParticleSystem>().Play();
-
+			// Do not remove.
+			Debug.Log(string.Format("Score: {0}, Bounces {1}", _Ball.CurrentScore, _Ball.CurrentBounces));
 			if (GameManager.Instance != null) {
 				GameManager.Instance.CheckAchievements(colliderObject);
 			} else {

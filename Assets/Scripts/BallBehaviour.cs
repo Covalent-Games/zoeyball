@@ -155,8 +155,6 @@ public class BallBehaviour : MonoBehaviour {
 		PhysicsBody.isKinematic = true;
 		PhysicsBody.velocity = Vector3.zero;
 
-		// Do not remove.
-		Debug.Log(string.Format("Score: {0}, Bounces {1}", CurrentScore, CurrentBounces));
 		CurrentScore = 0f;
 		CurrentBounces = 0;
 		StartCountingScore = false;
@@ -168,13 +166,12 @@ public class BallBehaviour : MonoBehaviour {
 
 		_lineRenderer.enabled = true;
 		_lineRenderer.SetVertexCount(_flightPath.Count);
-		_lineRenderer.SetColors(Color.white, Color.blue);
-		_lineRenderer.SetWidth(0.3f, 0.3f);
+		_lineRenderer.SetColors(Color.blue, Color.blue);
+		_lineRenderer.SetWidth(0.1f, 0.1f);
 
 		for (int i = 0; i < _flightPath.Count; i++) {
 			_lineRenderer.SetPosition(i, _flightPath[i]);
 		}
-		Debug.Log(_flightPath.Count + " vertex points recorded");
 		_flightPath.Clear();
 	}
 
@@ -193,6 +190,7 @@ public class BallBehaviour : MonoBehaviour {
 				StartCoroutine(CheckForDeadPosition(LastPosition));
 			} else {
 				LastPosition = transform.position;
+				//TODO: Monitor this. If it gets too expensive limit iterations via coroutine.
 				_flightPath.Add(transform.position);
 			}
 		}

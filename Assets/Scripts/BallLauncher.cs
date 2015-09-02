@@ -145,12 +145,8 @@ public class BallLauncher : MonoBehaviour {
 	internal void SetPreviousPowerIcon() {
 
 		Vector3 pos = PreviousPower.transform.localPosition;
-		Debug.Log("Line position old:" + pos);
 		pos.x = (LaunchMeterImage.fillAmount * LaunchMeterImage.rectTransform.rect.width) -
 			(LaunchMeterImage.rectTransform.rect.width / 2f);
 		PreviousPower.transform.localPosition = pos;
-		Debug.Log("Line position new:" + pos);
-		Debug.Log("Parent pos: " + PreviousPower.transform.parent.position);
-
 	}
 }
