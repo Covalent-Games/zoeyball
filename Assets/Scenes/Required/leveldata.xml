@@ -99,6 +99,21 @@
     <LevelID>20</LevelID>
     <WorldID>0</WorldID>
     <BounceGoal>5</BounceGoal>
-  </Level>  
+  </Level>
+  <Level>
+    <LevelID>21</LevelID>
+    <WorldID>0</WorldID>
+    <BounceGoal>1</BounceGoal>
+  </Level>
+  <Level>
+    <LevelID>22</LevelID>
+    <WorldID>0</WorldID>
+    <BounceGoal>5</BounceGoal>
+  </Level>
+  <Level>
+    <LevelID>23</LevelID>
+    <WorldID>0</WorldID>
+    <BounceGoal>5</BounceGoal>
+  </Level>
 
 </ArrayOfLevel>
