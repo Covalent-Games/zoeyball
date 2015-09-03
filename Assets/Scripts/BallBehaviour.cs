@@ -35,8 +35,16 @@ public class BallBehaviour : MonoBehaviour {
 	void Awake() {
 
 		_plusFivePrefab = (GameObject)Resources.Load("PlusFive");
+		if (_plusFivePrefab == null) {
+			Debug.Log("Plus five is null");
+		}
 		GetComponent<Rigidbody>().angularDrag = 0f;
 		_lineRenderer = GetComponent<LineRenderer>();
+		if (_lineRenderer == null) {
+			_lineRenderer = gameObject.AddComponent<LineRenderer>();
+			GameObject go = Resources.Load("Balls/FlightPathMatObj") as GameObject;
+			_lineRenderer.material = go.GetComponent<Renderer>().material;
+		}
 		_lineRenderer.enabled = false;
 	}
 

@@ -24,23 +24,30 @@ public class BallLauncher : MonoBehaviour {
 
 	void Awake() {
 
-		LoadSelectedBall();
+
 		LaunchArrowRenderer = transform.FindChild("LaunchArrow").GetComponent<SpriteRenderer>();
 		LaunchSound = transform.FindChild("LaunchSound").GetComponent<AudioSource>();
 		LaunchMeterImage = GameObject.Find("LaunchBar").GetComponent<Image>();
 		PreviousPower = GameObject.Find("PreviousPowerIndicator").GetComponent<Image>();
 		LaunchButtonText = transform.parent.FindChildRecursive("LaunchButtonText").GetComponent<Text>();
+		LoadSelectedBall();
 	}
 
 	void LoadSelectedBall() {
 
 		Ball = transform.GetChild(0).gameObject;
+		if (!Ball) {
+			Debug.Log("Ball is null");
+		}
 		if (!Application.isEditor) {
 			Time.timeScale = 1.25f;
 			// Disable old ball's collider to prevent random collision effects.
+			Debug.Log("Enabling SphereCollider");
 			BallLauncher.Ball.GetComponent<SphereCollider>().enabled = false;
 			// Create the new, selected ball.
+			Debug.Log("Attempting to instantiate " + GameManager.SelectedBall);
 			GameObject ball = Instantiate(GameManager.SelectedBall);
+			Debug.Log("Setting " + ball + "'s position and rotation");
 			ball.transform.position = BallLauncher.Ball.transform.position;
 			ball.transform.rotation = BallLauncher.Ball.transform.rotation;
 			// Get rid of the default ball.
