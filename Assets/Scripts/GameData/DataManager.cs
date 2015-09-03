@@ -33,7 +33,7 @@ namespace GameData {
 		public event DataChangedEventHandler OnBadInput;
 		//public event DataChangedEventHandler OnDataDeleted;
 
-		SessionTimeTracker thisTimeTracker = new SessionTimeTracker();
+		private SessionTimeTracker _timeTracker = new SessionTimeTracker();
 		ISavedGameMetadata SavedGameMetaData;
 		bool Writing = false;
 		// Currently means literally the opposite.
@@ -73,7 +73,7 @@ namespace GameData {
 
 		public void StartRecordingPlayTime() {
 
-			thisTimeTracker.StartRecordingTime();
+			_timeTracker.StartRecordingTime();
 		}
 
 		public void StartSaveGameData() {
@@ -148,7 +148,7 @@ namespace GameData {
 				}
 			}
 
-			thisTimeTracker.FalseTimeForConflicts = original.TotalTimePlayed + unmerged.TotalTimePlayed;
+			_timeTracker.FalseTimeForConflicts = original.TotalTimePlayed + unmerged.TotalTimePlayed;
 			DataManager.SaveData = originalState;
 			StartSaveGameData();
 
@@ -172,7 +172,7 @@ namespace GameData {
 						builder = builder
 							.WithUpdatedDescription("Saved game at " + DateTime.Now)
 							.WithUpdatedPlayedTime(
-								thisTimeTracker.GetTimeSnapshot(playTime));
+								_timeTracker.GetTimeSnapshot(playTime));
 
 						SavedGameMetadataUpdate updatedMetadata = builder.Build();
 						savedGameClient.CommitUpdate(
