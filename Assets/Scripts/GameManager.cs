@@ -107,11 +107,11 @@ public class GameManager : MonoBehaviour {
 		_skyBoxRotation %= 360;
 		RenderSettings.skybox.SetFloat("_Rotation", _skyBoxRotation);
 
-		if (Input.GetKeyDown(KeyCode.Escape)) {
+		if (Input.GetKeyDown(KeyCode.Escape) && !IsBusy) {
 			if (Application.loadedLevel == 0 || Application.loadedLevel == 1) {
 				QuitConfirmCanvas.GetComponent<Canvas>().enabled = true;
 			} else {
-				ReturnToLevelPicker(true);
+				ReturnButton();
 			}
 		}
 	}
