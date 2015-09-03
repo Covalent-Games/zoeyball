@@ -372,9 +372,9 @@ public class GameManager : MonoBehaviour {
 		IsBusy = true;
 		Debug.Log("-------GameManager busy---------");
 		if (Application.loadedLevel <= 2) {
-			this.LoadingScreen.ActivateLoadingscreen(LoadingScreenManager.Screens.WallOfText);
+			LoadingScreen.ActivateLoadingscreen(LoadingScreenManager.Screens.WallOfText);
 		} else {
-			this.LoadingScreen.ActivateLoadingscreen(LoadingScreenManager.Screens.Saving);
+			LoadingScreen.ActivateLoadingscreen(LoadingScreenManager.Screens.Saving);
 		}
 	}
 
@@ -382,7 +382,10 @@ public class GameManager : MonoBehaviour {
 
 		IsBusy = false;
 		Debug.Log("--------GameManager Not Busy----------");
-		this.LoadingScreen.DeactivateLoadingscreen();
+
+		if (LoadingScreen.ActiveScreen != LoadingScreenManager.Screens.None) {
+			LoadingScreen.DeactivateLoadingscreen();
+		}
 	}
 
 	public void CheckAchievements(Collision colliderObject) {

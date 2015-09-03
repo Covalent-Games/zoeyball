@@ -10,7 +10,7 @@ public class LoadingScreenManager : MonoBehaviour {
 		WallOfText,
 		Saving,
 	}
-	LoadingScreenManager.Screens ActiveScreen = Screens.None;
+	public LoadingScreenManager.Screens ActiveScreen = Screens.None;
 	Dictionary<Screens, Canvas> EnumToScreenDict;
 	Canvas LoadingScreen_01;
 	Canvas LoadingScreen_02;
