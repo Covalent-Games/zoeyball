@@ -74,12 +74,16 @@ public class BallBehaviour : MonoBehaviour {
 		if (CurrentBounces == 5) {
 			Instantiate(FiveBounceParticle, transform.position, Quaternion.identity);
 			FiveBounceTrail.GetComponent<ParticleSystem>().Play();
+			AudioManager.Clips.BounceGoal_5.Play();
 		} else if (CurrentBounces == 10) {
 			Instantiate(TenBounceParticle, transform.position, Quaternion.identity);
 			FiveBounceTrail.GetComponent<ParticleSystem>().Stop();
 			TenBounceTrail.GetComponent<ParticleSystem>().Play();
+			AudioManager.Clips.BounceGoal_10.Play();
 		} else if (CurrentBounces == 15) {
-
+			AudioManager.Clips.BounceGoal_15.Play();
+		} else if (CurrentBounces == 20) {
+			AudioManager.Clips.BounceGoal_20.Play();
 		}
 	}
 
