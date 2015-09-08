@@ -40,7 +40,6 @@ public class BallLauncher : MonoBehaviour {
 			Debug.Log("Ball is null");
 		}
 		if (!Application.isEditor) {
-			Time.timeScale = 1.25f;
 			// Disable old ball's collider to prevent random collision effects.
 			Debug.Log("Enabling SphereCollider");
 			BallLauncher.Ball.GetComponent<SphereCollider>().enabled = false;
@@ -107,6 +106,7 @@ public class BallLauncher : MonoBehaviour {
 		// Increase power is false when the user lifts there finger off the button
 		if (!IncreasePower)
 			LaunchBall();
+		// If the ball is in flight, and the launch button is pressed, reset the level.
 		if (IncreasePower && !CanLaunch)
 #if UNITY_EDITOR
 			if (GameManager.Instance == null)
@@ -143,13 +143,13 @@ public class BallLauncher : MonoBehaviour {
 
 	public void Reset() {
 
-		SetPreviousPowerIcon();
+		SetPreviousPowerIndicator();
 		LaunchPowerMeter = 0f;
 		LaunchButtonText.text = DefaultLaunchText;
 		LaunchArrowRenderer.enabled = true;
 	}
 
-	internal void SetPreviousPowerIcon() {
+	internal void SetPreviousPowerIndicator() {
 
 		Vector3 pos = PreviousPower.transform.localPosition;
 		pos.x = (LaunchMeterImage.fillAmount * LaunchMeterImage.rectTransform.rect.width) -

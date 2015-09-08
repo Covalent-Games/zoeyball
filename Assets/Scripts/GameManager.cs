@@ -292,6 +292,8 @@ public class GameManager : MonoBehaviour {
 		_ballBehavior.CurrentScore = 0;
 		_ballBehavior.CurrentBounces = 0;
 		_ballLauncher.LaunchMeterImage.fillAmount = RestartCache.Powerbar / _ballLauncher.MaxLaunchPower;
+		_ballLauncher.SetPreviousPowerIndicator();
+		_ballBehavior.DrawPreviousFlightPath();
 	}
 
 	void PopulateLevelListUI() {

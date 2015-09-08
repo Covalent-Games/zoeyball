@@ -69,21 +69,21 @@ public class BallBehaviour : MonoBehaviour {
 			CurrentBounces++;
 			CurrentScore += 5;
 			StartCoroutine(PlusFiveRoutine());
-		}
 
-		if (CurrentBounces == 5) {
-			Instantiate(FiveBounceParticle, transform.position, Quaternion.identity);
-			FiveBounceTrail.GetComponent<ParticleSystem>().Play();
-			AudioManager.Clips.BounceGoal_5.Play();
-		} else if (CurrentBounces == 10) {
-			Instantiate(TenBounceParticle, transform.position, Quaternion.identity);
-			FiveBounceTrail.GetComponent<ParticleSystem>().Stop();
-			TenBounceTrail.GetComponent<ParticleSystem>().Play();
-			AudioManager.Clips.BounceGoal_10.Play();
-		} else if (CurrentBounces == 15) {
-			AudioManager.Clips.BounceGoal_15.Play();
-		} else if (CurrentBounces == 20) {
-			AudioManager.Clips.BounceGoal_20.Play();
+			if (CurrentBounces == 5) {
+				Instantiate(FiveBounceParticle, transform.position, Quaternion.identity);
+				FiveBounceTrail.GetComponent<ParticleSystem>().Play();
+				AudioManager.Clips.BounceGoal_5.Play();
+			} else if (CurrentBounces == 10) {
+				Instantiate(TenBounceParticle, transform.position, Quaternion.identity);
+				FiveBounceTrail.GetComponent<ParticleSystem>().Stop();
+				TenBounceTrail.GetComponent<ParticleSystem>().Play();
+				AudioManager.Clips.BounceGoal_10.Play();
+			} else if (CurrentBounces == 15) {
+				AudioManager.Clips.BounceGoal_15.Play();
+			} else if (CurrentBounces == 20) {
+				AudioManager.Clips.BounceGoal_20.Play();
+			}
 		}
 	}
 
@@ -98,7 +98,7 @@ public class BallBehaviour : MonoBehaviour {
 		// Look through existing pool for an inactive object
 		lock (_plusFives) {
 			for (int i = 0; i < _plusFives.Count; i++) {
-				if (_plusFives[i].activeSelf) {
+				if (!_plusFives[i].activeSelf) {
 					plusFive = _plusFives[i].GetComponent<Text>();
 					plusFive.gameObject.SetActive(true);
 					break;
@@ -174,7 +174,7 @@ public class BallBehaviour : MonoBehaviour {
 		DrawPreviousFlightPath();
 	}
 
-	private void DrawPreviousFlightPath() {
+	public void DrawPreviousFlightPath() {
 
 		_lineRenderer.enabled = true;
 		_lineRenderer.SetVertexCount(_flightPath.Count);
