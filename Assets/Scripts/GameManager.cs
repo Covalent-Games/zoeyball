@@ -331,11 +331,11 @@ public class GameManager : MonoBehaviour {
 				button.transform.FindChild("Overlay").GetComponent<Image>().enabled = true;
 			} else {
 				scoreText.text = Mathf.RoundToInt(level.Score).ToString();
-				if (level.BounceGoalUnlocked) {
+				if (level.BounceGoalUnlocked && level.LevelID != 1) {
 					bounceText.text = string.Format("{0} / {1}", level.Bounces.ToString(), level.BounceGoal);
 					crown.enabled = true;
 				} else if (level.Score == 0) {
-					bounceText.text = level.Bounces.ToString();
+					bounceText.text = string.Format("{0} / ?", level.Bounces);
 					crown.enabled = false;
 				} else {
 					bounceText.text = string.Format("{0} / {1}", level.Bounces.ToString(), level.BounceGoal);
