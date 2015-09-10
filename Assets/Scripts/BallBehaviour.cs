@@ -15,7 +15,7 @@ public class BallBehaviour : MonoBehaviour {
 	public GameObject FifteenBounceParticle;
 	public BallLauncher LaunchPlatform;
 	public Rigidbody PhysicsBody;
-	public GameObject[] ImpactEffects = new GameObject[3];
+	public GameObject[] ImpactEffects = new GameObject[4];
 	int ImpactEffectPoolIndex;
 	Vector3 LastPosition;
 	public GameReset ResetTrigger;
