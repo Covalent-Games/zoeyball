@@ -228,7 +228,7 @@ MeshRenderer:
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
-  m_ReflectionProbeUsage: 1
+  m_ReflectionProbeUsage: 3
   m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
   m_PreserveUVs: 1
@@ -296,8 +296,8 @@ MonoBehaviour:
   ResetTrigger: {fileID: 0}
   ScoreText: {fileID: 0}
   BounceText: {fileID: 0}
-  TmpScore: 0
-  TmpBounces: 0
+  CurrentScore: 0
+  CurrentBounces: 0
   StartCountingScore: 0
 --- !u!114 &11498940
 MonoBehaviour:
@@ -6802,7 +6802,15 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_ReflectionProbeUsage
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_UseLightProbes
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 108702}

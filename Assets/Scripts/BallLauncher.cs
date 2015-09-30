@@ -54,11 +54,13 @@ public class BallLauncher : MonoBehaviour {
 			BallLauncher.Ball = ball;
 			ball.transform.parent = transform;
 		}
+		if (GameManager.SelectedBall != null) {
+			Debug.Log("GameManager.SelectedBall = " + GameManager.SelectedBall.name);
+		}
 		BallBehaviour bb = Ball.GetComponent<BallBehaviour>();
 		bb.ScoreText = transform.parent.FindChildRecursive("ScoreText").GetComponent<Text>();
 		bb.BounceText = transform.parent.FindChildRecursive("BounceText").GetComponent<Text>();
 		bb.LaunchPlatform = this;
-		bb.PhysicsBody = bb.GetComponent<Rigidbody>();
 		bb.PhysicsBody.isKinematic = true;
 		GameObject resource = (GameObject)Resources.Load("Effects/ImpactEffect");
 		for (int i = 0; i < bb.ImpactEffects.Length; i++) {

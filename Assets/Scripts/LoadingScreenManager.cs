@@ -46,9 +46,4 @@ public class LoadingScreenManager : MonoBehaviour {
 		EnumToScreenDict[ActiveScreen].enabled = false;
 		ActiveScreen = Screens.None;
 	}
-
-	// Update is called once per frame
-	void Update() {
-
-	}
 }

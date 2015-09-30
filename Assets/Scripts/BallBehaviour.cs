@@ -34,6 +34,7 @@ public class BallBehaviour : MonoBehaviour {
 
 	void Awake() {
 
+		PhysicsBody = GetComponent<Rigidbody>();
 		_plusFivePrefab = (GameObject)Resources.Load("PlusFive");
 		if (_plusFivePrefab == null) {
 			Debug.Log("Plus five is null");
