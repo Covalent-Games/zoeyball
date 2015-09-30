@@ -161,7 +161,7 @@ namespace GameData {
 
 					// Set to save the current game.
 					if (Writing) {
-						byte[] savedData = Serializer.SerializeGameState(SaveData);
+						byte[] savedData = Serializer.SerializeGameState(DataManager.SaveData);
 
 						ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
 						SavedGameMetadataUpdate.Builder builder = new SavedGameMetadataUpdate.Builder();
@@ -243,12 +243,13 @@ namespace GameData {
 						return;
 					}
 					GameState tmpGameState = Serializer.DeserializeGameState(data);
+
 					for (int i = 0; i < tmpGameState.LevelList.Count; i++) {
 						DataManager.SaveData.LevelList[i] = tmpGameState.LevelList[i];
 					}
 
-					SaveData.AchievementProg = tmpGameState.AchievementProg;
-					SaveData.LeaderBoardScores = tmpGameState.LeaderBoardScores;
+					DataManager.SaveData.AchievementProg = tmpGameState.AchievementProg;
+					DataManager.SaveData.LeaderBoardScores = tmpGameState.LeaderBoardScores;
 					OnDataLoaded();
 					// Loop through all the unlocked/locked balls to guarantee we don't overwrite anything
 					// that's already unlocked.
