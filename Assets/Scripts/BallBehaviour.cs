@@ -175,7 +175,7 @@ public class BallBehaviour : MonoBehaviour {
 		DrawPreviousFlightPath();
 	}
 
-	public void DrawPreviousFlightPath() {
+	public void DrawPreviousFlightPath(bool clearPath = true) {
 
 		_lineRenderer.enabled = true;
 		_lineRenderer.SetVertexCount(FlightPath.Count);
@@ -185,7 +185,8 @@ public class BallBehaviour : MonoBehaviour {
 		for (int i = 0; i < FlightPath.Count; i++) {
 			_lineRenderer.SetPosition(i, FlightPath[i]);
 		}
-		FlightPath.Clear();
+		if (clearPath)
+			FlightPath.Clear();
 	}
 
 	void Update() {

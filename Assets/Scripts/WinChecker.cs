@@ -197,6 +197,7 @@ public class WinChecker : MonoBehaviour {
 	void Update() {
 
 		if (Winning) {
+			_Ball.DrawPreviousFlightPath(false);
 			int index = UnityEngine.Random.Range(0, WinMessages.Count);
 			YouWinLabel.text = WinMessages[index];
 			YouWinLabelCanvas.enabled = true;
