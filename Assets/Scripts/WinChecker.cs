@@ -89,6 +89,9 @@ public class WinChecker : MonoBehaviour {
 			"Thanks for playing! Come back and see us again soon!",
 			"Nailed it. Am I right, Or am I right?",
 			"It's Madison's fault.",
+			"Put a bird on it.",
+			"Rub some bacon on it.",
+			"It's over 9000!!! Oh wait. No it's not. It's not even close."
 		};
 	}
 
@@ -211,7 +214,10 @@ public class WinChecker : MonoBehaviour {
 			UpdateCloudData();
 #else
 			Debug.LogWarning("You're in a standalone level. Level Complete UI cannot be displayed. Resetting level");
-			Application.LoadLevel(Application.loadedLevel);
+			if (GameManager.Instance != null)
+				DisplayWinUI();
+			else
+				Application.LoadLevel(Application.loadedLevel);
 #endif
 		}
 	}

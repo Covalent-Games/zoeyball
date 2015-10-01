@@ -113,7 +113,7 @@
   <Level>
     <LevelID>23</LevelID>
     <WorldID>0</WorldID>
-    <BounceGoal>1</BounceGoal>
+    <BounceGoal>7</BounceGoal>
   </Level>
 
 </ArrayOfLevel>
