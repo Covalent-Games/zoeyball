@@ -27,6 +27,7 @@ public class BallBehaviour : MonoBehaviour {
 	public int CurrentBounces;
 	public bool StartCountingScore = false;
 
+	private int _bouncePointValue = 3;
 	private GameObject _plusFivePrefab;
 	private List<GameObject> _plusFives = new List<GameObject>();
 	private List<Vector3> _flightPath = new List<Vector3>();
@@ -68,7 +69,7 @@ public class BallBehaviour : MonoBehaviour {
 
 		if (obj.gameObject.tag == "Block") {
 			CurrentBounces++;
-			CurrentScore += 5;
+			CurrentScore += _bouncePointValue;
 			StartCoroutine(PlusFiveRoutine());
 
 			if (CurrentBounces == 5) {
