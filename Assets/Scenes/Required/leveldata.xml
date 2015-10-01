@@ -110,10 +110,15 @@
     <WorldID>0</WorldID>
     <BounceGoal>1</BounceGoal>
   </Level>
+  <Level>
+    <LevelID>23</LevelID>
+    <WorldID>0</WorldID>
+    <BounceGoal>1</BounceGoal>
+  </Level>
     <Level>
     <LevelID>24</LevelID>
     <WorldID>0</WorldID>
-    <BounceGoal>7</BounceGoal>
+    <BounceGoal>1</BounceGoal>
   </Level>
 
 </ArrayOfLevel>
