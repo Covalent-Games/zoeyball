@@ -26,10 +26,10 @@ public class BallBehaviour : MonoBehaviour {
 	public float CurrentScore;
 	public int CurrentBounces;
 	public bool StartCountingScore = false;
+	public List<Vector3> FlightPath = new List<Vector3>();
 
 	private GameObject _plusFivePrefab;
 	private List<GameObject> _plusFives = new List<GameObject>();
-	private List<Vector3> _flightPath = new List<Vector3>();
 	private LineRenderer _lineRenderer;
 
 	void Awake() {
@@ -178,14 +178,14 @@ public class BallBehaviour : MonoBehaviour {
 	public void DrawPreviousFlightPath() {
 
 		_lineRenderer.enabled = true;
-		_lineRenderer.SetVertexCount(_flightPath.Count);
+		_lineRenderer.SetVertexCount(FlightPath.Count);
 		_lineRenderer.SetColors(Color.blue, Color.blue);
 		_lineRenderer.SetWidth(0.1f, 0.1f);
 
-		for (int i = 0; i < _flightPath.Count; i++) {
-			_lineRenderer.SetPosition(i, _flightPath[i]);
+		for (int i = 0; i < FlightPath.Count; i++) {
+			_lineRenderer.SetPosition(i, FlightPath[i]);
 		}
-		_flightPath.Clear();
+		FlightPath.Clear();
 	}
 
 	void Update() {
@@ -204,7 +204,7 @@ public class BallBehaviour : MonoBehaviour {
 			} else {
 				LastPosition = transform.position;
 				//TODO: Monitor this. If it gets too expensive limit iterations via coroutine.
-				_flightPath.Add(transform.position);
+				FlightPath.Add(transform.position);
 			}
 		}
 	}

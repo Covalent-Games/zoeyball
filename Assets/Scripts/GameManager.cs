@@ -204,6 +204,7 @@ public class GameManager : MonoBehaviour {
 		RestartCache.Bounces = _ballBehavior.CurrentBounces;
 		RestartCache.StartBlockRotation = _ballLauncher.transform.rotation;
 		RestartCache.Powerbar = _ballLauncher.LaunchPowerMeter;
+		RestartCache.FlightPath = _ballBehavior.FlightPath;
 		RestartCache.LoadFromCache = true;
 
 		_ballBehavior.FiveBounceTrail.GetComponent<ParticleSystem>().Stop();
@@ -293,6 +294,7 @@ public class GameManager : MonoBehaviour {
 		_ballBehavior.CurrentBounces = 0;
 		_ballLauncher.LaunchMeterImage.fillAmount = RestartCache.Powerbar / _ballLauncher.MaxLaunchPower;
 		_ballLauncher.SetPreviousPowerIndicator();
+		_ballBehavior.FlightPath = RestartCache.FlightPath;
 		_ballBehavior.DrawPreviousFlightPath();
 	}
 
