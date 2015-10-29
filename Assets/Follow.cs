@@ -12,6 +12,7 @@ public class Follow : MonoBehaviour {
 	public float FollowDistance;
 	[Tooltip("Modifies where the camera looks")]
 	public Vector2 Offset;
+	public bool IsShaking;
 	GameObject FocusObject;
 
 	void Start() {
@@ -40,6 +41,14 @@ public class Follow : MonoBehaviour {
 			Vector3 focalPoint = Vector3.Lerp(
 					WinBlock.transform.position + (Vector3)Offset,
 					FollowTarget.transform.position + (Vector3)Offset, FollowDistance);
+			if (IsShaking) {
+				var randomValue = (Vector2)SmoothRandom.GetVector3(5f);
+				var scaledValue = randomValue - new Vector2(0.3f, 0.3f);
+				Debug.Log("SmoothRandom value: " + randomValue.ToString());
+				Debug.Log("Scaled value:" + scaledValue.ToString());
+				focalPoint += Vector3.Scale(scaledValue, new Vector2(3f, 3f));
+				// add to focalPoint
+			}
 			FocusObject.transform.position = focalPoint;
 			transform.LookAt(FocusObject.transform);
 		}

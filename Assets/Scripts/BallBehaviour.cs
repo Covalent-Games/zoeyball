@@ -4,6 +4,7 @@ using UnityEngine.TransformExtensions;
 using System.Collections;
 using System.Collections.Generic;
 
+
 [RequireComponent(typeof(SphereCollider))]
 [RequireComponent(typeof(Rigidbody))]
 public class BallBehaviour : MonoBehaviour {
@@ -36,7 +37,7 @@ public class BallBehaviour : MonoBehaviour {
 	void Awake() {
 
 		PhysicsBody = GetComponent<Rigidbody>();
-		_plusFivePrefab = (GameObject)Resources.Load("PlusFive");
+		_plusFivePrefab = (GameObject)Resources.Load("PlusThree");
 		if (_plusFivePrefab == null) {
 			Debug.Log("Plus five is null");
 		}
@@ -72,8 +73,12 @@ public class BallBehaviour : MonoBehaviour {
 			CurrentScore += _bouncePointValue;
 			StartCoroutine(PlusFiveRoutine());
 
+				Camera.main.GetComponent<Follow>().IsShaking = true;
+				Invoke("SetShakingFlag", 0.5f);
 			if (CurrentBounces == 5) {
 				Instantiate(FiveBounceParticle, transform.position, Quaternion.identity);
+				//StartCoroutine(CameraShake(new Vector3(3, 3, 3), 2f, 2f));
+				//StartCoroutine(CameraShake());
 				FiveBounceTrail.GetComponent<ParticleSystem>().Play();
 				AudioManager.Clips.BounceGoal_5.Play();
 			} else if (CurrentBounces == 10) {
@@ -86,6 +91,30 @@ public class BallBehaviour : MonoBehaviour {
 			} else if (CurrentBounces == 20) {
 				AudioManager.Clips.BounceGoal_20.Play();
 			}
+		}
+	}
+
+	public void SetShakingFlag() {
+
+		Camera.main.GetComponent<Follow>().IsShaking = false;
+	}
+
+	IEnumerator CameraShake(Vector3 range, float shakeTime, float shakeSpeed) {
+		while (shakeTime <= 0) {
+			Camera.main.transform.position += Vector3.Scale(SmoothRandom.GetVector3(shakeSpeed--), range);
+			shakeTime -= Time.deltaTime;
+			yield return null;
+		}
+	}
+
+	IEnumerator CameraShake() {
+		Vector3 range = new Vector3(1f, 1f, 0f);
+		float shakeTime = 2f;
+		float shakeSpeed = 2f;
+		while (shakeTime >= 0) {
+			Camera.main.transform.position += Vector3.Scale(SmoothRandom.GetVector3(1f), range);
+			shakeTime -= Time.deltaTime;
+			yield return null;
 		}
 	}
 
