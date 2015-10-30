@@ -73,22 +73,30 @@ public class BallBehaviour : MonoBehaviour {
 			CurrentScore += _bouncePointValue;
 			StartCoroutine(PlusFiveRoutine());
 
-				Camera.main.GetComponent<Follow>().IsShaking = true;
-				Invoke("SetShakingFlag", 0.5f);
 			if (CurrentBounces == 5) {
 				Instantiate(FiveBounceParticle, transform.position, Quaternion.identity);
-				//StartCoroutine(CameraShake(new Vector3(3, 3, 3), 2f, 2f));
-				//StartCoroutine(CameraShake());
+				Camera.main.GetComponent<Follow>().IsShaking = true;
+				Camera.main.GetComponent<Follow>().BounceModifier = 1f;
+				Invoke("SetShakingFlag", 0.5f);
 				FiveBounceTrail.GetComponent<ParticleSystem>().Play();
 				AudioManager.Clips.BounceGoal_5.Play();
 			} else if (CurrentBounces == 10) {
 				Instantiate(TenBounceParticle, transform.position, Quaternion.identity);
+				Camera.main.GetComponent<Follow>().IsShaking = true;
+				Camera.main.GetComponent<Follow>().BounceModifier = 3f;
+				Invoke("SetShakingFlag", 0.5f);
 				FiveBounceTrail.GetComponent<ParticleSystem>().Stop();
 				TenBounceTrail.GetComponent<ParticleSystem>().Play();
 				AudioManager.Clips.BounceGoal_10.Play();
 			} else if (CurrentBounces == 15) {
+				Camera.main.GetComponent<Follow>().IsShaking = true;
+				Camera.main.GetComponent<Follow>().BounceModifier = 6f;
+				Invoke("SetShakingFlag", 0.5f);
 				AudioManager.Clips.BounceGoal_15.Play();
 			} else if (CurrentBounces == 20) {
+				Camera.main.GetComponent<Follow>().IsShaking = true;
+				Camera.main.GetComponent<Follow>().BounceModifier = 10f;
+				Invoke("SetShakingFlag", 0.7f);
 				AudioManager.Clips.BounceGoal_20.Play();
 			}
 		}
@@ -186,6 +194,8 @@ public class BallBehaviour : MonoBehaviour {
 	}
 
 	public void Reset() {
+
+		Camera.main.GetComponent<Follow>().IsShaking = false;
 
 		FiveBounceTrail.GetComponent<ParticleSystem>().Stop();
 		FiveBounceTrail.GetComponent<ParticleSystem>().Clear();

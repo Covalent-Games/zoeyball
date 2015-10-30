@@ -13,7 +13,12 @@ public class Follow : MonoBehaviour {
 	[Tooltip("Modifies where the camera looks")]
 	public Vector2 Offset;
 	public bool IsShaking;
+	public float BounceModifier;
 	GameObject FocusObject;
+
+	private static int _flipper = 1;
+	private Vector3 _shakeRange = new Vector3(.2f, .2f, .2f);
+	private int _shakeSpeed = 50;
 
 	void Start() {
 
@@ -42,11 +47,14 @@ public class Follow : MonoBehaviour {
 					WinBlock.transform.position + (Vector3)Offset,
 					FollowTarget.transform.position + (Vector3)Offset, FollowDistance);
 			if (IsShaking) {
-				var randomValue = (Vector2)SmoothRandom.GetVector3(5f);
-				var scaledValue = randomValue - new Vector2(0.3f, 0.3f);
+				Debug.Log("Shake speed: " + _shakeSpeed.ToString());
+				var randomValue = (Vector2)SmoothRandom.GetVector3(_shakeSpeed--);
+				var scaledValue = randomValue;// -new Vector2(0.3f, 0.3f);
 				Debug.Log("SmoothRandom value: " + randomValue.ToString());
-				Debug.Log("Scaled value:" + scaledValue.ToString());
-				focalPoint += Vector3.Scale(scaledValue, new Vector2(3f, 3f));
+				//Debug.Log("Scaled value:" + scaledValue.ToString());
+				focalPoint += Vector3.Scale(scaledValue, Vector3.Scale(_shakeRange, new Vector3(BounceModifier, BounceModifier, BounceModifier)));
+				_shakeSpeed *= -1;
+				_shakeRange = new Vector3(_shakeRange.x * -1, _shakeRange.y);
 				// add to focalPoint
 			}
 			FocusObject.transform.position = focalPoint;
