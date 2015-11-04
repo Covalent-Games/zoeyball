@@ -38,32 +38,28 @@ public class Follow : MonoBehaviour {
 
 		FocusObject = new GameObject("FocusObject");
 		FocusObject.transform.parent = this.transform;
+
+		StartCoroutine(LookAtTarget());
 	}
 
-	void LookAtTarget() {
+	IEnumerator LookAtTarget() {
 
-		if (FollowTarget) {
-			Vector3 focalPoint = Vector3.Lerp(
-					WinBlock.transform.position + (Vector3)Offset,
-					FollowTarget.transform.position + (Vector3)Offset, FollowDistance);
-			if (IsShaking) {
-				Debug.Log("Shake speed: " + _shakeSpeed.ToString());
-				var randomValue = (Vector2)SmoothRandom.GetVector3(_shakeSpeed--);
-				var scaledValue = randomValue;// -new Vector2(0.3f, 0.3f);
-				Debug.Log("SmoothRandom value: " + randomValue.ToString());
-				//Debug.Log("Scaled value:" + scaledValue.ToString());
-				focalPoint += Vector3.Scale(scaledValue, Vector3.Scale(_shakeRange, new Vector3(BounceModifier, BounceModifier, BounceModifier)));
-				_shakeSpeed *= -1;
-				_shakeRange = new Vector3(_shakeRange.x * -1, _shakeRange.y);
-				// add to focalPoint
+		while (true) {
+			if (FollowTarget) {
+				Vector3 focalPoint = Vector3.Lerp(
+						WinBlock.transform.position + (Vector3)Offset,
+						FollowTarget.transform.position + (Vector3)Offset, FollowDistance);
+				if (IsShaking) {
+					Vector2 scaledValue = (Vector2)SmoothRandom.GetVector3(_shakeSpeed--);
+					focalPoint += Vector3.Scale(scaledValue, Vector3.Scale(_shakeRange, new Vector3(BounceModifier, BounceModifier, BounceModifier)));
+					_shakeSpeed *= -1;
+					_shakeRange = new Vector3(_shakeRange.x * -0.5f, _shakeRange.y);
+				}
+				FocusObject.transform.position = focalPoint;
+				transform.LookAt(FocusObject.transform);
 			}
-			FocusObject.transform.position = focalPoint;
-			transform.LookAt(FocusObject.transform);
+
+			yield return new WaitForFixedUpdate();
 		}
-	}
-
-	void Update() {
-
-		LookAtTarget();
 	}
 }
