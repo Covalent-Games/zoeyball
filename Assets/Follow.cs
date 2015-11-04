@@ -17,8 +17,8 @@ public class Follow : MonoBehaviour {
 	GameObject FocusObject;
 
 	private static int _flipper = 1;
-	private Vector3 _shakeRange = new Vector3(.2f, .2f, .2f);
-	private int _shakeSpeed = 50;
+	private Vector3 _shakeRange = new Vector3(1f, 1f, 1f);
+	private int _shakeSpeed = 10;
 
 	void Start() {
 
@@ -43,6 +43,7 @@ public class Follow : MonoBehaviour {
 	}
 
 	IEnumerator LookAtTarget() {
+		Vector2? initialRandomValue = null;	// Captures first random value to set a median.
 
 		while (true) {
 			if (FollowTarget) {
@@ -50,10 +51,12 @@ public class Follow : MonoBehaviour {
 						WinBlock.transform.position + (Vector3)Offset,
 						FollowTarget.transform.position + (Vector3)Offset, FollowDistance);
 				if (IsShaking) {
-					Vector2 scaledValue = (Vector2)SmoothRandom.GetVector3(_shakeSpeed--);
-					focalPoint += Vector3.Scale(scaledValue, Vector3.Scale(_shakeRange, new Vector3(BounceModifier, BounceModifier, BounceModifier)));
-					_shakeSpeed *= -1;
-					_shakeRange = new Vector3(_shakeRange.x * -0.5f, _shakeRange.y);
+					if (initialRandomValue == null)
+						initialRandomValue = (Vector2)SmoothRandom.GetVector3(_shakeSpeed);
+					Vector2 scaledValue = (Vector2)SmoothRandom.GetVector3(_shakeSpeed);
+					focalPoint += Vector3.Scale(scaledValue - initialRandomValue.Value, Vector3.Scale(_shakeRange, new Vector3(BounceModifier, BounceModifier, BounceModifier)));
+				} else if (initialRandomValue != null) {
+					initialRandomValue = null;
 				}
 				FocusObject.transform.position = focalPoint;
 				transform.LookAt(FocusObject.transform);
