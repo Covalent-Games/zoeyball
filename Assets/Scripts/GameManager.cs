@@ -206,7 +206,7 @@ public class GameManager : MonoBehaviour {
 		RestartCache.Powerbar = _ballLauncher.LaunchPowerMeter;
 		RestartCache.FlightPath = _ballBehavior.FlightPath;
 		RestartCache.LoadFromCache = true;
-
+		RestartCache.MeterWidth = _ballLauncher.LaunchMeterImage.rectTransform.rect.width;
 		_ballBehavior.FiveBounceTrail.GetComponent<ParticleSystem>().Stop();
 		_ballBehavior.FiveBounceTrail.GetComponent<ParticleSystem>().Clear();
 		_ballBehavior.TenBounceTrail.GetComponent<ParticleSystem>().Stop();

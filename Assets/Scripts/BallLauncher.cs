@@ -152,10 +152,14 @@ public class BallLauncher : MonoBehaviour {
 	}
 
 	internal void SetPreviousPowerIndicator() {
-
 		Vector3 pos = PreviousPower.transform.localPosition;
-		pos.x = (LaunchMeterImage.fillAmount * LaunchMeterImage.rectTransform.rect.width) -
-			(LaunchMeterImage.rectTransform.rect.width / 2f);
+		float meterWidth = 0;
+		if (RestartCache.LoadFromCache)
+			meterWidth = RestartCache.MeterWidth;
+		else
+			meterWidth = LaunchMeterImage.rectTransform.rect.width;
+
+		pos.x = (LaunchMeterImage.fillAmount * meterWidth) - (meterWidth / 2f);
 		PreviousPower.transform.localPosition = pos;
 	}
 }
