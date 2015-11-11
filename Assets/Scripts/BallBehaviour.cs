@@ -31,7 +31,7 @@ public class BallBehaviour : MonoBehaviour {
 
 	private int _bouncePointValue = 3;
 	private GameObject _plusFivePrefab;
-	private List<GameObject> _plusFives = new List<GameObject>();
+	private List<GameObject> _plusThrees = new List<GameObject>();
 	private LineRenderer _lineRenderer;
 
 	void Awake() {
@@ -41,7 +41,7 @@ public class BallBehaviour : MonoBehaviour {
 		if (_plusFivePrefab == null) {
 			Debug.Log("Plus five is null");
 		}
-		GetComponent<Rigidbody>().angularDrag = 0f;
+		//GetComponent<Rigidbody>().angularDrag = 0f;
 		_lineRenderer = GetComponent<LineRenderer>();
 		if (_lineRenderer == null) {
 			_lineRenderer = gameObject.AddComponent<LineRenderer>();
@@ -51,9 +51,25 @@ public class BallBehaviour : MonoBehaviour {
 		_lineRenderer.enabled = false;
 	}
 
+	/// <summary>
+	/// Triggered when this object collides with another physics object.
+	/// </summary>
+	/// <param name="obj"></param>
 	void OnCollisionEnter(Collision obj) {
 
-		AudioSource audioSource = obj.gameObject.GetComponent<AudioSource>();
+		PlayHitAudio(obj.gameObject);
+		GenerateImpactEffect(obj);
+		ProcessNextBouce(obj.gameObject);
+
+	}
+
+	/// <summary>
+	/// Plays the audio from the AudioSource attached to /go/.
+	/// </summary>
+	/// <param name="go">The object to play the audio from</param>
+	private void PlayHitAudio(GameObject go) {
+
+		AudioSource audioSource = go.GetComponent<AudioSource>();
 		if (audioSource != null) {
 			// Raise or lower volume of impact based on ball velocity.
 			audioSource.volume = Vector3.Distance(
@@ -61,22 +77,36 @@ public class BallBehaviour : MonoBehaviour {
 					transform.position) * 3.3f;
 			audioSource.Play();
 		}
+	}
+
+	/// <summary>
+	/// Generates an impact effect.
+	/// </summary>
+	/// <param name="collision">The Collision used to determine the location of the impact effect.</param>
+	private void GenerateImpactEffect(Collision collision) {
 
 		int index = ImpactEffectPoolIndex % ImpactEffects.Length;
-		ImpactEffects[index].transform.position = obj.contacts[0].point;
+		ImpactEffects[index].transform.position = collision.contacts[0].point;
 		ImpactEffects[index].transform.LookAt(transform.position);
 		ImpactEffects[index].GetComponent<ParticleSystem>().Play();
 		ImpactEffectPoolIndex++;
+	}
 
-		if (obj.gameObject.tag == "Block") {
+	/// <summary>
+	/// If the provided obj is a block, increments bounces, plays audio, etc.
+	/// </summary>
+	/// <param name="go">The block that was hit.</param>
+	private void ProcessNextBouce(GameObject go) {
+
+		if (go.tag == "Block") {
 			CurrentBounces++;
 			CurrentScore += _bouncePointValue;
-			StartCoroutine(PlusFiveRoutine());
+			StartCoroutine(PlusThreeRoutine());
 			Follow follow = Camera.main.GetComponent<Follow>();
 
 			if (CurrentBounces > 0 && CurrentBounces % 5 == 0) {
 				follow.IsShaking = true;
-				follow.BounceModifier = CurrentBounces/5 + follow.BounceModifier;
+				follow.BounceModifier = CurrentBounces / 5 + follow.BounceModifier;
 				Invoke("SetShakingFlag", 0.5f);
 			}
 
@@ -97,80 +127,69 @@ public class BallBehaviour : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Flag checked by follow.cs to determine if the camera should start shaking.
+	/// </summary>
 	public void SetShakingFlag() {
 
 		Camera.main.GetComponent<Follow>().IsShaking = false;
 	}
 
-	IEnumerator CameraShake(Vector3 range, float shakeTime, float shakeSpeed) {
-		while (shakeTime <= 0) {
-			Camera.main.transform.position += Vector3.Scale(SmoothRandom.GetVector3(shakeSpeed--), range);
-			shakeTime -= Time.deltaTime;
-			yield return null;
-		}
-	}
-
-	IEnumerator CameraShake() {
-		Vector3 range = new Vector3(1f, 1f, 0f);
-		float shakeTime = 2f;
-		float shakeSpeed = 2f;
-		while (shakeTime >= 0) {
-			Camera.main.transform.position += Vector3.Scale(SmoothRandom.GetVector3(1f), range);
-			shakeTime -= Time.deltaTime;
-			yield return null;
-		}
-	}
-
 	/// <summary>
-	/// Animates a '+5' to fall and fade from the score text.
+	/// Animates a '+3' to fall and fade from the score text.
 	/// </summary>
-	IEnumerator PlusFiveRoutine() {
+	IEnumerator PlusThreeRoutine() {
 
-		Text plusFive = null;
+		Text plusThree = null;
 		float duration = Time.time + 1f;
 
 		// Look through existing pool for an inactive object
-		lock (_plusFives) {
-			for (int i = 0; i < _plusFives.Count; i++) {
-				if (!_plusFives[i].activeSelf) {
-					plusFive = _plusFives[i].GetComponent<Text>();
-					plusFive.gameObject.SetActive(true);
+		lock (_plusThrees) {
+			for (int i = 0; i < _plusThrees.Count; i++) {
+				if (!_plusThrees[i].activeSelf) {
+					plusThree = _plusThrees[i].GetComponent<Text>();
+					plusThree.gameObject.SetActive(true);
 					break;
 				}
 			}
 		}
 		// No objects were available, so make a new one and add it to the pool
-		if (plusFive == null) {
-			GameObject plusFiveGO = (GameObject)Instantiate(
+		if (plusThree == null) {
+			GameObject plusThreeGo = (GameObject)Instantiate(
 				_plusFivePrefab,
 				ScoreText.transform.position,
 				Quaternion.identity);
-			_plusFives.Add(plusFiveGO);
-			plusFive = plusFiveGO.GetComponent<Text>();
-			plusFive.transform.SetParent(ScoreText.transform);
+			_plusThrees.Add(plusThreeGo);
+			plusThree = plusThreeGo.GetComponent<Text>();
+			plusThree.transform.SetParent(ScoreText.transform);
 		}
-		Outline outline = plusFive.GetComponent<Outline>();
-		Color color = plusFive.color;
+		Outline outline = plusThree.GetComponent<Outline>();
+		Color color = plusThree.color;
 		color.a = 1f;
-		plusFive.color = color;
-		plusFive.transform.position = ScoreText.transform.position + new Vector3(0, -25, 0);
-		Vector3 pos = plusFive.transform.position + new Vector3(0, -75, 0);
+		plusThree.color = color;
+		plusThree.transform.position = ScoreText.transform.position + new Vector3(0, -25, 0);
+		Vector3 pos = plusThree.transform.position + new Vector3(0, -75, 0);
 
 		while (Time.time < duration) {
-			plusFive.transform.position = Vector3.MoveTowards(
-				plusFive.transform.position,
+			plusThree.transform.position = Vector3.MoveTowards(
+				plusThree.transform.position,
 				pos,
 				50 * Time.deltaTime);
 			color.a = Mathf.MoveTowards(color.a, 0, Time.deltaTime);
-			plusFive.color = color;
+			plusThree.color = color;
 			outline.effectColor = new Color(0, 0, 0, color.a);
 			yield return null;
 		}
 		// We're done animating, so set it inactive so we can use it again.
-		plusFive.gameObject.SetActive(false);
+		plusThree.gameObject.SetActive(false);
 
 	}
 
+	/// <summary>
+	/// CoRoutine to determine if the ball has stopped moving and should reset.
+	/// </summary>
+	/// <param name="lastPosition">The position from last frame.</param>
+	/// <returns>IEnumerator</returns>
 	IEnumerator CheckForDeadPosition(Vector3 lastPosition) {
 
 		yield return new WaitForSeconds(.2f);
@@ -182,12 +201,19 @@ public class BallBehaviour : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Updates the UI to reflect the current bounces and score.
+	/// </summary>
 	public void UpdateScoreText() {
 
 		ScoreText.text = Mathf.RoundToInt(CurrentScore).ToString();
 		BounceText.text = CurrentBounces.ToString();
 	}
 
+	/// <summary>
+	/// Resets the entire level, including scores, ball position and particles.
+	/// This also generates the previous flight path.
+	/// </summary>
 	public void Reset() {
 
 		Camera.main.GetComponent<Follow>().IsShaking = false;
@@ -210,6 +236,10 @@ public class BallBehaviour : MonoBehaviour {
 		DrawPreviousFlightPath();
 	}
 
+	/// <summary>
+	/// Draws a path indicating where the ball traveled on the last attempt.
+	/// </summary>
+	/// <param name="clearPath">bool: true will clear the previous flight path position list.</param>
 	public void DrawPreviousFlightPath(bool clearPath = true) {
 
 		_lineRenderer.enabled = true;
