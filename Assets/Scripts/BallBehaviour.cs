@@ -31,7 +31,7 @@ public class BallBehaviour : MonoBehaviour {
 
 	private int _bouncePointValue = 3;
 	private GameObject _plusFivePrefab;
-	private List<GameObject> _plusFives = new List<GameObject>();
+	private List<GameObject> _plusThrees = new List<GameObject>();
 	private LineRenderer _lineRenderer;
 
 	void Awake() {
@@ -41,7 +41,7 @@ public class BallBehaviour : MonoBehaviour {
 		if (_plusFivePrefab == null) {
 			Debug.Log("Plus five is null");
 		}
-		GetComponent<Rigidbody>().angularDrag = 0f;
+		//GetComponent<Rigidbody>().angularDrag = 0f;
 		_lineRenderer = GetComponent<LineRenderer>();
 		if (_lineRenderer == null) {
 			_lineRenderer = gameObject.AddComponent<LineRenderer>();
@@ -131,48 +131,48 @@ public class BallBehaviour : MonoBehaviour {
 	/// </summary>
 	IEnumerator PlusFiveRoutine() {
 
-		Text plusFive = null;
+		Text plusThree = null;
 		float duration = Time.time + 1f;
 
 		// Look through existing pool for an inactive object
-		lock (_plusFives) {
-			for (int i = 0; i < _plusFives.Count; i++) {
-				if (!_plusFives[i].activeSelf) {
-					plusFive = _plusFives[i].GetComponent<Text>();
-					plusFive.gameObject.SetActive(true);
+		lock (_plusThrees) {
+			for (int i = 0; i < _plusThrees.Count; i++) {
+				if (!_plusThrees[i].activeSelf) {
+					plusThree = _plusThrees[i].GetComponent<Text>();
+					plusThree.gameObject.SetActive(true);
 					break;
 				}
 			}
 		}
 		// No objects were available, so make a new one and add it to the pool
-		if (plusFive == null) {
-			GameObject plusFiveGO = (GameObject)Instantiate(
+		if (plusThree == null) {
+			GameObject plusThreeGo = (GameObject)Instantiate(
 				_plusFivePrefab,
 				ScoreText.transform.position,
 				Quaternion.identity);
-			_plusFives.Add(plusFiveGO);
-			plusFive = plusFiveGO.GetComponent<Text>();
-			plusFive.transform.SetParent(ScoreText.transform);
+			_plusThrees.Add(plusThreeGo);
+			plusThree = plusThreeGo.GetComponent<Text>();
+			plusThree.transform.SetParent(ScoreText.transform);
 		}
-		Outline outline = plusFive.GetComponent<Outline>();
-		Color color = plusFive.color;
+		Outline outline = plusThree.GetComponent<Outline>();
+		Color color = plusThree.color;
 		color.a = 1f;
-		plusFive.color = color;
-		plusFive.transform.position = ScoreText.transform.position + new Vector3(0, -25, 0);
-		Vector3 pos = plusFive.transform.position + new Vector3(0, -75, 0);
+		plusThree.color = color;
+		plusThree.transform.position = ScoreText.transform.position + new Vector3(0, -25, 0);
+		Vector3 pos = plusThree.transform.position + new Vector3(0, -75, 0);
 
 		while (Time.time < duration) {
-			plusFive.transform.position = Vector3.MoveTowards(
-				plusFive.transform.position,
+			plusThree.transform.position = Vector3.MoveTowards(
+				plusThree.transform.position,
 				pos,
 				50 * Time.deltaTime);
 			color.a = Mathf.MoveTowards(color.a, 0, Time.deltaTime);
-			plusFive.color = color;
+			plusThree.color = color;
 			outline.effectColor = new Color(0, 0, 0, color.a);
 			yield return null;
 		}
 		// We're done animating, so set it inactive so we can use it again.
-		plusFive.gameObject.SetActive(false);
+		plusThree.gameObject.SetActive(false);
 
 	}
 
