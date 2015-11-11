@@ -709,7 +709,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: 1dbc8888f2128114784235b09c981515, type: 2}
+  - {fileID: 2100000, guid: 40ebd5c7a0d49504786b4d2fae4385fb, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -932,6 +932,7 @@ MonoBehaviour:
   CurrentScore: 0
   CurrentBounces: 0
   StartCountingScore: 0
+  FlightPath: []
 --- !u!114 &11401342
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -8846,10 +8847,10 @@ RectTransform:
   - {fileID: 22419006}
   m_Father: {fileID: 22418966}
   m_RootOrder: 0
-  m_AnchorMin: {x: -.0354593173, y: .104166664}
-  m_AnchorMax: {x: 1.03273749, y: .890444338}
-  m_AnchoredPosition: {x: 2, y: -.217230007}
-  m_SizeDelta: {x: -79, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 1, y: -.717230082}
+  m_SizeDelta: {x: -13, y: -11}
   m_Pivot: {x: .5, y: .5}
 --- !u!224 &22444820
 RectTransform:
