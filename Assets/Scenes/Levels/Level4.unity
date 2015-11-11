@@ -434,6 +434,10 @@ Prefab:
       propertyPath: m_Name
       value: LaunchArrow
       objectReference: {fileID: 0}
+    - target: {fileID: 11400366, guid: 4e5927e64e5d29d4ea7612824b8a07e4, type: 2}
+      propertyPath: CurrentBounces
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4e5927e64e5d29d4ea7612824b8a07e4, type: 2}
   m_IsPrefabParent: 0
