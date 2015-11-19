@@ -75,7 +75,7 @@ public class BallBehaviour : MonoBehaviour {
 			audioSource.volume = Vector3.Distance(
 					(PhysicsBody.velocity * Time.deltaTime) + transform.position,
 					transform.position) * 3.3f;
-			audioSource.Play();
+			AudioSource.PlayClipAtPoint(audioSource.clip, Camera.main.transform.position);
 		}
 	}
 
