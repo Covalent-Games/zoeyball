@@ -115,8 +115,13 @@
     <WorldID>0</WorldID>
     <BounceGoal>1</BounceGoal>
   </Level>
-    <Level>
+  <Level>
     <LevelID>24</LevelID>
+    <WorldID>0</WorldID>
+    <BounceGoal>1</BounceGoal>
+  </Level>
+  <Level>
+    <LevelID>25</LevelID>
     <WorldID>0</WorldID>
     <BounceGoal>1</BounceGoal>
   </Level>
