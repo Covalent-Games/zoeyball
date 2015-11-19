@@ -17,6 +17,7 @@ namespace GameData {
 	public class DataManager {
 
 		#region Members
+		public const string SaveFileName = "save_alpha_test_01";
 		public static GameState SaveData = new GameState();
 		public static GameObject[] BallObjects;
 		public static Dictionary<string, string> BallNamePathPairs = new Dictionary<string, string>();
@@ -114,7 +115,7 @@ namespace GameData {
 			if (ResolvingConflict) {
 				//ResolvingConflict = false;
 				savedGameClient.OpenWithAutomaticConflictResolution(
-					"save",
+					SaveFileName,
 					DataSource.ReadCacheOrNetwork,
 					ConflictResolutionStrategy.UseLongestPlaytime,
 					OnSavedGameOpened);
@@ -123,7 +124,7 @@ namespace GameData {
 			} else {
 				bool prefetchDataOnConflict = true;
 				savedGameClient.OpenWithManualConflictResolution(
-						"save",
+						SaveFileName,
 						DataSource.ReadCacheOrNetwork,
 						prefetchDataOnConflict,
 						OnSavedGameConflict,
