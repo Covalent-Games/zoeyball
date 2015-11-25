@@ -138,11 +138,16 @@
   <Level>
     <LevelID>28</LevelID>
     <WorldID>0</WorldID>
-    <BounceGoal>20</BounceGoal>
+    <BounceGoal>1</BounceGoal>
   </Level>
   <Level>
-    <LevelID>31</LevelID>
+    <LevelID>29</LevelID>
     <WorldID>0</WorldID>
-    <BounceGoal>8</BounceGoal>
+    <BounceGoal>1</BounceGoal>
+  </Level>
+  <Level>
+    <LevelID>30</LevelID>
+    <WorldID>0</WorldID>
+    <BounceGoal>1</BounceGoal>
   </Level>
 </ArrayOfLevel>
