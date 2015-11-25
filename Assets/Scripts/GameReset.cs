@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 using GameData;
 
 public class GameReset : MonoBehaviour {
@@ -8,12 +9,14 @@ public class GameReset : MonoBehaviour {
 	private WinChecker _winChecker;
 	private static GameReset _instance;
 	private Canvas _winCanvas;
+	private static CloudBlock[] _clouds;
 
 	void Awake() {
 
 		_instance = this;
 		_winChecker = GameObject.FindObjectOfType<WinChecker>();
 		_winCanvas = GameObject.Find("YouWinLabelCanvas").GetComponent<Canvas>();
+		_clouds = GameObject.FindObjectsOfType<CloudBlock>();
 	}
 
 	void OnTriggerEnter(Collider colliderObject) {
@@ -48,6 +51,9 @@ public class GameReset : MonoBehaviour {
 		ballBehaviour.Reset();
 		ballBehaviour.LaunchPlatform.Reset();
 		GameReset._instance.StartCoroutine(GameReset._instance.ResetBallRoutine(ballBehaviour));
+		foreach (var cloudBlock in _clouds) {
+			cloudBlock.gameObject.SetActive(true);
+		}
 	}
 
 	IEnumerator ResetBallRoutine(BallBehaviour ball) {
