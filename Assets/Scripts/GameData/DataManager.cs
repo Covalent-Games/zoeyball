@@ -234,23 +234,34 @@ namespace GameData {
 			}
 		}
 
-		void OnSavedGameDataRead(SavedGameRequestStatus status, byte[] data) {
+		void OnSavedGameDataRead(SavedGameRequestStatus status, byte[] incomingData) {
 
 			switch (status) {
 				case SavedGameRequestStatus.Success:
-					if (data.Length == 0) {
+					if (incomingData.Length == 0) {
 						// If stuff starts happening and shouldn't after loading, this might be why!!!
 						OnDataLoaded();
 						return;
 					}
-					GameState tmpGameState = Serializer.DeserializeGameState(data);
+					GameState incomingGameState = Serializer.DeserializeGameState(incomingData);
 
-					for (int i = 0; i < tmpGameState.LevelList.Count; i++) {
-						DataManager.SaveData.LevelList[i] = tmpGameState.LevelList[i];
+					// This is the common result. The App has new levels that we don't want to delete with
+					// the incoming saved game, so we update the level list up to the last saved level.
+					if (incomingGameState.LevelList.Count <= DataManager.SaveData.LevelList.Count) {
+						for (int i = 0; i < incomingGameState.LevelList.Count; i++) {
+							DataManager.SaveData.LevelList[i] = incomingGameState.LevelList[i];
+						}
+					} else {
+						// The SavedGame is more up to date than the app. This should be rare. Here we're
+						// safe to completely overwrite the local data. In this case the incoming data will
+						// have more levels than the local XML. 
+						//TODO: Consider prompting the user to update their app if this happens.
+						DataManager.SaveData.LevelList = incomingGameState.LevelList;
+
 					}
 
-					DataManager.SaveData.AchievementProg = tmpGameState.AchievementProg;
-					DataManager.SaveData.LeaderBoardScores = tmpGameState.LeaderBoardScores;
+					DataManager.SaveData.AchievementProg = incomingGameState.AchievementProg;
+					DataManager.SaveData.LeaderBoardScores = incomingGameState.LeaderBoardScores;
 					OnDataLoaded();
 					// Loop through all the unlocked/locked balls to guarantee we don't overwrite anything
 					// that's already unlocked.
