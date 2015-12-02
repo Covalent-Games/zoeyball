@@ -61,7 +61,13 @@ public class BallLauncher : MonoBehaviour {
 		bb.ScoreText = transform.parent.FindChildRecursive("ScoreText").GetComponent<Text>();
 		bb.BounceText = transform.parent.FindChildRecursive("BounceText").GetComponent<Text>();
 		bb.LaunchPlatform = this;
-		bb.PhysicsBody.isKinematic = true;
+
+		// There's some issue with PhysicsBody being set, but in every case the RigidBody exists.
+		if (bb.PhysicsBody == null) {
+			bb.GetComponent<Rigidbody>().isKinematic = true;
+		} else {
+			bb.PhysicsBody.isKinematic = true;
+		}
 		GameObject resource = (GameObject)Resources.Load("Effects/ImpactEffect");
 		for (int i = 0; i < bb.ImpactEffects.Length; i++) {
 			bb.ImpactEffects[i] = Instantiate(resource) as GameObject;

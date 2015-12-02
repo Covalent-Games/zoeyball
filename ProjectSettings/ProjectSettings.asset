@@ -124,7 +124,7 @@ PlayerSettings:
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: C:/Users/Dell/Programming/Unity/zoeyball/zoeyball.keystore
+  AndroidKeystoreName: C:/Users/Justin/Projects/ZoeyBall/zoeyball.keystore
   AndroidKeyaliasName: zoeyball
   AndroidTVCompatibility: 0
   AndroidIsGame: 1
