@@ -23,62 +23,62 @@
   <Level>
     <LevelID>5</LevelID>
     <WorldID>0</WorldID>
-    <BounceGoal>5</BounceGoal>
+    <BounceGoal>7</BounceGoal>
   </Level>
   <Level>
     <LevelID>6</LevelID>
     <WorldID>0</WorldID>
-    <BounceGoal>5</BounceGoal>
+    <BounceGoal>6</BounceGoal>
   </Level>
   <Level>
     <LevelID>7</LevelID>
     <WorldID>0</WorldID>
-    <BounceGoal>5</BounceGoal>
+    <BounceGoal>7</BounceGoal>
   </Level>
   <Level>
     <LevelID>8</LevelID>
     <WorldID>0</WorldID>
-   <BounceGoal>5</BounceGoal>
+   <BounceGoal>8</BounceGoal>
   </Level>
   <Level>
    <LevelID>9</LevelID>
    <WorldID>0</WorldID>
-   <BounceGoal>5</BounceGoal>
+   <BounceGoal>7</BounceGoal>
   </Level>
   <Level>
     <LevelID>10</LevelID>
     <WorldID>0</WorldID>
-    <BounceGoal>5</BounceGoal>
+    <BounceGoal>8</BounceGoal>
   </Level>  
   <Level>
     <LevelID>11</LevelID>
     <WorldID>0</WorldID>
-    <BounceGoal>5</BounceGoal>
+    <BounceGoal>8</BounceGoal>
   </Level>
   <Level>
     <LevelID>12</LevelID>
     <WorldID>0</WorldID>
-    <BounceGoal>5</BounceGoal>
+    <BounceGoal>10</BounceGoal>
   </Level>
   <Level>
     <LevelID>13</LevelID>
     <WorldID>0</WorldID>
-    <BounceGoal>5</BounceGoal>
+    <BounceGoal>15</BounceGoal>
   </Level>
   <Level>
     <LevelID>14</LevelID>
     <WorldID>0</WorldID>
-    <BounceGoal>5</BounceGoal>
+    <BounceGoal>10</BounceGoal>
   </Level>
   <Level>
     <LevelID>15</LevelID>
     <WorldID>0</WorldID>
-    <BounceGoal>5</BounceGoal>
+    <BounceGoal>10</BounceGoal>
   </Level>
   <Level>
     <LevelID>16</LevelID>
     <WorldID>0</WorldID>
-    <BounceGoal>5</BounceGoal>
+    <BounceGoal>1</BounceGoal>
   </Level>
   <Level>
     <LevelID>17</LevelID>
@@ -93,17 +93,17 @@
   <Level>
     <LevelID>19</LevelID>
     <WorldID>0</WorldID>
-    <BounceGoal>5</BounceGoal>
+    <BounceGoal>11</BounceGoal>
   </Level>
   <Level>
     <LevelID>20</LevelID>
     <WorldID>0</WorldID>
-    <BounceGoal>5</BounceGoal>
+    <BounceGoal>8</BounceGoal>
   </Level>
   <Level>
     <LevelID>21</LevelID>
     <WorldID>0</WorldID>
-    <BounceGoal>1</BounceGoal>
+    <BounceGoal>5</BounceGoal>
   </Level>
   <Level>
     <LevelID>22</LevelID>
@@ -128,7 +128,7 @@
   <Level>
     <LevelID>26</LevelID>
     <WorldID>0</WorldID>
-    <BounceGoal>10</BounceGoal>
+    <BounceGoal>5</BounceGoal>
   </Level>
   <Level>
     <LevelID>27</LevelID>
