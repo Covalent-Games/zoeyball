@@ -155,4 +155,14 @@
     <WorldID>0</WorldID>
     <BounceGoal>10</BounceGoal>
   </Level>
+  <Level>
+    <LevelID>32</LevelID>
+    <WorldID>0</WorldID>
+    <BounceGoal>10</BounceGoal>
+  </Level>
+  <Level>
+    <LevelID>33</LevelID>
+    <WorldID>0</WorldID>
+    <BounceGoal>12</BounceGoal>
+  </Level>
 </ArrayOfLevel>
