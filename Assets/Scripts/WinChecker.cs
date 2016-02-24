@@ -91,7 +91,8 @@ public class WinChecker : MonoBehaviour {
 			"It's Madison's fault.",
 			"Put a bird on it.",
 			"Rub some bacon on it.",
-			"It's over 9000!!! Oh wait. No it's not. It's not even close."
+			"It's over 9000!!! Oh wait. No it's not. It's not even close.",
+			"Yay! You hit the thing with the thing!"
 		};
 	}
 

@@ -17,7 +17,7 @@ namespace GameData {
 	public class DataManager {
 
 		#region Members
-		public const string SaveFileName = "save_alpha_test_02";
+		public const string SaveFileName = "save_beta_test_01";
 		public static GameState SaveData = new GameState();
 		public static GameObject[] BallObjects;
 		public static Dictionary<string, string> BallNamePathPairs = new Dictionary<string, string>();

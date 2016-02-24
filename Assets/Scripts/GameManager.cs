@@ -395,60 +395,67 @@ public class GameManager : MonoBehaviour {
 	public void CheckAchievements(Collision colliderObject) {
 
 		BallBehaviour ball = colliderObject.gameObject.GetComponent<BallBehaviour>();
+		// Pentabounce! 5 bounces
 		if (!DataManager.SaveData.AchievementProg.Pentabounce && ball.CurrentBounces >= 5) {
-			//Social.ReportProgress(AchievementCodes.Pentabounce, 100f, (bool success) => {
-			//	DataManager.SaveData.AchievementProg.Pentabounce = true;
-			//});
+			Social.ReportProgress(AchievementCodes.Pentabounce, 100f, (bool success) => {
+				DataManager.SaveData.AchievementProg.Pentabounce = true;
+			});
 			DataManager.SaveData.AchievementProg.Pentabounce = true;
-			ShowAchievementPanel_tmp(AchievementCodes.CodeToNameDict[AchievementCodes.Pentabounce]);
+			//ShowAchievementPanel_tmp(AchievementCodes.CodeToNameDict[AchievementCodes.Pentabounce]);
 		}
+		// Decabounce! 10 bounces
 		if (!DataManager.SaveData.AchievementProg.TheDecabounce && ball.CurrentBounces >= 10) {
-			//Social.ReportProgress(AchievementCodes.TheDecabounce, 100f, (bool success) => {
-			//	DataManager.SaveData.AchievementProg.TheDecabounce = true;
-			//});
+			Social.ReportProgress(AchievementCodes.TheDecabounce, 100f, (bool success) => {
+				DataManager.SaveData.AchievementProg.TheDecabounce = true;
+			});
 			DataManager.SaveData.AchievementProg.TheDecabounce = true;
-			ShowAchievementPanel_tmp(AchievementCodes.CodeToNameDict[AchievementCodes.TheDecabounce]);
-			//DataManager.SaveData.UnlockedBalls.Add("BallBaseBall", true);
-			//PlayerPrefs.SetInt("BallBaseBall", 1);
+			//ShowAchievementPanel_tmp(AchievementCodes.CodeToNameDict[AchievementCodes.TheDecabounce]);
+			DataManager.SaveData.UnlockedBalls.Add("BallBaseBall", true);
+			PlayerPrefs.SetInt("BallBaseBall", 1);
 		}
+		// 20 bounces
 		if (!DataManager.SaveData.AchievementProg.AScoreOfBounces && ball.CurrentBounces >= 20) {
-			//Social.ReportProgress(AchievementCodes.AScoreOfBounces, 100f, (bool success) => {
-			//	DataManager.SaveData.AchievementProg.AScoreOfBounces = true;
-			//});
+			Social.ReportProgress(AchievementCodes.AScoreOfBounces, 100f, (bool success) => {
+				DataManager.SaveData.AchievementProg.AScoreOfBounces = true;
+			});
 			DataManager.SaveData.AchievementProg.AScoreOfBounces = true;
-			ShowAchievementPanel_tmp(AchievementCodes.CodeToNameDict[AchievementCodes.AScoreOfBounces]);
+			//ShowAchievementPanel_tmp(AchievementCodes.CodeToNameDict[AchievementCodes.AScoreOfBounces]);
 		}
-		if (!DataManager.SaveData.AchievementProg.Check && GameManager.CurrentLevel.LevelID == 20) {
-			//Social.ReportProgress(AchievementCodes.Check, 100f, (bool success) => {
-			//	DataManager.SaveData.AchievementProg.Check = true;
-			//});
+		// Beat all the things!
+		if (!DataManager.SaveData.AchievementProg.Check && GameManager.CurrentLevel.LevelID == 35) {
+			Social.ReportProgress(AchievementCodes.Check, 100f, (bool success) => {
+				DataManager.SaveData.AchievementProg.Check = true;
+			});
 			DataManager.SaveData.AchievementProg.Check = true;
-			ShowAchievementPanel_tmp(AchievementCodes.CodeToNameDict[AchievementCodes.Check]);
-			//DataManager.SaveData.UnlockedBalls.Add("BallEarth", true);
-			//PlayerPrefs.SetInt("BallEarth", 1);
+			//ShowAchievementPanel_tmp(AchievementCodes.CodeToNameDict[AchievementCodes.Check]);
+			DataManager.SaveData.UnlockedBalls.Add("BallEarth", true);
+			PlayerPrefs.SetInt("BallEarth", 1);
 		}
+		// Score of 100
 		if (!DataManager.SaveData.AchievementProg.Champ && ball.CurrentScore >= 100) {
-			//Social.ReportProgress(AchievementCodes.Champ, 100f, (bool success) => {
-			//	DataManager.SaveData.AchievementProg.Champ = true;
-			//});
+			Social.ReportProgress(AchievementCodes.Champ, 100f, (bool success) => {
+				DataManager.SaveData.AchievementProg.Champ = true;
+			});
 			DataManager.SaveData.AchievementProg.Champ = true;
-			ShowAchievementPanel_tmp(AchievementCodes.CodeToNameDict[AchievementCodes.Champ]);
-			//DataManager.SaveData.UnlockedBalls.Add("BallPokeball", true);
-			//PlayerPrefs.SetInt("Ball8Ball", 1);
+			//ShowAchievementPanel_tmp(AchievementCodes.CodeToNameDict[AchievementCodes.Champ]);
 		}
+		// Score of 200
 		if (!DataManager.SaveData.AchievementProg.Olympian && ball.CurrentScore >= 200) {
-			//Social.ReportProgress(AchievementCodes.ADict[AchievementCodes.Olympian, 100f, (bool success) => {
-			//	DataManager.SaveData.AchievementProg.Olympian = true;
-			//});
+			Social.ReportProgress(AchievementCodes.Olympian, 100f, (bool success) => {
+				DataManager.SaveData.AchievementProg.Olympian = true;
+			});
 			DataManager.SaveData.AchievementProg.Olympian = true;
-			ShowAchievementPanel_tmp(AchievementCodes.CodeToNameDict[AchievementCodes.Olympian]);
+			//ShowAchievementPanel_tmp(AchievementCodes.CodeToNameDict[AchievementCodes.Olympian]);
+			DataManager.SaveData.UnlockedBalls.Add("Ball8Ball", true);
+			PlayerPrefs.SetInt("Ball8Ball", 1);
 		}
+		// Score of 500! You crazy!
 		if (!DataManager.SaveData.AchievementProg.YoureRidiculous && ball.CurrentScore >= 500) {
-			//Social.ReportProgress(AchievementCodes.YoureRidiculous, 100f, (bool success) => {
-			//	DataManager.SaveData.AchievementProg.YoureRidiculous = true;
-			//});
+			Social.ReportProgress(AchievementCodes.YoureRidiculous, 100f, (bool success) => {
+				DataManager.SaveData.AchievementProg.YoureRidiculous = true;
+			});
 			DataManager.SaveData.AchievementProg.YoureRidiculous = true;
-			ShowAchievementPanel_tmp(AchievementCodes.CodeToNameDict[AchievementCodes.YoureRidiculous]);
+			//ShowAchievementPanel_tmp(AchievementCodes.CodeToNameDict[AchievementCodes.YoureRidiculous]);
 		}
 	}
 
